@@ -23,8 +23,8 @@ then
 fi
 
 if mountpoint -q /srv
-	then
-		exit 0
-	else
-		exit 1
-	fi
+then
+	exit 0
+else
+	exit 1
+fi
