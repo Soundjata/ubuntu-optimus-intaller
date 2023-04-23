@@ -42,7 +42,7 @@ then
     echo_magenta "Création du conteneur"
     verbose docker create \
     --name optimus-databases-v5 \
-    --restart on-failure \
+    --restart always \
     --env TZ=Europe/Paris \
     --env MARIADB_ROOT_PASSWORD \
     --volume /srv/databases:/var/lib/mysql:rw \
