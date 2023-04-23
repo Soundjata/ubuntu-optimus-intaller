@@ -21,7 +21,7 @@ while : ; do
 clear
 
 tput cup 2 	3; echo -ne  "\033[46;30m          OPTIMUS INSTALLER          \e[0m"
-tput cup 3 	3; echo -ne  "\033[46;30m                 V$OPTIMUS_INSTALLER_VERSION                \e[0m"
+tput cup 3 	3; echo -ne  "\033[46;30m                V$OPTIMUS_INSTALLER_VERSION                \e[0m"
 
 tput cup 5  3; if [ -n "$LAST_UPGRADE" ]; then echo_green "a. Mettre à jour le système (LASTUPGRADE : $LAST_UPGRADE)"; else echo_red "a. Mettre à jour le système"; fi
 tput cup 6  3; if [ -n "$PART_TO_ENCRYPT" ] && lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT; then echo_green "b. Créer une partition $PART_TO_ENCRYPT indépendante"; else echo_red "b. Créer une partition $PART_TO_ENCRYPT indépendante"; fi
