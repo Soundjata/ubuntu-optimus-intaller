@@ -10,7 +10,7 @@ DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes install git unzip zip sudo
 # CLONAGE DU DEPOT OPTIMUS INSTALLER
 if [ -d "/etc/optimus-installer" ]; then sudo rm -R /etc/optimus-installer; fi
 sudo mkdir /etc/optimus-installer
-sudo git clone --branch dev https://git.cybertron.fr/optimus/optimus-installer /etc/optimus-installer
+sudo git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus-installer
 sudo chmod +x /etc/optimus-installer/menu.sh
 
 sudo timedatectl set-timezone Europe/Paris
