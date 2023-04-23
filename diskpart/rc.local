@@ -1,0 +1,6 @@
+#!/bin/bash
+rm /etc/initramfs-tools/hooks/resizefs_hook
+rm /etc/initramfs-tools/scripts/local-premount/resizefs
+update-initramfs -u
+rm $0
+exit 0

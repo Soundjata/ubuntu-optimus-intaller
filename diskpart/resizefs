@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+PREREQS=""
+
+prereqs() { echo "$PREREQS"; }
+
+case "$1" in
+    prereqs)
+        prereqs
+        exit 0
+    ;;
+esac
+
+/sbin/e2fsck -f /dev/sda1
+/sbin/resize2fs /dev/sda1 10G
+/bin/echo "$START_SECTOR,10G" | /sbin/sfdisk --force -N 1 /dev/sda
+/sbin/resize2fs /dev/sda1
+/bin/echo ";" | /sbin/sfdisk --force -N 2 /dev/sda

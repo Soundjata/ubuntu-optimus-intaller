@@ -1,0 +1,50 @@
+5.00 (2022-03-01)
+Synchronisation du versioning avec le client V5
+Le processus de decryptage du disque se relance toutes les 15 secondes avec désormais un maximum de 10 tentatives
+Correction d'un bug qui empêchait spamassassin de mettre à jour sa base de données
+Augmentation de la taille du disque système à 10 Go pour éviter la saturation due aux logs
+Création d'un swapfile de 2Go pour pallier la forte consommation de RAM de CLAMAV
+Migration d'APACHE vers NGINX
+Conteneurisation de tous les services additionnels
+
+2.11 (2022-10-09)
+Correction d'un bug qui empêchait le partage de la boite source INBOX en IMAP ACL
+
+2.10 (2022-07-29)
+Mise à jour de Roundcube en version 1.6.0
+Modification de Roundcube pour une meilleure intégration dans Optimus V5 (synchronisation du darkmode, dissimulation de certaines icônes)
+Modification du plugin Roundcube "contextmenu_folder" pour faire réapparaitre l'icône "Localiser un Dossier"
+Ajout d'un dossier "Notifications" dans les boîtes mail. Les alertes au postmaster sont automatiquement classées dans ce dossier
+
+2.09 (2022-07-26)
+Correction syntaxique CRYPTAGE => CHIFFREMENT
+Mise à jour des instructions de redémarrage après la configuration de la zone DNS
+
+2.08 (2022-07-15)
+Modifications de SABREDAV pour permettre le partage de la seule ressource 'files'
+
+2.07 (2022-06-17)
+Déclaration explicite d'une locale en-US_UTF-8 pour compatibilité avec les nouveaux VPS OVH
+
+2.06 (2022-03-18)
+Ouverture des droits d'écriture sur la première boite mail créée pour l'administrateur
+Modification du header retourné par le moteur API : text/html => application/json
+
+2.05 (2022-02-01)
+Ajout de --allow-releaseinfo-change pour le processus d'upgrade de Debian 10 vers Debian 11
+
+2.04 (2022-01-26)
+Nouveau lien de téléchargement pour oooPY
+
+2.03 (2021-11-30)
+Le webmail envoie désormais les mails depuis le port 587 au lieu de 25 car le port 25 est bloqué par certains FAI
+
+2.02 (2021-11-22)
+Modifications pour faciliter l'installation sur un serveur physique suite à la mise à jour DEBIAN 11
+
+2.01 (2021-11-10)
+Le module BACKUP n'est plus installé par défaut mais peut être installé manuellement par la suite
+
+2.00 (2021-11-01)
+Passage à Debian 11
+Intégration des api OPTIMUS V2

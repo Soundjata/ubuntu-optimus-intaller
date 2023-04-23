@@ -1,0 +1,2 @@
+Si quelqu'un relance par mégarde une installation automatisée alors qu'une installation est terminée, cela remplace les mot de passe root et debian ainsi que l'UUID (ce qui empêche le décryptage)
+a l'issue ne pas oublier de changer la branch dev en main dans install.sh
