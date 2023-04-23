@@ -11,7 +11,9 @@ source /root/.optimus-installer
 
 if [ $MODULE_CLEANDNS_OVH = "Y" ]
 then
-		
+  echo
+  echo_green "==== REINITIALISATION DE LA ZONE DNS ===="
+
   echo_magenta "Suppression des enregistrements A"
   RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=A")
   for RECORD in $(echo "$RECORDS" | jq -r '.[]')

@@ -66,7 +66,7 @@ then
     echo_magenta "Création du conteneur"
     verbose docker create \
     --name optimus-base-v5 \
-    --restart always \
+    --restart on-failure \
     --env NAME=optimus-base \
     --env DISPLAYNAME="OPTIMUS Base" \
     --env DESCRIPTION="Client et API de base" \

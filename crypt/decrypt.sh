@@ -10,24 +10,15 @@ then
 	mount /dev/mapper/crypt$PART_TO_ENCRYPT /srv
 	sleep 0.5
 
-	if [ -d /srv/www ] || [ -d /srv/api ] || [ -d /srv/cloud ] || [ -d /srv/webmail ]
+	if [ -d /srv/vhosts ]
 	then
-		systemctl restart apache2
+		systemctl restart incron
+		systemctl restart nginx
 	fi
 
-	if [ -d /srv/databases ]
+	if [ -d /srv/optimus ]
 	then
-		systemctl restart mariadb;
-	fi
-
-	if [ -d /srv/mailboxes ]
-	then
-		systemctl restart postfix
-		systemctl restart dovecot
-		systemctl restart spamassassin
-		systemctl restart spamass-milter
-		systemctl restart clamav-daemon
-		systemctl restart clamav-milter
+		docker start $(docker ps -a -q)
 	fi
 fi
 
