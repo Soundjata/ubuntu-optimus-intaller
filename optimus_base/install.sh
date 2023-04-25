@@ -55,8 +55,8 @@ then
     if [ $( docker container inspect -f '{{.State.Running}}' optimus-base-v5  2> /dev/null | grep true ) ]
     then
         echo_magenta "Suppression du conteneur existant"
-        verbose docker stop optimus-base-v5
-        verbose docker rm optimus-base-v5
+        verbose docker stop optimus-base
+        verbose docker rm optimus-base
         verbose docker image rm git.cybertron.fr:5050/optimus/optimus-base/v5:latest
     fi
 
@@ -65,7 +65,7 @@ then
 
     echo_magenta "Création du conteneur"
     verbose docker create \
-    --name optimus-base-v5 \
+    --name optimus-base \
     --restart always \
     --env NAME=optimus-base \
     --env DISPLAYNAME="OPTIMUS Base" \
@@ -102,5 +102,5 @@ then
     git.cybertron.fr:5050/optimus/optimus-base/v5:latest
     
     echo_magenta "Lancement du conteneur"
-    verbose docker start optimus-base-v5
+    verbose docker start optimus-base
 fi

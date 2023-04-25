@@ -31,8 +31,8 @@ then
     if [ $( docker container inspect -f '{{.State.Running}}' optimus-databases-v5  2> /dev/null | grep true ) ]
     then
         echo_magenta "Suppression du conteneur existant"
-        verbose docker stop optimus-databases-v5
-        verbose docker rm optimus-databases-v5
+        verbose docker stop optimus-databases
+        verbose docker rm optimus-databases
         verbose docker image rm git.cybertron.fr:5050/optimus/optimus-databases/v5:latest
     fi
 
@@ -41,7 +41,7 @@ then
 
     echo_magenta "Création du conteneur"
     verbose docker create \
-    --name optimus-databases-v5 \
+    --name optimus-databases \
     --restart always \
     --env TZ=Europe/Paris \
     --env MARIADB_ROOT_PASSWORD \
@@ -52,7 +52,7 @@ then
     git.cybertron.fr:5050/optimus/optimus-databases/v5:latest --default-authentication-plugin=mysql_native_password
     
     echo_magenta "Lancement du conteneur"
-    verbose docker start optimus-databases-v5
+    verbose docker start optimus-databases
     
     echo_magenta "Attente de l'ouverture du socket MARIADB"
     WAITER=0
