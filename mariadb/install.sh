@@ -28,7 +28,7 @@ then
     #echo_magenta "Installation du client MARIADB"
     #verbose apt-get -qq -y install mariadb-client
 
-    if [ $( docker container inspect -f '{{.State.Running}}' optimus-databases-v5  2> /dev/null | grep true ) ]
+    if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
     then
         echo_magenta "Suppression du conteneur existant"
         verbose docker stop optimus-databases

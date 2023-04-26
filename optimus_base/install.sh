@@ -53,7 +53,7 @@ then
       chown mailboxes:mailboxes -R /srv/mailboxes
     fi
 
-    if [ $( docker container inspect -f '{{.State.Running}}' optimus-base-v5  2> /dev/null | grep true ) ]
+    if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
     then
         echo_magenta "Suppression du conteneur existant"
         verbose docker stop optimus-base
@@ -98,6 +98,11 @@ then
     --volume /srv/vhosts:/srv/vhosts \
     --volume /srv/optimus:/srv/optimus \
     --volume /srv/services:/srv/services \
+    --volume /srv/optimus/optimus-base/api:/srv/api \
+		--volume /srv/optimus/optimus-libs/functions.php:/srv/api/libs/functions.php \
+		--volume /srv/optimus/optimus-libs/datatables.php:/srv/api/libs/datatables.php \
+		--volume /srv/optimus/optimus-libs/JWT.php:/srv/api/libs/JWT.php \
+		--volume /srv/optimus/optimus-libs/docker_socket.php:/srv/api/libs/docker_socket.php \
     --network host \
     --user www-data \
     --stop-signal SIGTERM \
