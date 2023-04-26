@@ -203,6 +203,12 @@ then
       
       echo_magenta "Lancement du conteneur optimus-devtools"
       verbose docker start optimus-devtools
+      
+      echo_magenta "Activation de la connexion à distance sur le port 3306 pour l'utilisateur MARIADB root"
+      if [ $(which /sbin/ufw) ]
+      then 
+        verbose /sbin/ufw allow 3306
+      fi
     fi
 
 fi
