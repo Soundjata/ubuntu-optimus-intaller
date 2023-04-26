@@ -35,7 +35,7 @@ then
     then 
       verbose mkdir /srv/optimus
       chown www-data:www-data -R /srv/optimus
-      chmod +775 -R /srv/optimus
+      chmod 775 -R /srv/optimus
     fi
 
     if [ ! -d "/srv/files" ]
@@ -63,6 +63,27 @@ then
 
     echo_magenta "Téléchargement de l'image"
     verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-base/v5:latest
+
+    if [ $DEV == 1 ]
+    then
+      echo_magenta "Installation des repos (pour le mode développeur)"
+      if [ ! -d /srv/optimus/optimus-libs/.git ]
+      then
+        verbose rm -Rf /srv/optimus/optimus-libs
+        verbose mkdir -p /srv/optimus/optimus-libs
+        verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-libs /srv/optimus/optimus-libs
+      fi
+      if [ ! -d /srv/optimus/optimus-base/.git ]
+      then
+        verbose rm -Rf /srv/optimus/optimus-base
+        verbose mkdir -p /srv/optimus/optimus-base
+        verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-base /srv/optimus/optimus-base
+      fi
+      verbose chmod 775 -R /srv/optimus
+      echo_magenta "Ajout de l'utilisateur debian au groupe www-data (pour le mode développeur)"
+      verbose usermod -a -G www-data debian
+      DEV_VOLUMES="--volume /srv/optimus/optimus-base/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
+    fi
 
     echo_magenta "Création du conteneur"
     verbose docker create \
@@ -98,11 +119,7 @@ then
     --volume /srv/vhosts:/srv/vhosts \
     --volume /srv/optimus:/srv/optimus \
     --volume /srv/services:/srv/services \
-    --volume /srv/optimus/optimus-base/api:/srv/api \
-		--volume /srv/optimus/optimus-libs/functions.php:/srv/api/libs/functions.php \
-		--volume /srv/optimus/optimus-libs/datatables.php:/srv/api/libs/datatables.php \
-		--volume /srv/optimus/optimus-libs/JWT.php:/srv/api/libs/JWT.php \
-		--volume /srv/optimus/optimus-libs/docker_socket.php:/srv/api/libs/docker_socket.php \
+    $DEV_VOLUMES \
     --network host \
     --user www-data \
     --stop-signal SIGTERM \
