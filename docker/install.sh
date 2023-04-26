@@ -21,4 +21,7 @@ then
   
   echo_magenta "Changement des droits sur le socket DOCKER"
   chown root:docker /var/run/docker.sock
+
+  echo_magenta "Création du réseau docker optimus"
+  verbose docker network create --subnet=172.20.0.0/16 optimus
 fi

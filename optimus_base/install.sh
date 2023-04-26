@@ -53,16 +53,7 @@ then
       chown mailboxes:mailboxes -R /srv/mailboxes
     fi
 
-    if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
-    then
-        echo_magenta "Suppression du conteneur existant"
-        verbose docker stop optimus-base
-        verbose docker rm optimus-base
-        verbose docker image rm git.cybertron.fr:5050/optimus/optimus-base/v5:latest
-    fi
-
-    echo_magenta "Téléchargement de l'image"
-    verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-base/v5:latest
+    
 
     if [ $DEV == 1 ]
     then
@@ -80,12 +71,24 @@ then
         verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-base /srv/optimus/optimus-base
       fi
       verbose chmod 775 -R /srv/optimus
+      verbose chown www-data:www-data -R /srv/optimus
       echo_magenta "Ajout de l'utilisateur debian au groupe www-data (pour le mode développeur)"
       verbose usermod -a -G www-data debian
       DEV_VOLUMES="--volume /srv/optimus/optimus-base/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
     fi
 
-    echo_magenta "Création du conteneur"
+    if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
+    then
+        echo_magenta "Suppression du conteneur optimus-base existant"
+        verbose docker stop optimus-base
+        verbose docker rm optimus-base
+        verbose docker image rm git.cybertron.fr:5050/optimus/optimus-base/v5:latest
+    fi
+
+    echo_magenta "Téléchargement de l'image optimus-base"
+    verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-base/v5:latest
+
+    echo_magenta "Création du conteneur optimus-base"
     verbose docker create \
     --name optimus-base \
     --restart always \
@@ -111,8 +114,9 @@ then
     --env ADMIN_LASTNAME \
     --env ADMIN_EMAIL_PREFIX \
     --env ADMIN_PASSWORD \
-    --env PORT=20000 \
     --env DEV=$DEV \
+    --network optimus \
+    --ip 172.20.0.3 \
     --volume /run/mysqld:/run/mysqld \
     --volume /var/run/docker.sock:/var/run/docker.sock \
     --volume /var/log/optimus:/var/log/optimus \
@@ -120,11 +124,79 @@ then
     --volume /srv/optimus:/srv/optimus \
     --volume /srv/services:/srv/services \
     $DEV_VOLUMES \
-    --network host \
     --user www-data \
     --stop-signal SIGTERM \
     git.cybertron.fr:5050/optimus/optimus-base/v5:latest
     
-    echo_magenta "Lancement du conteneur"
+    echo_magenta "Lancement du conteneur optimus-base"
     verbose docker start optimus-base
+
+    echo_magenta "Installation de la proposition de service optimus-cloud"
+    verbose wget --quiet -O /srv/services/optimus-cloud.json https://git.cybertron.fr/optimus/optimus-cloud/-/blob/v5-dev/manifest.json
+
+    echo_magenta "Installation de la proposition de service optimus-avocats"
+    verbose wget --quiet -O /srv/services/optimus-avocats.json https://git.cybertron.fr/optimus/optimus-avocats/-/blob/v5-dev/manifest.json
+
+    echo_magenta "Installation de la proposition de service optimus-structures"
+    verbose wget --quiet -O /srv/services/optimus-structures.json https://git.cybertron.fr/optimus/optimus-structures/-/blob/v5-dev/manifest.json
+
+    verbose chmod 775 -R /srv/services
+    verbose chown www-data:www-data -R /srv/services
+    
+    if [ $DEV == 1 ]
+    then
+      if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
+      then
+          echo_magenta "Suppression du conteneur optimus-devtools existant"
+          verbose docker stop optimus-devtools
+          verbose docker rm optimus-devtools
+          verbose docker image rm git.cybertron.fr:5050/optimus/optimus-devtools/v5:latest
+      fi
+    
+      echo_magenta "Téléchargement de l'image optimus-devtools"
+      verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-devtools/v5:latest
+      
+      echo_magenta "Installation du conteneur optimus-devtools"
+      verbose docker create \
+      --name optimus-devtools \
+      --restart always \
+      --env NAME=optimus-devtools \
+      --env DISPLAYNAME="Optimus Dev Tools" \
+      --env DESCRIPTION="Outils de développement" \
+      --env PUBLISHER="cybertron" \
+      --env PUBLISHER_WEBSITE="www.cybertron.fr" \
+      --env PREREQUISITES=["mariadb"] \
+      --env VERSION_DATE="202303010000" \
+      --env VERSION_DISPLAY="5.0" \
+      --env REPOSITORY="git.cybertron.fr/optimus/optimus-devtools" \
+      --env KEEP_ROOT_ACCESS=1 \
+      --env MARIADB_ROOT_USER=root \
+      --env MARIADB_ROOT_PASSWORD \
+      --env AES_KEY \
+      --env API_SHA_KEY \
+      --env DOMAIN \
+      --env OVH_APP_KEY \
+      --env OVH_SECRET_KEY \
+      --env OVH_CONSUMER_KEY \
+      --env ADMIN_FIRSTNAME \
+      --env ADMIN_LASTNAME \
+      --env ADMIN_EMAIL_PREFIX \
+      --env ADMIN_PASSWORD \
+      --env DEV=1 \
+      --volume /run/mysqld:/run/mysqld \
+      --volume /var/run/docker.sock:/var/run/docker.sock \
+      --volume /var/log/optimus:/var/log/optimus \
+      --volume /srv/vhosts:/srv/vhosts \
+      --volume /srv/optimus:/srv/optimus \
+      --volume /srv/services:/srv/services \
+      $DEV_VOLUMES \
+      --network optimus \
+      --user www-data \
+      --stop-signal SIGTERM \
+      git.cybertron.fr:5050/optimus/optimus-devtools/v5:latest
+      
+      echo_magenta "Lancement du conteneur optimus-devtools"
+      verbose docker start optimus-devtools
+    fi
+
 fi

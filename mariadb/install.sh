@@ -47,7 +47,8 @@ then
     --env MARIADB_ROOT_PASSWORD \
     --volume /srv/databases:/var/lib/mysql:rw \
     --volume /run/mysqld:/run/mysqld \
-    --network host \
+    --network optimus \
+    --ip 172.20.0.2 \
     --cap-add SYS_NICE \
     git.cybertron.fr:5050/optimus/optimus-databases/v5:latest --default-authentication-plugin=mysql_native_password
     
