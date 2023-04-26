@@ -74,7 +74,8 @@ then
       verbose chown www-data:www-data -R /srv/optimus
       echo_magenta "Ajout de l'utilisateur debian au groupe www-data (pour le mode développeur)"
       verbose usermod -a -G www-data debian
-      DEV_VOLUMES="--volume /srv/optimus/optimus-base/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
+      OPTIMUS_BASE_ADDITIONNAL_VOLUMES="--volume /srv/optimus/optimus-base/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
+      OPTIMUS_DEV_ADDITIONNAL_VOLUMES="--volume /srv/optimus/optimus-devtools/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
     fi
 
     if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
@@ -124,7 +125,7 @@ then
     --volume /srv/vhosts:/srv/vhosts \
     --volume /srv/optimus:/srv/optimus \
     --volume /srv/services:/srv/services \
-    $DEV_VOLUMES \
+    $OPTIMUS_BASE_ADDITIONNAL_VOLUMES \
     --user www-data \
     --stop-signal SIGTERM \
     git.cybertron.fr:5050/optimus/optimus-base/v5:latest
@@ -133,19 +134,22 @@ then
     verbose docker start optimus-base
 
     echo_magenta "Installation de la proposition de service optimus-cloud"
-    verbose wget --quiet -O /srv/services/optimus-cloud.json https://git.cybertron.fr/optimus/optimus-cloud/-/blob/v5-dev/manifest.json
+    verbose wget --quiet -O /srv/services/optimus-cloud.json https://git.cybertron.fr/optimus/optimus-cloud/-/raw/v5-dev/manifest.json
 
     echo_magenta "Installation de la proposition de service optimus-avocats"
-    verbose wget --quiet -O /srv/services/optimus-avocats.json https://git.cybertron.fr/optimus/optimus-avocats/-/blob/v5-dev/manifest.json
+    verbose wget --quiet -O /srv/services/optimus-avocats.json https://git.cybertron.fr/optimus/optimus-avocats/-/raw/v5-dev/manifest.json
 
     echo_magenta "Installation de la proposition de service optimus-structures"
-    verbose wget --quiet -O /srv/services/optimus-structures.json https://git.cybertron.fr/optimus/optimus-structures/-/blob/v5-dev/manifest.json
+    verbose wget --quiet -O /srv/services/optimus-structures.json https://git.cybertron.fr/optimus/optimus-structures/-/raw/v5-dev/manifest.json
 
     verbose chmod 775 -R /srv/services
     verbose chown www-data:www-data -R /srv/services
     
     if [ $DEV == 1 ]
     then
+      echo
+      echo_green "==== INSTALLATION DU CONTENEUR OPTIMUS DEV TOOLS ===="
+
       if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
       then
           echo_magenta "Suppression du conteneur optimus-devtools existant"
@@ -184,14 +188,14 @@ then
       --env ADMIN_LASTNAME \
       --env ADMIN_EMAIL_PREFIX \
       --env ADMIN_PASSWORD \
-      --env DEV=1 \
+      --env DEV=$DEV \
       --volume /run/mysqld:/run/mysqld \
       --volume /var/run/docker.sock:/var/run/docker.sock \
       --volume /var/log/optimus:/var/log/optimus \
       --volume /srv/vhosts:/srv/vhosts \
       --volume /srv/optimus:/srv/optimus \
       --volume /srv/services:/srv/services \
-      $DEV_VOLUMES \
+      $OPTIMUS_DEV_ADDITIONNAL_VOLUMES \
       --network optimus \
       --user www-data \
       --stop-signal SIGTERM \
