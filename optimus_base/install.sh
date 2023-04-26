@@ -22,6 +22,7 @@ then
     then 
       verbose mkdir /srv/services
       chown www-data:www-data -R /srv/services
+      chmod 775 /srv/services
     fi
 
     if [ ! -d "/srv/www" ]
@@ -89,6 +90,7 @@ then
     --env ADMIN_LASTNAME \
     --env ADMIN_EMAIL_PREFIX \
     --env ADMIN_PASSWORD \
+    --env PORT=20000 \
     --env DEV=$DEV \
     --volume /run/mysqld:/run/mysqld \
     --volume /var/run/docker.sock:/var/run/docker.sock \
