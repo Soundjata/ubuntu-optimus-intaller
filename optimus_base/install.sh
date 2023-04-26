@@ -83,8 +83,8 @@ then
         echo_magenta "Suppression du conteneur optimus-base existant"
         verbose docker stop optimus-base
         verbose docker rm optimus-base
-        echo_magenta "Suppression de l'image optimus-base existante"
-        verbose docker image rm git.cybertron.fr:5050/optimus/optimus-base/v5:latest
+        verbose docker stop optimus-base-old
+        verbose docker rm optimus-base-old
     fi
 
     echo_magenta "Téléchargement de l'image optimus-base"
@@ -118,7 +118,6 @@ then
     --env ADMIN_PASSWORD \
     --env DEV=$DEV \
     --network optimus \
-    --ip 172.20.0.3 \
     --volume /run/mysqld:/run/mysqld \
     --volume /var/run/docker.sock:/var/run/docker.sock \
     --volume /var/log/optimus:/var/log/optimus \
@@ -132,6 +131,9 @@ then
     
     echo_magenta "Lancement du conteneur optimus-base"
     verbose docker start optimus-base
+
+    echo_magenta "Installation de la proposition de service optimus-databases"
+    verbose wget --quiet -O /srv/services/optimus-databases.json https://git.cybertron.fr/optimus/optimus-databases/-/raw/v5-dev/manifest.json
 
     echo_magenta "Installation de la proposition de service optimus-cloud"
     verbose wget --quiet -O /srv/services/optimus-cloud.json https://git.cybertron.fr/optimus/optimus-cloud/-/raw/v5-dev/manifest.json

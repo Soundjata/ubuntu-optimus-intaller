@@ -33,7 +33,6 @@ then
         echo_magenta "Suppression du conteneur existant"
         verbose docker stop optimus-databases
         verbose docker rm optimus-databases
-        verbose docker image rm git.cybertron.fr:5050/optimus/optimus-databases/v5:latest
     fi
 
     echo_magenta "Téléchargement de l'image"
