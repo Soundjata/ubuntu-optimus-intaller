@@ -82,6 +82,7 @@ then
         echo_magenta "Suppression du conteneur optimus-base existant"
         verbose docker stop optimus-base
         verbose docker rm optimus-base
+        echo_magenta "Suppression de l'image optimus-base existante"
         verbose docker image rm git.cybertron.fr:5050/optimus/optimus-base/v5:latest
     fi
 
@@ -150,6 +151,7 @@ then
           echo_magenta "Suppression du conteneur optimus-devtools existant"
           verbose docker stop optimus-devtools
           verbose docker rm optimus-devtools
+          echo_magenta "Suppression de l'image optimus-devtools existante"
           verbose docker image rm git.cybertron.fr:5050/optimus/optimus-devtools/v5:latest
       fi
     
