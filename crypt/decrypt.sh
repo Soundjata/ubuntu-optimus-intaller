@@ -1,7 +1,6 @@
 #!/bin/bash
 if [ ! -e /dev/mapper/crypt$PART_TO_ENCRYPT ]
 then
-	DEBIAN_FRONTEND=noninteractive apt-get -qq install cryptsetup cryptsetup-bin &> /dev/null
 	mkdir -p /root/tmpramfs
 	mount ramfs /root/tmpramfs/ -t ramfs
 	wget -qO /root/tmpramfs/keyfile_encrypted https://decrypt.optimus-avocats.fr/${UUID}_keyfile

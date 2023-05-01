@@ -14,6 +14,11 @@ then
   if [ ! -e /dev/mapper/crypt${PART_TO_ENCRYPT} ]
   then
 
+    echo_magenta "Installation des paquets requis"
+    DEBIAN_FRONTEND=noninteractive apt-get -qq install keyboard-configuration &> /dev/null
+    DEBIAN_FRONTEND=noninteractive apt-get -qq install cryptsetup cryptsetup-bin &> /dev/null
+    verbose apt-get -qq install curl
+    
     echo_magenta "Ouverture de la partition chiffrée via le serveur de clé distant"
     mkdir -p /root/tmpramfs
     mount ramfs /root/tmpramfs/ -t ramfs
