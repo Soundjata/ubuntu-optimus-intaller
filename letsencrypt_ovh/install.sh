@@ -1,13 +1,13 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus-installer; fi
-if [ -z $MODULE_LETSENCRYPT_OVH ]; then require MODULE_LETSENCRYPT_OVH yesno "Voulez-vous générer des certificats SSL pour sécuriser les communications ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_CLEANDNS_OVH ]; then require MODULE_CLEANDNS_OVH yesno "Voulez-vous supprimer les enregistrements DNS inutiles sur $DOMAIN ?"; source /root/.optimus-installer; fi
-if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus-installer; fi
-if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus-installer; fi
-if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus-installer; fi
+source /etc/optimus/functions.sh
+if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
+if [ -z $MODULE_LETSENCRYPT_OVH ]; then require MODULE_LETSENCRYPT_OVH yesno "Voulez-vous générer des certificats SSL pour sécuriser les communications ?"; source /root/.optimus; fi
+if [ -z $MODULE_CLEANDNS_OVH ]; then require MODULE_CLEANDNS_OVH yesno "Voulez-vous supprimer les enregistrements DNS inutiles sur $DOMAIN ?"; source /root/.optimus; fi
+if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus; fi
+if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus; fi
+if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus; fi
 
-source /root/.optimus-installer
+source /root/.optimus
 
 if [ $MODULE_CLEANDNS_OVH = "Y" ]
 then

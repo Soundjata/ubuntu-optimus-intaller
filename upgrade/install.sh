@@ -1,7 +1,7 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_UPGRADE ]; then require MODULE_UPGRADE yesno "Voulez vous mettre à jour le système -> update/upgrade/dist-upgrade ?"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_UPGRADE ]; then require MODULE_UPGRADE yesno "Voulez vous mettre à jour le système -> update/upgrade/dist-upgrade ?"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_UPGRADE = "Y" ]
 then

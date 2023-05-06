@@ -68,9 +68,9 @@ echo_cyan()(echo -e "\e[36m${1}\e[0m")
 
 if [ $1 ]
 then
-  if [ ! -f /root/.optimus-installer ] && [ -f $1 ]
+  if [ ! -f /root/.optimus ] && [ -f $1 ]
   then
-    cp $1 /root/.optimus-installer
+    cp $1 /root/.optimus
   else
     if [ -f $1 ]
     then
@@ -79,7 +79,7 @@ then
       read -p "(o)ui / (n)on ? " -n 1 -e replace_config
       if [[ $replace_config =~ ^[YyOo]$ ]]
       then
-        cp $1 /root/.optimus-installer
+        cp $1 /root/.optimus
         echo_magenta "Le fichier de configuration a bien été remplacé !"
         exit 0
       fi
@@ -90,12 +90,12 @@ then
   fi
 fi
 
-if [ ! -f /root/.optimus-installer ]
+if [ ! -f /root/.optimus ]
 then
-  cp /etc/optimus-installer/config.sh /root/.optimus-installer
+  cp /etc/optimus/config.sh /root/.optimus
 fi
 
-source /root/.optimus-installer
+source /root/.optimus
 
 
 verbose()
@@ -115,11 +115,11 @@ verbose()
 
 update_conf()
 (
-  if grep -q "$1=" /root/.optimus-installer
+  if grep -q "$1=" /root/.optimus
   then
-    verbose sed -i "/export $1=/c export $1=$2" /root/.optimus-installer
+    verbose sed -i "/export $1=/c export $1=$2" /root/.optimus
   else
-    echo "export $1=$2"  >> /root/.optimus-installer
+    echo "export $1=$2"  >> /root/.optimus
   fi
 )
 

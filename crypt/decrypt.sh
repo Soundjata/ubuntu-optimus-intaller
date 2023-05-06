@@ -1,6 +1,11 @@
 #!/bin/bash
 if [ ! -e /dev/mapper/crypt$PART_TO_ENCRYPT ]
 then
+	if [ -d /srv/optimus ]
+	then
+		docker stop $(docker ps -a -q)
+	fi
+
 	mkdir -p /root/tmpramfs
 	mount ramfs /root/tmpramfs/ -t ramfs
 	wget -qO /root/tmpramfs/keyfile_encrypted https://decrypt.optimus-avocats.fr/${UUID}_keyfile
@@ -18,6 +23,8 @@ then
 
 	if [ -d /srv/optimus ]
 	then
+		docker start optimus-databases
+		docker start optimus-base
 		docker start $(docker ps -a -q)
 	fi
 fi

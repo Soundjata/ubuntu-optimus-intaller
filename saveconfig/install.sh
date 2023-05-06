@@ -1,6 +1,6 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+source /root/.optimus
 
 while : ; do
 
@@ -20,7 +20,7 @@ echo_green "- clé publique du serveur : /root/public.pem"
 echo_green "- clé privée du serveur : /root/private.pem "
 echo_green "- clé de chiffrement du disque (chiffrée avec la clé du serveur) : https://decrypt.optimus-avocats.fr/${UUID}_keyfile"
 echo
-echo_magenta "Tous les autres paramètres d'installation sont sauvegardés dans le fichier /root/.optimus-installer"
+echo_magenta "Tous les autres paramètres d'installation sont sauvegardés dans le fichier /root/.optimus"
 echo_magenta "Il est recommandé d'en faire une copie afin de pouvoir réinstaller le serveur en cas de panne grave."
 echo
 echo_magenta "Il est également recommandé de faire une sauvegarde de l'entête du disque crypté qui peut permettre une restauration en cas de défaillance grave."
@@ -49,7 +49,7 @@ case "$y" in
 
   3)
     clear
-    more /root/.optimus-installer
+    more /root/.optimus
     read -n 1 -s -r -p ""
     ;;
 

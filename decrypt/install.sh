@@ -1,9 +1,9 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_DECRYPT ]; then require MODULE_DECRYPT yesno "Voulez-vous chiffrer la partition qui stocke vos données ?"; source /root/.optimus-installer; fi
-if [ -z $PART_TO_ENCRYPT ]; then require PART_TO_ENCRYPT string "Veuillez indiquer le nom de la partition à encrypter :"; source /root/.optimus-installer; fi
-if [ -z $UUID ] || [ $UUID = "auto" ]; then require UUID uuid "Veuillez choisir et renseigner un identifiant unique de 16 caractères [A-Z0-9]"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_DECRYPT ]; then require MODULE_DECRYPT yesno "Voulez-vous chiffrer la partition qui stocke vos données ?"; source /root/.optimus; fi
+if [ -z $PART_TO_ENCRYPT ]; then require PART_TO_ENCRYPT string "Veuillez indiquer le nom de la partition à encrypter :"; source /root/.optimus; fi
+if [ -z $UUID ] || [ $UUID = "auto" ]; then require UUID uuid "Veuillez choisir et renseigner un identifiant unique de 16 caractères [A-Z0-9]"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_DECRYPT = "Y" ]
 then

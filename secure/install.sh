@@ -1,18 +1,18 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
+source /etc/optimus/functions.sh
 . /etc/os-release
-if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez renseigner votre nom de domaine :"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_UPDATE ]; then require MODULE_SECURE_UPDATE yesno "Voulez vous mettre à jour le système -> update/upgrade ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_ENABLEFW ]; then require MODULE_SECURE_ENABLEFW yesno "Voulez vous installer le pare-feu UFW ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_FAIL2BAN ]; then require MODULE_SECURE_FAIL2BAN yesno "Voulez vous installer FAIL2BAN ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_CHANGEROOTPASS ]; then require MODULE_SECURE_CHANGEROOTPASS yesno "Voulez vous modifier le mot de passe root ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_CHANGEDEBIANPASS ]; then require MODULE_SECURE_CHANGEDEBIANPASS yesno "Voulez vous modifier le mot de passe de l'utilisateur '$ID' ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_SSH_REPLACEDEFAULTPORT ]; then require MODULE_SECURE_SSH_REPLACEDEFAULTPORT yesno "Voulez vous remplacer le port de connexion SSH par le port 7822 ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_SSH_PORTKNOCKING ]; then require MODULE_SECURE_SSH_PORTKNOCKING yesno "Voulez vous protéger le serveur SSH avec une séquence de Port Knocking ?"; source /root/.optimus-installer; fi
-if [[ $MODULE_SECURE_SSH_PORTKNOCKING =~ ^[YyOo]$ ]] && [ -z $MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE ]; then require MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE string "Veuillez indiquer la séquence de Port Knocking (exemple : 1083,1080,1082,1075) :"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_SSH_DISABLEROOTACCESS ]; then require MODULE_SECURE_SSH_DISABLEROOTACCESS yesno "Voulez vous interdire l'accès SSH à l'utilisateur root ?"; source /root/.optimus-installer; fi
-if [ -z $MODULE_SECURE_SSH_2FA ]; then require MODULE_SECURE_SSH_2FA yesno "Voulez vous protéger l'accès SSH avec une authentification à deux facteurs (authenticator) ?"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez renseigner votre nom de domaine :"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_UPDATE ]; then require MODULE_SECURE_UPDATE yesno "Voulez vous mettre à jour le système -> update/upgrade ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_ENABLEFW ]; then require MODULE_SECURE_ENABLEFW yesno "Voulez vous installer le pare-feu UFW ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_FAIL2BAN ]; then require MODULE_SECURE_FAIL2BAN yesno "Voulez vous installer FAIL2BAN ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_CHANGEROOTPASS ]; then require MODULE_SECURE_CHANGEROOTPASS yesno "Voulez vous modifier le mot de passe root ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_CHANGEDEBIANPASS ]; then require MODULE_SECURE_CHANGEDEBIANPASS yesno "Voulez vous modifier le mot de passe de l'utilisateur '$ID' ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_SSH_REPLACEDEFAULTPORT ]; then require MODULE_SECURE_SSH_REPLACEDEFAULTPORT yesno "Voulez vous remplacer le port de connexion SSH par le port 7822 ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_SSH_PORTKNOCKING ]; then require MODULE_SECURE_SSH_PORTKNOCKING yesno "Voulez vous protéger le serveur SSH avec une séquence de Port Knocking ?"; source /root/.optimus; fi
+if [[ $MODULE_SECURE_SSH_PORTKNOCKING =~ ^[YyOo]$ ]] && [ -z $MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE ]; then require MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE string "Veuillez indiquer la séquence de Port Knocking (exemple : 1083,1080,1082,1075) :"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_SSH_DISABLEROOTACCESS ]; then require MODULE_SECURE_SSH_DISABLEROOTACCESS yesno "Voulez vous interdire l'accès SSH à l'utilisateur root ?"; source /root/.optimus; fi
+if [ -z $MODULE_SECURE_SSH_2FA ]; then require MODULE_SECURE_SSH_2FA yesno "Voulez vous protéger l'accès SSH avec une authentification à deux facteurs (authenticator) ?"; source /root/.optimus; fi
+source /root/.optimus
 source /etc/os-release
 
 if [ $MODULE_SECURE_UPDATE = "Y" ]
@@ -56,7 +56,7 @@ then
   echo_magenta "Installation des paquets requis"
   verbose apt-get -qq install fail2ban
   echo_magenta "Installation des prisons locales"
-  envsubst '${DOMAIN}' < /etc/optimus-installer/secure/jail.local > /etc/fail2ban/jail.local
+  envsubst '${DOMAIN}' < /etc/optimus/secure/jail.local > /etc/fail2ban/jail.local
   #commit suggéré sur le github fail2ban mais pas encore implémenté
   sed -i '/mdpr-ddos = lost connection after(?! DATA)/c\mdpr-ddos = (?:lost connection after(?! DATA) [A-Z]+|disconnect(?= from \S+(?: \S+=\d+)* auth=0/(?:[1-9]|\d\d+)))' /etc/fail2ban/filter.d/postfix.conf
   sed -i "s/example.com/$DOMAIN/g" /etc/hosts
@@ -75,7 +75,7 @@ then
   echo_green "==== MODIFICATION DU MOT DE PASSE ROOT ===="
   echo_magenta "Modification du mot de passe root"
   require SECURE_ROOT_PASSWORD password "Veuillez renseigner le nouveau mot de passe root :"
-  source /root/.optimus-installer
+  source /root/.optimus
   echo "root:$SECURE_ROOT_PASSWORD" | chpasswd root
 fi
 
@@ -85,7 +85,7 @@ then
   echo_green "==== MODIFICATION DU MOT DE PASSE DE L'UTILISATEUR $ID ===="
   echo_magenta "Modification du mot de passe de l'utilisateur '$ID'"
   require SECURE_DEBIAN_PASSWORD password "Veuillez renseigner le nouveau mot de passe pour l'utilisateur '$ID' :"
-  source /root/.optimus-installer
+  source /root/.optimus
   echo "$ID:$SECURE_DEBIAN_PASSWORD" | chpasswd $ID
 fi
 
@@ -120,7 +120,7 @@ then
 	echo_magenta "Installation des paquets requis"
 	verbose apt-get -qq install knockd
 	echo_magenta "Modification des fichiers de configuration"
-	envsubst '${MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE}' < /etc/optimus-installer/secure/knockd.conf > /etc/knockd.conf
+	envsubst '${MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE}' < /etc/optimus/secure/knockd.conf > /etc/knockd.conf
 	if [ $MODULE_SECURE_SSH_REPLACEDEFAULTPORT = "Y" ]
 	then
 		verbose sed -i 's/22/7822/g' /etc/knockd.conf
@@ -151,7 +151,7 @@ then
 	echo
 	echo_green "==== SECURISATION DE L'ACCESS SSH AVEC UN CODE A DEUX FACTEURS ===="
 
-	if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus-installer; fi
+	if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
 
 	echo_magenta "Installation des paquets requis"
 	verbose apt-get -qq -y install libpam-google-authenticator qrencode ntp

@@ -1,20 +1,20 @@
 #!/bin/bash
 cd /
-source /etc/optimus-installer/functions.sh
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+source /root/.optimus
 
 #MENU OPENS ON REBOOT EXCEPT IN DEV MODE (because it hangs VSCODE and some SFTP CLIENTS)
 if [ $DEV -eq 1 ]
 then
-  sed -i '/sudo \/usr\/bin\/bash \/etc\/optimus-installer\/menu.sh/d' /home/debian/.bashrc
-elif ! grep -q "sudo /usr/bin/bash /etc/optimus-installer/menu.sh" /home/debian/.bashrc
+  sed -i '/sudo \/usr\/bin\/bash \/etc\/optimus\/menu.sh/d' /home/debian/.bashrc
+elif ! grep -q "sudo /usr/bin/bash /etc/optimus/menu.sh" /home/debian/.bashrc
 then
-    echo "sudo /usr/bin/bash /etc/optimus-installer/menu.sh" >> /home/debian/.bashrc
+    echo "sudo /usr/bin/bash /etc/optimus/menu.sh" >> /home/debian/.bashrc
 fi
 
 DOMAIN_TO_DNS=$( getent hosts $DOMAIN | awk '{ print $1 }' )
 PUBLIC_IP=$( wget -qO- ipinfo.io/ip )
-OPTIMUS_INSTALLER_VERSION=$( tail -n 1 /etc/optimus-installer/VERSION )
+OPTIMUS_INSTALLER_VERSION=$( tail -n 1 /etc/optimus/VERSION )
 
 while : ; do
 
@@ -35,12 +35,12 @@ tput cup 13 3; if [ -d "/etc/docker" ]; then echo_green "h. Installer DOCKER"; e
 tput cup 14 3; if [ -d "/srv/databases" ]; then echo_green "i. Installer le conteneur MARIADB"; else echo_red "i. Installer le conteneur MARIADB"; fi
 tput cup 15 3; if [ -d "/srv/services" ]; then echo_green "j. Installer le conteneur OPTIMUS BASE"; else echo_red "j. Installer le conteneur OPTIMUS BASE"; fi
 
-tput cup 19 3; if [ -f "/srv/optimus-installer-backup.sh" ]; then echo_green "r. Installer les scripts de sauvegarde"; else echo_red "r. Installer les scripts de sauvegarde"; fi
+tput cup 19 3; if [ -f "/srv/optimus-backup.sh" ]; then echo_green "r. Installer les scripts de sauvegarde"; else echo_red "r. Installer les scripts de sauvegarde"; fi
 
 tput cup 21 3; echo_green "s. Sauvegarder la configuration et les clés de chiffrement"
 
 tput cup 23 3; echo_green "t. Editer la configuration"
-tput cup 24 3; echo_green "u. Mettre à jour optimus-installer Installer"
+tput cup 24 3; echo_green "u. Mettre à jour Optimus Installer"
 tput cup 25 3; echo_green "v. Redémarrer le serveur"
 tput cup 26 3; echo_green "w. Afficher le QR CODE 2FA"
 tput cup 27 3; echo_green "x. Quitter"
@@ -62,105 +62,105 @@ case "$y" in
   a)
 		tput reset
 		clear
-    source /etc/optimus-installer/upgrade/install.sh
-    source /root/.optimus-installer
+    source /etc/optimus/upgrade/install.sh
+    source /root/.optimus
     read -p "Appuyez sur [ENTREE] pour continuer..."
 		;;
 
   b)
 		tput reset
 		clear
-		source /etc/optimus-installer/diskpart/install.sh
+		source /etc/optimus/diskpart/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
 		;;
 
   c)
   	tput reset
   	clear
-  	source /etc/optimus-installer/crypt/install.sh
+  	source /etc/optimus/crypt/install.sh
   	read -p "Appuyez sur [ENTREE] pour continuer..."
   	;;
 
   d)
     tput reset
     clear
-    source /etc/optimus-installer/decrypt/install.sh
+    source /etc/optimus/decrypt/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   e)
     tput reset
     clear
-    source /etc/optimus-installer/secure/install.sh
+    source /etc/optimus/secure/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   f)
     tput reset
     clear
-	source /etc/optimus-installer/letsencrypt_ovh/install.sh
+	source /etc/optimus/letsencrypt_ovh/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
   
   g)
     tput reset
     clear
-	  source /etc/optimus-installer/nginx/install.sh
+	  source /etc/optimus/nginx/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   h)
     tput reset
     clear
-    source /etc/optimus-installer/docker/install.sh
+    source /etc/optimus/docker/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   i)
     tput reset
     clear
-    source /etc/optimus-installer/mariadb/install.sh
+    source /etc/optimus/mariadb/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   j)
     tput reset
     clear
-    source /etc/optimus-installer/optimus_base/install.sh
+    source /etc/optimus/optimus_base/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   q)
     tput reset
     clear
-    source /etc/optimus-installer/devtools/install.sh
+    source /etc/optimus/devtools/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   r)
     tput reset
     clear
-    source /etc/optimus-installer/backup/install.sh
+    source /etc/optimus/backup/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   s)
     tput reset
     clear
-    source /etc/optimus-installer/saveconfig/install.sh
+    source /etc/optimus/saveconfig/install.sh
     ;;
 
   t)
     tput reset
     clear
-    nano /root/.optimus-installer
-    source /etc/optimus-installer/menu.sh
+    nano /root/.optimus
+    source /etc/optimus/menu.sh
     ;;
 
   u)
 		tput reset
 		clear
-    source /etc/optimus-installer/update/install.sh
+    source /etc/optimus/update/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
 		;;
 
@@ -172,7 +172,7 @@ case "$y" in
 
   w)
     tput reset
-    qrencode -t ansi "otpauth://totp/debian@$DOMAIN?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus-installer"
+    qrencode -t ansi "otpauth://totp/debian@$DOMAIN?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus"
     echo
     echo_magenta "Ce code doit être scanné et conservé sur votre smartphone à l'aide d'une application comme GOOGLE Authenticator, 2FAS ou Authy (gratuit)"
     echo_magenta "Ces applications permettent de générer un mot de passe qui change toutes les 30 secondes et qui vous sera demandé pour vous authentifier sur le serveur"
@@ -189,17 +189,17 @@ case "$y" in
   y)
     tput reset
     clear
-    source /etc/optimus-installer/upgrade/install.sh
-  	source /etc/optimus-installer/diskpart/install.sh
-    source /etc/optimus-installer/crypt/install.sh
-    source /etc/optimus-installer/secure/install.sh
-    source /etc/optimus-installer/letsencrypt_ovh/install.sh
-    source /etc/optimus-installer/nginx/install.sh
-    source /etc/optimus-installer/docker/install.sh
-    source /etc/optimus-installer/mariadb/install.sh
-    source /etc/optimus-installer/optimus_base/install.sh
-    source /etc/optimus-installer/backup/install.sh
-    qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus-installer"
+    source /etc/optimus/upgrade/install.sh
+  	source /etc/optimus/diskpart/install.sh
+    source /etc/optimus/crypt/install.sh
+    source /etc/optimus/secure/install.sh
+    source /etc/optimus/letsencrypt_ovh/install.sh
+    source /etc/optimus/nginx/install.sh
+    source /etc/optimus/docker/install.sh
+    source /etc/optimus/mariadb/install.sh
+    source /etc/optimus/optimus_base/install.sh
+    source /etc/optimus/backup/install.sh
+    qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus"
     read -p "Appuyez sur [ENTREE] après avoir enregistré votre code ..."
     ;;
 
@@ -207,12 +207,12 @@ case "$y" in
   	tput reset
   	clear
     if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez renseigner votre nom de domaine :"; fi
-    if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus-installer; fi
-    if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus-installer; fi
-    if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus-installer; fi
-    if [ -z $ADMIN_FIRSTNAME ]; then require ADMIN_FIRSTNAME string "Merci d'indiquer le prénom du premier administrateur à créer :"; source /root/.optimus-installer; fi
-    if [ -z $ADMIN_LASTNAME ]; then require ADMIN_LASTNAME string "Merci d'indiquer le nom de famille du premier administrateur à créer :"; source /root/.optimus-installer; fi
-    if [ -z $ADMIN_EMAIL_PREFIX ]; then require ADMIN_EMAIL_PREFIX string "Merci d'indiquer le préfixe de l'adresse email du premier administrateur à créer. Exemple 'alice.dupont' pour créer 'alice.dupont@$DOMAIN :"; source /root/.optimus-installer; fi
+    if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus; fi
+    if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus; fi
+    if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus; fi
+    if [ -z $ADMIN_FIRSTNAME ]; then require ADMIN_FIRSTNAME string "Merci d'indiquer le prénom du premier administrateur à créer :"; source /root/.optimus; fi
+    if [ -z $ADMIN_LASTNAME ]; then require ADMIN_LASTNAME string "Merci d'indiquer le nom de famille du premier administrateur à créer :"; source /root/.optimus; fi
+    if [ -z $ADMIN_EMAIL_PREFIX ]; then require ADMIN_EMAIL_PREFIX string "Merci d'indiquer le préfixe de l'adresse email du premier administrateur à créer. Exemple 'alice.dupont' pour créer 'alice.dupont@$DOMAIN :"; source /root/.optimus; fi
     if [ -z $ADMIN_PASSWORD ]; then require ADMIN_PASSWORD password "Merci d'indiquer le mot de passe du premier administrateur '$ADMIN_EMAIL_PREFIX'. Au moins 9 caractères, 1 chiffre, 1 majuscule et 1 caractère spécial :"; fi
     update_conf VERBOSE 2
     update_conf UUID auto
@@ -244,19 +244,19 @@ case "$y" in
     update_conf MODULE_SECURE_SSH_DISABLEROOTACCESS "Y"
     update_conf MODULE_SECURE_SSH_2FA "Y"
     update_conf AUTODECRYPT "Y"
-    source /root/.optimus-installer
-    source /etc/optimus-installer/upgrade/install.sh
-  	source /etc/optimus-installer/diskpart/install.sh
-    source /etc/optimus-installer/crypt/install.sh
-    source /etc/optimus-installer/secure/install.sh
-    source /etc/optimus-installer/letsencrypt_ovh/install.sh
-    source /etc/optimus-installer/nginx/install.sh
-    source /etc/optimus-installer/docker/install.sh
-    source /etc/optimus-installer/mariadb/install.sh
-    source /etc/optimus-installer/optimus_base/install.sh
+    source /root/.optimus
+    source /etc/optimus/upgrade/install.sh
+  	source /etc/optimus/diskpart/install.sh
+    source /etc/optimus/crypt/install.sh
+    source /etc/optimus/secure/install.sh
+    source /etc/optimus/letsencrypt_ovh/install.sh
+    source /etc/optimus/nginx/install.sh
+    source /etc/optimus/docker/install.sh
+    source /etc/optimus/mariadb/install.sh
+    source /etc/optimus/optimus_base/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer ..."
     clear
-    qrencode -t ansi "otpauth://totp/debian@$DOMAIN?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus-installer"
+    qrencode -t ansi "otpauth://totp/debian@$DOMAIN?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus"
     echo
     echo_magenta "Ce code doit être scanné et conservé sur votre smartphone à l'aide d'une application comme GOOGLE Authenticator, 2FAS ou Authy (gratuit)"
     echo_magenta "Ces applications permettent de générer un mot de passe qui change toutes les 30 secondes et qui vous sera demandé pour vous authentifier sur le serveur"
@@ -264,14 +264,14 @@ case "$y" in
     read -p "Appuyez sur [ENTREE] pour continuer..."
     clear
     echo
-    echo_magenta "Il est rappelé que les scripts d'installation optimus-installer ainsi que le logiciel OPTIMUS sont des logiciels libres."
+    echo_magenta "Il est rappelé que les outils OPTIMUS sont des logiciels libres."
     echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable sur https://git.cybertron.fr/optimus/optimus-installer/-/raw/master/LICENSE"
     echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
     echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
     echo "APPUYER SUR [ENTREE] POUR CONTINUER"
     read -p ""
     clear
-    source /etc/optimus-installer/saveconfig/install.sh
+    source /etc/optimus/saveconfig/install.sh
     clear
     echo_magenta "Un redémarrage est nécessaire pour finaliser l'installation"
     echo_magenta "Avant toute utilisation vérifiez bien que vous parvenez toujours à accéder au serveur via SSH après le redémarrage"
@@ -291,7 +291,7 @@ case "$y" in
 
   '')
     clear
-    more /etc/optimus-installer/LICENSE
+    more /etc/optimus/LICENSE
     ;;
 esac
 done

@@ -1,7 +1,7 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_DISKPART ]; then require MODULE_DISKPART yesno "Voulez-vous créer une nouvelle partition pour accueillir vos données ?"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_DISKPART ]; then require MODULE_DISKPART yesno "Voulez-vous créer une nouvelle partition pour accueillir vos données ?"; source /root/.optimus; fi
+source /root/.optimus
 
 
 if [ $MODULE_DISKPART = "Y" ]
@@ -16,21 +16,21 @@ then
     then
       update_conf DISKPART_DISK_TO_PART nvme0n1
       update_conf PART_TO_ENCRYPT nvme0n1p2
-      source /root/.optimus-installer
+      source /root/.optimus
     elif [ -e /dev/sdb ]
     then
       update_conf DISKPART_DISK_TO_PART sdb
       update_conf PART_TO_ENCRYPT sdb
-      source /root/.optimus-installer
+      source /root/.optimus
 	elif [ -e /dev/sda ]
     then
       update_conf DISKPART_DISK_TO_PART sda
       update_conf PART_TO_ENCRYPT sda2
-      source /root/.optimus-installer
+      source /root/.optimus
     else
       require DISKPART_DISK_TO_PART string "Veuillez indiquer sur quel disque se trouve la partition à partitionner :";
       require PART_TO_ENCRYPT string "Veuillez indiquer le nom de la nouvelle partition a créér :";
-      source /root/.optimus-installer
+      source /root/.optimus
     fi
   fi
 
@@ -42,7 +42,7 @@ then
     if [ ! -z "$FREESPACE" ]
     then
       require DISKPART_USE_FREESPACE yesno "Souhaitez vous utiliser les $FREESPACE non partitionnés de $DISKPART_DISK_TO_PART";
-      source /root/.optimus-installer
+      source /root/.optimus
       if [ $DISKPART_USE_FREESPACE = "Y" ]
       then
         echo $FIRSTSECTOR | /usr/sbin/sfdisk /dev/$PART_TO_ENCRYPT --append --force
@@ -57,11 +57,11 @@ then
       echo
 
       require DISKPART_RESIZE_PARTITION yesno "Souhaitez vous redimensionner le disque $DISKPART_DISK_TO_PART ?";
-      source /root/.optimus-installer
+      source /root/.optimus
       if [ $DISKPART_RESIZE_PARTITION = "Y" ]
       then
         echo_magenta "Mise en place des scripts de partitionnement..."
-        verbose cp /etc/optimus-installer/diskpart/resizefs_hook /etc/initramfs-tools/hooks/resizefs_hook
+        verbose cp /etc/optimus/diskpart/resizefs_hook /etc/initramfs-tools/hooks/resizefs_hook
         verbose chmod +x /etc/initramfs-tools/hooks/resizefs_hook
         . /etc/os-release
         if [ $VERSION_ID == 10 ]
@@ -71,9 +71,9 @@ then
         then
           START_SECTOR=262144
         fi
-        envsubst '${START_SECTOR}' < /etc/optimus-installer/diskpart/resizefs > /etc/initramfs-tools/scripts/local-premount/resizefs
+        envsubst '${START_SECTOR}' < /etc/optimus/diskpart/resizefs > /etc/initramfs-tools/scripts/local-premount/resizefs
         verbose chmod +x /etc/initramfs-tools/scripts/local-premount/resizefs
-        verbose cp /etc/optimus-installer/diskpart/rc.local /etc/rc.local
+        verbose cp /etc/optimus/diskpart/rc.local /etc/rc.local
         verbose chmod +x /etc/rc.local
         sleep 0.5
 

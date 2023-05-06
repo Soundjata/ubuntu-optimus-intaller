@@ -1,13 +1,13 @@
 #!/bin/bash
 cd /
-rm -R /etc/optimus-installer
-mkdir /etc/optimus-installer
+rm -R /etc/optimus
+mkdir /etc/optimus
 if [ $DEV == 1 ]
 then
-    git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus-installer
+    git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus
 else
-    git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus-installer
+    git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus
 fi
 
-chmod +x /etc/optimus-installer/menu.sh
-source /etc/optimus-installer/menu.sh
+chmod +x /etc/optimus/menu.sh
+source /etc/optimus/menu.sh

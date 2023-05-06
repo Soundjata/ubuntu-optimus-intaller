@@ -1,11 +1,11 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez renseigner votre nom de domaine :"; source /root/.optimus-installer; fi
-if [ -z $MODULE_BACKUP ]; then require MODULE_BACKUP yesno "Voulez-vous installer le module de sauvegarde ?"; source /root/.optimus-installer; fi
-if [ -z $MARIADB_ADMIN_PASSWORD ] || [ $MARIADB_ADMIN_PASSWORD = "auto" ]; then require MARIADB_ADMIN_PASSWORD password "Veuillez renseigner le mot de passe de l'administrateur MARIADB :"; source /root/.optimus-installer; fi
-if [[ $MODULE_BACKUP =~ ^[YyOo]$ ]] && [ -z $BACKUP_SERVER ]; then require BACKUP_SERVER string "Veuillez renseigner l'adresse IP du serveur de sauvegarde"; source /root/.optimus-installer; fi
-if [[ $MODULE_BACKUP =~ ^[YyOo]$ ]] && [ -z $BACKUP_SERVER_SSHPORT ]; then require BACKUP_SERVER_SSHPORT string "Veuillez renseigner le port SSH du serveur de sauvegarde"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez renseigner votre nom de domaine :"; source /root/.optimus; fi
+if [ -z $MODULE_BACKUP ]; then require MODULE_BACKUP yesno "Voulez-vous installer le module de sauvegarde ?"; source /root/.optimus; fi
+if [ -z $MARIADB_ADMIN_PASSWORD ] || [ $MARIADB_ADMIN_PASSWORD = "auto" ]; then require MARIADB_ADMIN_PASSWORD password "Veuillez renseigner le mot de passe de l'administrateur MARIADB :"; source /root/.optimus; fi
+if [[ $MODULE_BACKUP =~ ^[YyOo]$ ]] && [ -z $BACKUP_SERVER ]; then require BACKUP_SERVER string "Veuillez renseigner l'adresse IP du serveur de sauvegarde"; source /root/.optimus; fi
+if [[ $MODULE_BACKUP =~ ^[YyOo]$ ]] && [ -z $BACKUP_SERVER_SSHPORT ]; then require BACKUP_SERVER_SSHPORT string "Veuillez renseigner le port SSH du serveur de sauvegarde"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_BACKUP = "Y" ]
 then
@@ -32,7 +32,7 @@ then
   chown debian:debian /home/debian/public.pem
 
   echo_magenta "Configuration du serveur distant"
-  scp -P $BACKUP_SERVER_SSHPORT -i /root/private.pem /etc/optimus-installer/backup/install_remote.sh debian@$BACKUP_SERVER:/home/debian/install_remote.sh
+  scp -P $BACKUP_SERVER_SSHPORT -i /root/private.pem /etc/optimus/backup/install_remote.sh debian@$BACKUP_SERVER:/home/debian/install_remote.sh
   ssh -i /root/private.pem -p $BACKUP_SERVER_SSHPORT debian@$BACKUP_SERVER sudo chmod 700 /home/debian/install_remote.sh
   ssh -i /root/private.pem -p $BACKUP_SERVER_SSHPORT debian@$BACKUP_SERVER sudo /home/debian/install_remote.sh
 
@@ -49,14 +49,14 @@ then
 
 
   echo_magenta "Installation du script de sauvegarde"
-  envsubst '${DOMAIN} ${BACKUP_SERVER} ${BACKUP_SERVER_SSHPORT}' < /etc/optimus-installer/backup/optimus-installer-backup.sh > /srv/optimus-installer-backup.sh
-  chmod 700 /srv/optimus-installer-backup.sh
+  envsubst '${DOMAIN} ${BACKUP_SERVER} ${BACKUP_SERVER_SSHPORT}' < /etc/optimus/backup/optimus-backup.sh > /srv/optimus-backup.sh
+  chmod 700 /srv/optimus-backup.sh
 
 
   echo_magenta "Création de la tâche automatique quotidienne"
-  cp /etc/optimus-installer/backup/optimus-installer-backup.timer /etc/systemd/system/optimus-installer-backup.timer
-  cp /etc/optimus-installer/backup/optimus-installer-backup.service /etc/systemd/system/optimus-installer-backup.service
-  systemctl enable optimus-installer-backup.timer
-  systemctl start optimus-installer-backup.timer
+  cp /etc/optimus/backup/optimus-backup.timer /etc/systemd/system/optimus-backup.timer
+  cp /etc/optimus/backup/optimus-backup.service /etc/systemd/system/optimus-backup.service
+  systemctl enable optimus-backup.timer
+  systemctl start optimus-backup.timer
   systemctl daemon-reload
 fi

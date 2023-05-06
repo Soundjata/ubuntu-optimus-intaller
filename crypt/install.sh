@@ -1,10 +1,10 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_CRYPT ]; then require MODULE_CRYPT yesno "Voulez-vous chiffrer la partition qui stocke vos données ?"; source /root/.optimus-installer; fi
-if [ -z $AUTODECRYPT ]; then require AUTODECRYPT yesno "Voulez-vous que la partition se déchiffre automatiquement au démarrage du serveur ?"; source /root/.optimus-installer; fi
-if [ -z $PART_TO_ENCRYPT ]; then require PART_TO_ENCRYPT string "Veuillez indiquer le nom de la partition à encrypter :"; source /root/.optimus-installer; fi
-if [ -z $UUID ] || [ $UUID = "auto" ]; then require UUID uuid "Veuillez choisir et renseigner un identifiant unique de 16 caractères [A-Z0-9]"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_CRYPT ]; then require MODULE_CRYPT yesno "Voulez-vous chiffrer la partition qui stocke vos données ?"; source /root/.optimus; fi
+if [ -z $AUTODECRYPT ]; then require AUTODECRYPT yesno "Voulez-vous que la partition se déchiffre automatiquement au démarrage du serveur ?"; source /root/.optimus; fi
+if [ -z $PART_TO_ENCRYPT ]; then require PART_TO_ENCRYPT string "Veuillez indiquer le nom de la partition à encrypter :"; source /root/.optimus; fi
+if [ -z $UUID ] || [ $UUID = "auto" ]; then require UUID uuid "Veuillez choisir et renseigner un identifiant unique de 16 caractères [A-Z0-9]"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_CRYPT = "Y" ]
 then
@@ -76,9 +76,9 @@ then
   if [ $AUTODECRYPT = "Y" ]
   then
     echo_magenta "Activation du service de décryptage"
-    envsubst '${PART_TO_ENCRYPT} ${UUID}' < /etc/optimus-installer/crypt/decrypt.sh > /root/decrypt.sh
+    envsubst '${PART_TO_ENCRYPT} ${UUID}' < /etc/optimus/crypt/decrypt.sh > /root/decrypt.sh
     verbose chmod 700 /root/decrypt.sh
-    verbose cp /etc/optimus-installer/crypt/decrypt.service /etc/systemd/system/decrypt.service
+    verbose cp /etc/optimus/crypt/decrypt.service /etc/systemd/system/decrypt.service
     verbose systemctl daemon-reload
 	verbose systemctl enable decrypt.service 2> /dev/null
   else

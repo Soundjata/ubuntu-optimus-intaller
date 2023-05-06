@@ -1,7 +1,7 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_NGINX ]; then require MODULE_NGINX yesno "Souhaitez vous installer le serveur web NGINX ?"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_NGINX ]; then require MODULE_NGINX yesno "Souhaitez vous installer le serveur web NGINX ?"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_NGINX = "Y" ]
 then

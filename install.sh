@@ -8,10 +8,10 @@ DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes remove cryptsetup-initramf
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes install git unzip zip sudo jq
 
 # CLONAGE DU DEPOT OPTIMUS INSTALLER
-if [ -d "/etc/optimus-installer" ]; then sudo rm -R /etc/optimus-installer; fi
-sudo mkdir /etc/optimus-installer
-sudo git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus-installer
-sudo chmod +x /etc/optimus-installer/menu.sh
+if [ -d "/etc/optimus" ]; then sudo rm -R /etc/optimus; fi
+sudo mkdir /etc/optimus
+sudo git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus
+sudo chmod +x /etc/optimus/menu.sh
 
 sudo timedatectl set-timezone Europe/Paris
 
@@ -25,11 +25,11 @@ then
   sudo echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
 fi
 
-# ALIAS PERMETTANT DE LANCER LE MENU EN TAPPANT "optimus-installer"
+# ALIAS PERMETTANT DE LANCER LE MENU EN TAPPANT "optimus"
 if ! grep -q "alias optimus" /home/debian/.bashrc
 then
-  echo "alias optimus='sudo bash /etc/optimus-installer/menu.sh'" >> /home/debian/.bashrc
+  echo "alias optimus='sudo bash /etc/optimus/menu.sh'" >> /home/debian/.bashrc
 fi
 
-# LANCEMENT DU MENU optimus-installer
-sudo /etc/optimus-installer/menu.sh
+# LANCEMENT DU MENU optimus
+sudo /etc/optimus/menu.sh

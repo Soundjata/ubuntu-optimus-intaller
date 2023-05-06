@@ -1,7 +1,7 @@
 #!/bin/bash
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_DOCKER ]; then require MODULE_DOCKER yesno "Souhaitez vous installer le gestionnaire de conteneurs DOCKER ?"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_DOCKER ]; then require MODULE_DOCKER yesno "Souhaitez vous installer le gestionnaire de conteneurs DOCKER ?"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_DOCKER = "Y" ]
 then

@@ -1,11 +1,11 @@
 #!/bin/bash
 cd /
-source /etc/optimus-installer/functions.sh
-if [ -z $MODULE_MARIADB ]; then require MODULE_MARIADB yesno "Voulez-vous installer le serveur de bases de données MARIADB"; source /root/.optimus-installer; fi
-#if [ -z $MODULE_MARIADB_REMOTE_ACCESS ]; then require MODULE_MARIADB_REMOTE_ACCESS yesno "Voulez-vous autoriser la connexion à distance à la base de données ?"; source /root/.optimus-installer; fi
-if [ -z $MARIADB_ROOT_PASSWORD ] || [ $MARIADB_ROOT_PASSWORD = "auto" ]; then require MARIADB_ROOT_PASSWORD password "Veuillez renseigner le mot de passe de connexion à distance de l'utilisateur 'root' :"; source /root/.optimus-installer; fi
-# if [ -z $AES_KEY ] || [ $AES_KEY = "auto" ]; then require AES_KEY aeskey "Veuillez renseigner une clé de chiffrement AES de 16 caractères [A-Za-z0-9]"; source /root/.optimus-installer; fi
-source /root/.optimus-installer
+source /etc/optimus/functions.sh
+if [ -z $MODULE_MARIADB ]; then require MODULE_MARIADB yesno "Voulez-vous installer le serveur de bases de données MARIADB"; source /root/.optimus; fi
+#if [ -z $MODULE_MARIADB_REMOTE_ACCESS ]; then require MODULE_MARIADB_REMOTE_ACCESS yesno "Voulez-vous autoriser la connexion à distance à la base de données ?"; source /root/.optimus; fi
+if [ -z $MARIADB_ROOT_PASSWORD ] || [ $MARIADB_ROOT_PASSWORD = "auto" ]; then require MARIADB_ROOT_PASSWORD password "Veuillez renseigner le mot de passe de connexion à distance de l'utilisateur 'root' :"; source /root/.optimus; fi
+# if [ -z $AES_KEY ] || [ $AES_KEY = "auto" ]; then require AES_KEY aeskey "Veuillez renseigner une clé de chiffrement AES de 16 caractères [A-Za-z0-9]"; source /root/.optimus; fi
+source /root/.optimus
 
 if [ $MODULE_MARIADB = "Y" ]
 then
