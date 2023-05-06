@@ -22,7 +22,7 @@ then
   done
 
   echo_magenta "Recréation de l'enregistrement A racine"
-  verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/record" '{"fieldType": "A", "subDomain": "", "target": "'$PUBLIC_IP'", "ttl": 0}'
+  verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/record" '{"fieldType": "A", "target": "'$PUBLIC_IP'", "ttl": 0}'
   
   echo_magenta "Suppression des enregistrements MX"
   RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=MX")
@@ -51,6 +51,8 @@ then
   do
     verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
   done
+
+   verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/refresh"
 fi
 
 
