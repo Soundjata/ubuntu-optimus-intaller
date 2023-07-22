@@ -79,7 +79,7 @@ function output()
   then
     if [ ! -z "$MESSAGE" ]
     then
-      echo '{"code":"'$STATUS'", "message":"'$MESSAGE'", "operation":"'$OPERATION'", "progress":"'$PROGRESS'"}'
+      echo '{"code":'$STATUS', "message":"'$MESSAGE'", "operation":"'$OPERATION'", "progress":'$PROGRESS'}'
     fi
   elif [ $MODE = "console" ]
   then

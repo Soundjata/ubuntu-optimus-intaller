@@ -3,7 +3,9 @@ source /etc/optimus/functions.sh
 source /root/.optimus
 
 output $OUTPUT_MODE 
-output $OUTPUT_MODE "==== CREATION D'UNE NOUVELLE PARTITION ====" 'magenta' 200 'upgrade' 0
+output $OUTPUT_MODE "==== CREATION D'UNE NOUVELLE PARTITION ====" 'magenta' 200 'diskpart' 0
+
+
 
 if [ -z $DISKPART_DISK_TO_PART ] || [ -z $PART_TO_ENCRYPT ]
 then
@@ -29,6 +31,8 @@ elif [ -e /dev/sda ]
   fi
 fi
 
+output $OUTPUT_MODE "Disque sélectionné : $PART_TO_ENCRYPT" "magenta" 200 "diskpart" 25
+
 if [ -e /dev/$DISKPART_DISK_TO_PART ] && [ ! -e /dev/$PART_TO_ENCRYPT ]
 then
   FREESPACE=$(/usr/sbin/sfdisk --list-free --quiet /dev/$DISKPART_DISK_TO_PART | grep -v "Size" |  awk '{print $NF}')
@@ -45,7 +49,7 @@ then
       mount /dev/$PART_TO_ENCRYPT /srv
     fi
   else
-    
+      
     if [ $OUTPUT_MODE = 'console' ]
     then
       echo_red "!! ATTENTION !!"
@@ -55,11 +59,15 @@ then
       echo
     fi
 
-    require DISKPART_RESIZE_PARTITION yesno "Souhaitez vous redimensionner le disque $DISKPART_DISK_TO_PART ?";
-    source /root/.optimus
-    if [ $DISKPART_RESIZE_PARTITION = "Y" ]
+    if [ $OUTPUT_MODE == 'console' ]
     then
-      output $OUTPUT_MODE "Mise en place des scripts de partitionnement..." "magenta" 200 "upgrade" 50
+      require DISKPART_RESIZE_PARTITION yesno "Souhaitez vous redimensionner le disque $DISKPART_DISK_TO_PART ?";
+      source /root/.optimus
+    fi
+
+    if [ $DISKPART_RESIZE_PARTITION = "Y" ] || [ $OUTPUT_MODE = 'json' ]
+    then
+      output $OUTPUT_MODE "Mise en place des scripts de partitionnement..." "magenta" 200 "diskpart" 50
       verbose cp /etc/optimus/diskpart/resizefs_hook /etc/initramfs-tools/hooks/resizefs_hook
       verbose chmod +x /etc/initramfs-tools/hooks/resizefs_hook
       . /etc/os-release
@@ -76,7 +84,7 @@ then
       verbose chmod +x /etc/rc.local
       sleep 0.5
 
-      output $OUTPUT_MODE "Mise à jour du module INITRAMFS..." "magenta" 200 "upgrade" 75
+      output $OUTPUT_MODE "Mise à jour du module INITRAMFS..." "magenta" 200 "diskpart" 75
       verbose apt-get remove -qq cryptsetup-initramfs
       verbose update-initramfs -u
 
@@ -88,11 +96,11 @@ then
         read -p ""
         reboot
       else
-        output $OUTPUT_MODE "Mise à jour du module INITRAMFS..." "magenta" 200 "upgrade" 100
+        output $OUTPUT_MODE "Redémarrage..." "magenta" 200 "diskpart" 90
         reboot
       fi
     fi
   fi
 else
-  output $OUTPUT_MODE "La partition /dev/$PART_TO_ENCRYPT existe déjà" "magenta" 200 "upgrade" 100
+  output $OUTPUT_MODE "La partition /dev/$PART_TO_ENCRYPT existe déjà" "red" 200 "diskpart" 100
 fi
