@@ -32,4 +32,4 @@ then
 fi
 
 # LANCEMENT DU MENU optimus
-sudo /etc/optimus/menu.sh
+# sudo /etc/optimus/menu.sh
