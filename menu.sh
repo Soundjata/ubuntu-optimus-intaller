@@ -4,13 +4,13 @@ source /etc/optimus/functions.sh
 source /root/.optimus
 
 #MENU OPENS ON REBOOT EXCEPT IN DEV MODE (because it hangs VSCODE and some SFTP CLIENTS)
-if [ $DEV -eq 1 ]
-then
-  sed -i '/sudo \/usr\/bin\/bash \/etc\/optimus\/menu.sh/d' /home/debian/.bashrc
-elif ! grep -q "sudo /usr/bin/bash /etc/optimus/menu.sh" /home/debian/.bashrc
-then
-    echo "sudo /usr/bin/bash /etc/optimus/menu.sh" >> /home/debian/.bashrc
-fi
+#if [ $DEV -eq 1 ]
+#then
+  #sed -i '/sudo \/usr\/bin\/bash \/etc\/optimus\/menu.sh/d' /home/debian/.bashrc
+#elif ! grep -q "sudo /usr/bin/bash /etc/optimus/menu.sh" /home/debian/.bashrc
+#then
+    #echo "sudo /usr/bin/bash /etc/optimus/menu.sh" >> /home/debian/.bashrc
+#fi
 
 DOMAIN_TO_DNS=$( getent hosts $DOMAIN | awk '{ print $1 }' )
 PUBLIC_IP=$( wget -qO- ipinfo.io/ip )

@@ -1,4 +1,13 @@
 #!/bin/bash
+OUTPUT_MODE="${1:-console}"
+
+if [ ! -f /root/.optimus ]
+then
+  cp /etc/optimus/config.sh /root/.optimus
+fi
+
+source /root/.optimus
+
 function ovh_api_request()
 {
 	CONSUMER_KEY=$OVH_CONSUMER_KEY
@@ -58,6 +67,36 @@ function ovh_dns_record_replace()
 	fi
 }
 
+function output()
+{
+  MODE="$1"
+  MESSAGE="$2"
+  COLOR="$3"
+  STATUS="$4"
+  OPERATION="$5"
+  PROGRESS="$6"
+  if [ $MODE = "json" ]
+  then
+    echo '{"code":"'$STATUS'", "message":"'$MESSAGE'", "operation":"'$OPERATION'", "progress":"'$PROGRESS'"}'
+  elif [ $MODE = "console" ]
+  then
+    case $COLOR in
+      red) echo -e "\e[31m$MESSAGE\e[0m"
+      ;;
+      green) echo -e "\e[32m$MESSAGE\e[0m"
+      ;;
+      yellow) echo -e "\e[33m$MESSAGE\e[0m"
+      ;;
+      blue) echo -e "\e[34m$MESSAGE\e[0m"
+      ;;
+      magenta) echo -e "\e[35m$MESSAGE\e[0m"
+      ;;
+      cyan) echo -e "\e[36m$MESSAGE\e[0m"
+      ;;
+    esac
+  fi
+}
+
 echo_red()(echo -e "\e[31m${1}\e[0m")
 echo_green()(echo -e "\e[32m${1}\e[0m")
 echo_yellow()(echo -e "\e[33m${1}\e[0m")
@@ -66,36 +105,29 @@ echo_magenta()(echo -e "\e[35m${1}\e[0m")
 echo_cyan()(echo -e "\e[36m${1}\e[0m")
 
 
-if [ $1 ]
-then
-  if [ ! -f /root/.optimus ] && [ -f $1 ]
-  then
-    cp $1 /root/.optimus
-  else
-    if [ -f $1 ]
-    then
-      echo_green "Souhaitez vous remplacer votre fichier de configuration par le fichier $1 ?"
-      echo_red "Cette opération écrasera tous vos paramètres antérieurs !"
-      read -p "(o)ui / (n)on ? " -n 1 -e replace_config
-      if [[ $replace_config =~ ^[YyOo]$ ]]
-      then
-        cp $1 /root/.optimus
-        echo_magenta "Le fichier de configuration a bien été remplacé !"
-        exit 0
-      fi
-    else
-      echo_red "Le fichier $1 n'existe pas !"
-      exit 1
-    fi
-  fi
-fi
-
-if [ ! -f /root/.optimus ]
-then
-  cp /etc/optimus/config.sh /root/.optimus
-fi
-
-source /root/.optimus
+# if [ $1 ]
+# then
+#   if [ ! -f /root/.optimus ] && [ -f $1 ]
+#   then
+#     cp $1 /root/.optimus
+#   else
+#     if [ -f $1 ]
+#     then
+#       echo_green "Souhaitez vous remplacer votre fichier de configuration par le fichier $1 ?"
+#       echo_red "Cette opération écrasera tous vos paramètres antérieurs !"
+#       read -p "(o)ui / (n)on ? " -n 1 -e replace_config
+#       if [[ $replace_config =~ ^[YyOo]$ ]]
+#       then
+#         cp $1 /root/.optimus
+#         echo_magenta "Le fichier de configuration a bien été remplacé !"
+#         exit 0
+#       fi
+#     else
+#       echo_red "Le fichier $1 n'existe pas !"
+#       exit 1
+#     fi
+#   fi
+# fi
 
 
 verbose()

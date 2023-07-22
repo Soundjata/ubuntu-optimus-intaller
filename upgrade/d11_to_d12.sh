@@ -1,4 +1,6 @@
 #!/bin/bash
+source /etc/optimus/functions.sh
+
 echo_green "==== MISE A JOUR DE DEBIAN 10 VERS DEBIAN 11 ===="
 
 . /etc/os-release
