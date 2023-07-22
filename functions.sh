@@ -77,7 +77,10 @@ function output()
   PROGRESS="$6"
   if [ $MODE = "json" ]
   then
-    echo '{"code":"'$STATUS'", "message":"'$MESSAGE'", "operation":"'$OPERATION'", "progress":"'$PROGRESS'"}'
+    if [ ! -z "$MESSAGE" ]
+    then
+      echo '{"code":"'$STATUS'", "message":"'$MESSAGE'", "operation":"'$OPERATION'", "progress":"'$PROGRESS'"}'
+    fi
   elif [ $MODE = "console" ]
   then
     case $COLOR in
