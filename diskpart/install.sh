@@ -3,7 +3,7 @@ source /etc/optimus/functions.sh
 source /root/.optimus
 
 output $OUTPUT_MODE 
-output $OUTPUT_MODE "==== CREATION D'UNE NOUVELLE PARTITION ====" 'blue' 200 'diskpart' 0
+output $OUTPUT_MODE "CREATION D'UNE NOUVELLE PARTITION" 'blue' 200 'diskpart' 0
 
 if [ -z $DISKPART_DISK_TO_PART ] || [ -z $PART_TO_ENCRYPT ]
 then
