@@ -1,5 +1,6 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
+source /root/.optimus
 
 #OPTIMUS INSTALLER
 output $OUTPUT_MODE "status" "green" 200 "optimus-installer" 100
@@ -11,7 +12,7 @@ then
 fi
 
 #DISKPART
-if [ -e /dev/$DISKPART_DISK_TO_PART ] && [ -e /dev/$PART_TO_ENCRYPT ]
+if [ ! -z $DISKPART_DISK_TO_PART ] && [ ! -z $PART_TO_ENCRYPT ] && [ -e /dev/$DISKPART_DISK_TO_PART ] && [ -e /dev/$PART_TO_ENCRYPT ]
 then
     output $OUTPUT_MODE "status" "green" 200 "diskpart" 100
 fi
