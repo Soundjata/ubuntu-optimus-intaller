@@ -1,10 +1,7 @@
 #!/bin/bash
 OUTPUT_MODE="${1:-console}"
 
-if [ ! -f /root/.optimus ]
-then
-  cp /etc/optimus/config.sh /root/.optimus
-fi
+
 
 source /root/.optimus
 
@@ -90,11 +87,9 @@ function output()
       ;;
       yellow) echo -e "\e[33m$MESSAGE\e[0m"
       ;;
-      blue) echo -e "\e[34m$MESSAGE\e[0m"
+      blue) echo -e "\e[36m$MESSAGE\e[0m"
       ;;
       magenta) echo -e "\e[35m$MESSAGE\e[0m"
-      ;;
-      cyan) echo -e "\e[36m$MESSAGE\e[0m"
       ;;
     esac
   fi
