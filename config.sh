@@ -1,13 +1,17 @@
 #!/bin/bash
 export DEV=0
+export LAST_UPGRADE=
+
 export DOMAIN=
 export UUID=
 export AES_KEY=
-export API_SHA_KEY=
-export MARIADB_ROOT_PASSWORD=
+export DEBIAN_PASSWORD=
 export OVH_APP_KEY=
 export OVH_SECRET_KEY=
 export OVH_CONSUMER_KEY=
+
+export API_SHA_KEY=
+export MARIADB_ROOT_PASSWORD=
 export ADMIN_FIRSTNAME=
 export ADMIN_LASTNAME=
 export ADMIN_EMAIL_PREFIX=
@@ -15,7 +19,6 @@ export ADMIN_PASSWORD=
 export SECURE_ROOT_PASSWORD=
 export SECURE_DEBIAN_PASSWORD=
 export SECURE_GOOGLEAUTH_KEY=
-export LAST_UPGRADE=
 export MODULE_BACKUP=
 export MODULE_CRYPT=
 export MODULE_DECRYPT=

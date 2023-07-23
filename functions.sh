@@ -1,8 +1,6 @@
 #!/bin/bash
 OUTPUT_MODE="${1:-console}"
 
-
-
 source /root/.optimus
 
 function ovh_api_request()

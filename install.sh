@@ -1,18 +1,66 @@
 #!/bin/bash
+while getopts og:d:a:c:s:-: option
+do
+  if [ "$option" = "-" ]
+  then
+    option="${OPTARG%%=*}"
+    OPTARG="${OPTARG#$option}"
+    OPTARG="${OPTARG#=}"
+  fi
+  case "$option" in
+    o | output-mode)
+      MODE=$OPTARG
+    ;;
+    g | generate)
+      sed -i 's/UUID=/UUID='$(</dev/urandom tr -dc A-Z0-9 | head -c 16)'/g' /root/.optimus
+      sed -i 's/AES_KEY=/AES_KEY='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus
+      sed -i 's/DEBIAN_PASSWORD=/DEBIAN_PASSWORD='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus
+    ;;
+    d | domain)
+      sed -i 's/DOMAIN=/DOMAIN='$OPTARG'/g' /root/.optimus
+    ;;
+    a | app-key)
+      sed -i 's/OVH_APP_KEY=/OVH_APP_KEY='$OPTARG'/g' /root/.optimus
+    ;;
+    c | consumer-key)
+      sed -i 's/OVH_CONSUMER_KEY=/OVH_CONSUMER_KEY='$OPTARG'/g' /root/.optimus
+    ;;
+    s | secret-key)
+      sed -i 's/OVH_SECRET_KEY=/OVH_SECRET_KEY='$OPTARG'/g' /root/.optimus
+    ;;
+    ??* )          
+      echo "Unknown option --$option"
+      exit 2 
+    ;;
+    ? )            
+      echo "Unknown option -$option"
+      exit 2 
+    ;;
+  esac
+done
+
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"==== OPTIMUS INSTALLER ====", "color":"blue","operation":"optimus-installer", "progress":0}'; fi
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Generation des locales", "color":"magenta","operation":"optimus-installer", "progress":15}'; fi
 sudo sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen
 sudo sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen
 sudo locale-gen
 
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Mise à jour du dépôt", "color":"magenta","operation":"optimus-installer", "progress":30}'; fi
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes update
+
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Suppression de paquets inutiles", "color":"magenta","operation":"optimus-installer", "progress":40}'; fi
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes remove cryptsetup-initramfs
+
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Installation de git, unzip, zip, sudo et jq", "color":"magenta","operation":"optimus-installer", "progress":50}'; fi
 DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes install git unzip zip sudo jq
 
-# CLONAGE DU DEPOT OPTIMUS INSTALLER
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Clonage du dépôt git", "color":"magenta","operation":"optimus-installer", "progress":70}'; fi
 if [ -d "/etc/optimus" ]; then sudo rm -R /etc/optimus; fi
 sudo mkdir /etc/optimus
 sudo git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus
 sudo chmod +x /etc/optimus/menu.sh
 
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Synchronisation du serveur sur la zone Europe/Paris", "color":"magenta","operation":"optimus-installer", "progress":80}'; fi
 sudo timedatectl set-timezone Europe/Paris
 
 # CREATION D'UN SWAPFILE DE 2GO
@@ -25,84 +73,10 @@ sudo timedatectl set-timezone Europe/Paris
 #   sudo echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
 # fi
 
-# ALIAS PERMETTANT DE LANCER LE MENU EN TAPPANT "optimus"
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Création d un alias pour la commande optimus", "color":"magenta","operation":"optimus-installer", "progress":90}'; fi
 if ! grep -q "alias optimus" /home/debian/.bashrc
 then
   echo "alias optimus='sudo bash /etc/optimus/menu.sh'" >> /home/debian/.bashrc
 fi
 
-# GENERATION DES VARIABLES PAR DEFAUT SI SOLLICITE AU PREMIER LANCEMENT
-source /etc/optimus/functions.sh
-while getopts g:d:a:c:s:-: option
-do
-  if [ "$option" = "-" ]
-  then   # long option: reformulate OPT and OPTARG
-    option="${OPTARG%%=*}"       # extract long option name
-    OPTARG="${OPTARG#$option}"   # extract long option argument (may be empty)
-    OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
-  fi
-  case "$option" in
-    g | generate)
-      update_conf UUID $(</dev/urandom tr -dc A-Z0-9 | head -c 16)
-    ;;
-    d | domain)
-      echo $OPTARG
-      update_conf DOMAIN $OPTARG
-    ;;
-    a | ovh-app-key)
-      echo $OPTARG
-      update_conf OVH_APP_KEY $OPTARG
-    ;;
-    c | ovh-consumer-key)
-      echo $OPTARG
-      update_conf OVH_CONSUMER_KEY $OPTARG
-    ;;
-    s | ovh-secret-key)
-      echo $OPTARG
-      update_conf OVH_SECRET_KEY $OPTARG
-    ;;
-    ??* )          
-      echo "Unknown option --$option"
-      exit 2 
-    ;;  # bad long option
-    ? )            
-      echo "Unknown option -$option"
-      exit 2 
-    ;;  # bad short option (error reported via getopts)
-  esac
-done
-
-
-
-source /etc/optimus/functions.sh
-if [ ! -f /root/.optimus ]
-then
-  cp /etc/optimus/config.sh /root/.optimus
-
-  if [ $1 = 'autogen' ]
-  then
-    update_conf UUID $(</dev/urandom tr -dc A-Z0-9 | head -c 16)
-  fi
-fi
-
-
-# LECTURE DES VARIABLES PASSEES
-while getopts ":autogen:domain:" opt; do
-  case $opt in
-    autogen)
-      update_conf UUID $(</dev/urandom tr -dc A-Z0-9 | head -c 16)
-    ;;
-    domain) 
-      update_conf DOMAIN $OPTARG
-    ;;
-    \?) echo "Option invalide -$OPTARG" >&2
-        exit 1 ;;
-    :) echo "L'option -$OPTARG nécessite un argument." >&2
-       exit 1 ;;
-  esac
-done
-
-if [ -z $2 ]
-then
-  update_conf DOMAIN $1
-fi
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Installation réussie", "color":"green","operation":"optimus-installer", "progress":100}'; fi
