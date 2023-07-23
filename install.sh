@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts og:d:a:c:s:-: option
+while getopts m:g:d:a:c:s:-: option
 do
   if [ "$option" = "-" ]
   then
@@ -8,7 +8,7 @@ do
     OPTARG="${OPTARG#=}"
   fi
   case "$option" in
-    o | output-mode)
+    m | mode)
       MODE=$OPTARG
     ;;
     g | generate)
