@@ -2,7 +2,7 @@
 source /etc/optimus/functions.sh
 
 output $OUTPUT_MODE 
-output $OUTPUT_MODE "==== CHIFFREMENT DU DISQUE ====" "blue" 200 "crypt" 0
+output $OUTPUT_MODE "CHIFFREMENT DU DISQUE" "blue" 200 "crypt" 0
 
 if ! lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT
 then

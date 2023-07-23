@@ -2,7 +2,7 @@
 source /etc/optimus/functions.sh
 
 output $OUTPUT_MODE 
-output $OUTPUT_MODE "==== MISE A JOUR DE DEBIAN ====" "blue" 200 "upgrade" 0
+output $OUTPUT_MODE "MISE A JOUR DE DEBIAN" "blue" 200 "upgrade" 0
 
 output $OUTPUT_MODE "Update" "magenta" 200 "upgrade" 25
 DEBIAN_FRONTEND=noninteractive verbose apt-get -qq -y --allow-releaseinfo-change update

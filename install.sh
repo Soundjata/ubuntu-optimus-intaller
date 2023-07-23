@@ -39,7 +39,7 @@ do
   esac
 done
 
-if [ $MODE = 'json' ]; then echo '{"code":200, "message":"==== OPTIMUS INSTALLER ====", "color":"blue","operation":"optimus-installer", "progress":0}'; fi
+if [ $MODE = 'json' ]; then echo '{"code":200, "message":"MISE EN ROUTE DE L'INSTALLEUR OPTIMUS", "color":"blue","operation":"optimus-installer", "progress":0}'; fi
 if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Generation des locales", "color":"magenta","operation":"optimus-installer", "progress":15}'; fi
 sudo sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen
 sudo sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen
