@@ -1,6 +1,5 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
-source /root/.optimus
 
 #OPTIMUS INSTALLER
 output $OUTPUT_MODE "status" "green" 200 "optimus-installer" 100
@@ -20,4 +19,9 @@ fi
 if [ -e /dev/mapper/crypt${PART_TO_ENCRYPT} ]
 then
     output $OUTPUT_MODE "status" "green" 200 "crypt" 100
+fi
+
+if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
+then
+    output $OUTPUT_MODE "status" "green" 200 "letsencrypt_ovh" 100
 fi
