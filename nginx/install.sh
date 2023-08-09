@@ -14,9 +14,6 @@ verbose usermod -a -G www-data debian
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "nginx" 35
 verbose apt-get -qq install nginx incron
 
-#echo_magenta "Ouverture du port 80 sur le firewall"
-#if [ $(which /sbin/ufw) ]; then verbose /sbin/ufw allow 80; fi
-
 output $OUTPUT_MODE "Paramétrage des vhosts" "magenta" 200 "nginx" 50
 verbose mkdir -p /srv/vhosts/servers
 verbose mkdir -p /srv/vhosts/locations

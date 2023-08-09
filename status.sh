@@ -35,3 +35,13 @@ if [ -d /etc/docker ]
 then
     output $OUTPUT_MODE "status" "green" 200 "docker" 100
 fi
+
+if [ -d /etc/ufw ]
+then
+    output $OUTPUT_MODE "status" "green" 200 "firewall" 100
+fi
+
+if [ -d /etc/fail2ban ]
+then
+    output $OUTPUT_MODE "status" "green" 200 "fail2ban" 100
+fi

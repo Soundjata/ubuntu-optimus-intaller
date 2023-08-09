@@ -62,12 +62,6 @@ then
   verbose chmod 600 /root/ovh
   verbose certbot certonly --expand --non-interactive --agree-tos --quiet --email postmaster@$DOMAIN --dns-ovh --dns-ovh-propagation-seconds 30 --dns-ovh-credentials /root/ovh -d $DOMAIN -d *.$DOMAIN
 
-  #output $OUTPUT_MODE "Ouverture du port 443 dans le firewall" "magenta" 200 "letsencrypt_ovh" 95
-  #if [ $(which /sbin/ufw) ]
-  #then 
-  #  verbose /sbin/ufw allow 443
-  #fi
-
   output $OUTPUT_MODE "Les certificats ont été valablement générés" "green" 200 "letsencrypt_ovh" 100
 
 else
