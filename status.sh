@@ -25,3 +25,13 @@ if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
 then
     output $OUTPUT_MODE "status" "green" 200 "letsencrypt_ovh" 100
 fi
+
+if [ -d /etc/nginx ]
+then
+    output $OUTPUT_MODE "status" "green" 200 "nginx" 100
+fi
+
+if [ -d /etc/docker ]
+then
+    output $OUTPUT_MODE "status" "green" 200 "docker" 100
+fi

@@ -1,27 +1,24 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
-if [ -z $MODULE_DOCKER ]; then require MODULE_DOCKER yesno "Souhaitez vous installer le gestionnaire de conteneurs DOCKER ?"; source /root/.optimus; fi
-source /root/.optimus
 
-if [ $MODULE_DOCKER = "Y" ]
-then
-  echo
-  echo_green "==== INSTALLATION DU GESTIONNAIRE DE CONTENEURS DOCKER ===="
+output $OUTPUT_MODE
+output $OUTPUT_MODE "INSTALLATION DU GESTIONNAIRE DE CONTENEURS DOCKER" "blue" 200 "docker" 0
 
-  echo_magenta "Création du groupe docker et ajout de l'utilisateur www-data"
-  verbose groupadd --gid 220 docker
-  verbose usermod -aG docker www-data
-  verbose usermod -aG docker debian
+output $OUTPUT_MODE "Création du groupe docker et ajout de l'utilisateur www-data" "magenta" 200 "docker" 20
+verbose groupadd --gid 220 docker
+verbose usermod -aG docker www-data
+verbose usermod -aG docker debian
+ 
+output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "docker" 35
+verbose apt-get -qq install docker.io
   
-  echo_magenta "Installation des paquets"
-  verbose apt-get -qq install docker.io
-  
-  echo_magenta "Activation du service"
-  verbose systemctl enable docker 2> /dev/null
-  
-  echo_magenta "Changement des droits sur le socket DOCKER"
-  chown root:docker /var/run/docker.sock
+output $OUTPUT_MODE "Activation du service" "magenta" 200 "docker" 50
+verbose systemctl enable docker 2> /dev/null
 
-  echo_magenta "Création du réseau docker optimus"
-  verbose docker network create --subnet=172.20.0.0/16 optimus
-fi
+output $OUTPUT_MODE "Changement des droits sur le socket DOCKER" "magenta" 200 "docker" 65
+chown root:docker /var/run/docker.sock
+
+output $OUTPUT_MODE "Création du réseau docker optimus" "magenta" 200 "docker" 80
+verbose docker network create --subnet=172.20.0.0/16 optimus
+
+output $OUTPUT_MODE "DOCKER a été installé avec succès" "green" 200 "docker" 100

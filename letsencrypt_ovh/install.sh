@@ -48,6 +48,8 @@ then
   do
     verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
   done
+
+  sleep 1
   
   output $OUTPUT_MODE "Rechargement de la zone DNS" "magenta" 200 "letsencrypt_ovh" 80
   verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/refresh"
