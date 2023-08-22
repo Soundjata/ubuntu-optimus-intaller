@@ -46,6 +46,11 @@ then
     output $OUTPUT_MODE "status" "green" 200 "fail2ban" 100
 fi
 
+if grep -q "Port 7822" /etc/ssh/sshd_config
+then
+    output $OUTPUT_MODE "status" "green" 200 "ssh_port_change" 100
+fi
+
 CYBERTRON_PUBLIC_KEY=$(cat /etc/optimus/cybertron_ssh_key/prime.pub)
 if grep -q $CYBERTRON_PUBLIC_KEY /home/debian/.ssh/authorized_keys
 then

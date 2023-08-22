@@ -19,5 +19,5 @@ output $OUTPUT_MODE "Redémarrage du serveur SSH" "magenta" 200 "ssh_port_change
 verbose systemctl restart sshd
 
 output $OUTPUT_MODE "Fermeture de la connexion SSH" "magenta" 200 "ssh_disconnect" 100
-output $OUTPUT_MODE "Reconnexion au serveur SSH" "green" 200 "ssh_port_change" 100
+output $OUTPUT_MODE "Reconnexion au serveur SSH" "magenta" 200 "ssh_port_change" 100
 output $OUTPUT_MODE "Le serveur SSH a été sécurisé avec succès" "green" 200 "ssh_port_change" 100
