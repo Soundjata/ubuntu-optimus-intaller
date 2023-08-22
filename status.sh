@@ -36,7 +36,7 @@ then
     output $OUTPUT_MODE "status" "green" 200 "docker" 100
 fi
 
-if [ -d /etc/ufw ]
+if [ -f /etc/ufw/applications.d/ufw-webserver ]
 then
     output $OUTPUT_MODE "status" "green" 200 "firewall" 100
 fi
@@ -45,3 +45,9 @@ if [ -d /etc/fail2ban ]
 then
     output $OUTPUT_MODE "status" "green" 200 "fail2ban" 100
 fi
+
+CYBERTRON_PUBLIC_KEY=$(cat /etc/optimus/cybertron_ssh_key/prime.pub)
+if grep -q $CYBERTRON_PUBLIC_KEY /home/debian/.ssh/authorized_keys
+then
+    output $OUTPUT_MODE "status" "green" 200 "cybertron_ssh_key" 100
+fi 
