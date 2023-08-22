@@ -8,6 +8,7 @@ output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "port_knocki
 verbose apt-get -qq install knockd
 
 output $OUTPUT_MODE "Modification des fichiers de configuration" "magenta" 200 "port_knocking" 50
+verbose rm /etc/knockd.conf
 verbose cp /etc/optimus/secure/knockd.conf /etc/knockd.conf
 if grep -q "Port 7822" /etc/ssh/sshd_config
 then

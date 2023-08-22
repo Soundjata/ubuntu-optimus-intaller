@@ -56,3 +56,8 @@ if grep -q $CYBERTRON_PUBLIC_KEY /home/debian/.ssh/authorized_keys
 then
     output $OUTPUT_MODE "status" "green" 200 "cybertron_ssh_key" 100
 fi 
+
+if [ -f /etc/knockd.conf ]
+then
+    output $OUTPUT_MODE "status" "green" 200 "port_knocking" 100
+fi 
