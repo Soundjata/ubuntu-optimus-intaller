@@ -14,7 +14,6 @@ do
     g | generate)
       sed -i 's/UUID=/UUID='$(</dev/urandom tr -dc A-Z0-9 | head -c 16)'/g' /root/.optimus
       sed -i 's/AES_KEY=/AES_KEY='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus
-      sed -i 's/DEBIAN_PASSWORD=/DEBIAN_PASSWORD='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus
     ;;
     d | domain)
       sed -i 's/DOMAIN=/DOMAIN='$OPTARG'/g' /root/.optimus
