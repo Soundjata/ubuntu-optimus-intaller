@@ -52,7 +52,7 @@ then
 fi
 
 CYBERTRON_PUBLIC_KEY=$(cat /etc/optimus/cybertron_ssh_key/prime.pub)
-if grep -q $CYBERTRON_PUBLIC_KEY /home/debian/.ssh/authorized_keys
+if grep -q "$CYBERTRON_PUBLIC_KEY" /home/debian/.ssh/authorized_keys
 then
     output $OUTPUT_MODE "status" "green" 200 "cybertron_ssh_key" 100
 fi 
