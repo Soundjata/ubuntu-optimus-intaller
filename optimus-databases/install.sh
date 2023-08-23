@@ -59,14 +59,4 @@ do
 	let "WAITER+=1"
 done
 
-if [ "$DEV_MODE" == "Y" ]
-then
-	output $OUTPUT_MODE "Activation de la connexion à distance sur le port 3306 pour l'utilisateur root" "magenta" 200 "optimus-databases" 90
-	if [ $(which /sbin/ufw) ]
-	then 
-		verbose /sbin/ufw allow 3306
-	fi
-	verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "GRANT ALL ON *.* to 'root'@'%' IDENTIFIED BY '$MARIADB_ROOT_PASSWORD' WITH GRANT OPTION;"
-fi
-
 output $OUTPUT_MODE "Le service OPTIMUS-DATABASES a été installé avec succès !" "green" 200 "optimus-databases" 100
