@@ -12,7 +12,8 @@ fi
 
 if [ -z $PORTKNOCKING_SEQUENCE ]
 then 
-	$PORTKNOCKING_SEQUENCE="port_knocking/knockd.conf"
+	PORTKNOCKING_SEQUENCE="1083,1080,1082,1075"
+	update_conf PORTKNOCKING_SEQUENCE $PORTKNOCKING_SEQUENCE
 fi
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "port_knocking" 20
@@ -25,7 +26,8 @@ then
 	verbose sed -i 's/22/7822/g' /etc/knockd.conf
 fi
 verbose sed -i 's/START_KNOCKD=0/START_KNOCKD=1/g' /etc/default/knockd
-verbose sed -i 's/#KNOCKD_OPTS="-i eth0"/KNOCKD_OPTS="-i $(ip route get 8.8.8.8 | awk -- '{printf $5}')"/g' /etc/default/knockd
+NETWORK_INTERFACE=$(ip route get 8.8.8.8 | awk -- '{printf $5}')
+verbose sed -i 's/#KNOCKD_OPTS="-i eth1"/KNOCKD_OPTS="-i '$NETWORK_INTERFACE'"/g' /etc/default/knockd
 
 output $OUTPUT_MODE "Redémarrage des services" "magenta" 200 "port_knocking" 60
 if ! grep -q "\[Install\]" /lib/systemd/system/knockd.service

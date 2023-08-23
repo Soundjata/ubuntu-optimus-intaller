@@ -9,6 +9,7 @@ export DEBIAN_PASSWORD=
 export OVH_APP_KEY=
 export OVH_SECRET_KEY=
 export OVH_CONSUMER_KEY=
+export 2FAKEY=
 export PORTKNOCKING_SEQUENCE=
 
 export API_SHA_KEY=
