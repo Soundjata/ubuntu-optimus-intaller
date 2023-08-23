@@ -1,6 +1,6 @@
 #!/bin/bash
 OUTPUT_MODE="${1:-console}"
-
+DEV_MODE="${2:-N}"
 source /root/.optimus
 
 function ovh_api_request()
