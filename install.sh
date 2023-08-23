@@ -1,4 +1,6 @@
 #!/bin/bash
+source /etc/os-release
+
 while getopts m:g:d:a:c:s:-: option
 do
   if [ "$option" = "-" ]
@@ -58,6 +60,7 @@ if [ -d "/etc/optimus" ]; then sudo rm -R /etc/optimus; fi
 sudo mkdir /etc/optimus
 sudo git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus
 sudo chmod +x /etc/optimus/menu.sh
+sudo chown $ID:$ID -R /etc/optimus
 
 if [ $MODE = 'json' ]; then echo '{"code":200, "message":"Synchronisation du serveur sur la zone Europe/Paris", "color":"magenta","operation":"optimus-installer", "progress":80}'; fi
 sudo timedatectl set-timezone Europe/Paris
