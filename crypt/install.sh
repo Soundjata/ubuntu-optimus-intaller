@@ -39,18 +39,18 @@ then
   chmod 0400 /root/tmpramfs/keyfile
   openssl genrsa -out /root/private.pem 4096 &> /dev/null
   openssl rsa -in /root/private.pem -outform PEM -pubout -out /root/public.pem &> /dev/null
-  openssl rsautl -encrypt -inkey /root/public.pem -pubin -in /root/tmpramfs/keyfile -out /root/tmpramfs/keyfile_encrypted &> /dev/null
+  openssl pkeyutl -encrypt -inkey /root/public.pem -pubin -in /root/tmpramfs/keyfile -out /root/tmpramfs/keyfile_encrypted &> /dev/null
   sleep 0.5
 
   output $OUTPUT_MODE "Envoi de la clé de chiffrement sur le serveur distant" "magenta" 200 "crypt" 40
   curl -X POST -F "$UUID=@/root/tmpramfs/keyfile_encrypted" https://decrypt.optimus-avocats.fr/index.php
 
   output $OUTPUT_MODE "Activation du chiffrement sur la partition" "magenta" 200 "crypt" 50
-  openssl rsautl -decrypt -inkey /root/private.pem -in /root/tmpramfs/keyfile_encrypted | /sbin/cryptsetup --batch-mode luksFormat /dev/$PART_TO_ENCRYPT
+  openssl pkeyutl -decrypt -inkey /root/private.pem -in /root/tmpramfs/keyfile_encrypted | /sbin/cryptsetup --batch-mode luksFormat /dev/$PART_TO_ENCRYPT
   sleep 0.5
 
   output $OUTPUT_MODE "Ouverture de la partition chiffrée" "magenta" 200 "crypt" 60
-  openssl rsautl -decrypt -inkey /root/private.pem -in /root/tmpramfs/keyfile_encrypted | /sbin/cryptsetup luksOpen /dev/$PART_TO_ENCRYPT crypt$PART_TO_ENCRYPT
+  openssl pkeyutl -decrypt -inkey /root/private.pem -in /root/tmpramfs/keyfile_encrypted | /sbin/cryptsetup luksOpen /dev/$PART_TO_ENCRYPT crypt$PART_TO_ENCRYPT
   sleep 0.5
 
   output $OUTPUT_MODE "Formattage de la partition chiffrée au format EXT4" "crypt" 200 "crypt" 70

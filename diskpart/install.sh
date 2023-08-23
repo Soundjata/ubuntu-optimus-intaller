@@ -40,7 +40,7 @@ then
   then
     require DISKPART_USE_FREESPACE yesno "Souhaitez vous utiliser les $FREESPACE non partitionnés de $DISKPART_DISK_TO_PART";
     source /root/.optimus
-    if [ $DISKPART_USE_FREESPACE = "Y" ]
+    if [ "$DISKPART_USE_FREESPACE" == "Y" ]
     then
       echo $FIRSTSECTOR | /usr/sbin/sfdisk /dev/$PART_TO_ENCRYPT --append --force
       /usr/sbin/mkfs.ext4 /dev/$PART_TO_ENCRYPT
@@ -48,7 +48,7 @@ then
     fi
   else
       
-    if [ $OUTPUT_MODE = 'console' ]
+    if [ "$OUTPUT_MODE" == "console" ]
     then
       echo_red "!! ATTENTION !!"
       echo_red "CETTE OPERATION EST RISQUEE"
@@ -57,13 +57,13 @@ then
       echo
     fi
 
-    if [ $OUTPUT_MODE == 'console' ]
+    if [ "$OUTPUT_MODE" == "console" ]
     then
       require DISKPART_RESIZE_PARTITION yesno "Souhaitez vous redimensionner le disque $DISKPART_DISK_TO_PART ?";
       source /root/.optimus
     fi
 
-    if [ $DISKPART_RESIZE_PARTITION = "Y" ] || [ $OUTPUT_MODE = 'json' ]
+    if [ "$DISKPART_RESIZE_PARTITION" == "Y" ] || [ "$OUTPUT_MODE" == 'json' ]
     then
       output $OUTPUT_MODE "Mise en place des scripts de partitionnement..." "magenta" 200 "diskpart" 50
       verbose cp /etc/optimus/diskpart/resizefs_hook /etc/initramfs-tools/hooks/resizefs_hook
@@ -86,7 +86,7 @@ then
       verbose apt-get remove -qq cryptsetup-initramfs
       verbose update-initramfs -u
 
-      if [ $OUTPUT_MODE == 'console']
+      if [ "$OUTPUT_MODE" == "console" ]
       then
         echo
         echo_red "Un redémarrage est nécessaire pour finaliser le partitionnement"
