@@ -12,7 +12,7 @@ if ! grep -q "auth required pam_google_authenticator.so" /etc/pam.d/sshd
 then
 	echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
 fi
-verbose sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
+verbose sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/g' /etc/ssh/sshd_config
 
 if [ ! -f /root/.google_authenticator ]
 then
