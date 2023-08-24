@@ -51,6 +51,16 @@ then
 	output $OUTPUT_MODE "status" "green" 200 "ssh_port_change" 100
 fi
 
+if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "optimus-databases" 100
+fi
+
+if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "optimus-base" 100
+fi
+
 CYBERTRON_PUBLIC_KEY=$(cat /etc/optimus/cybertron_ssh_key/prime.pub)
 if grep -q "$CYBERTRON_PUBLIC_KEY" /home/debian/.ssh/authorized_keys
 then
@@ -62,12 +72,3 @@ then
 	output $OUTPUT_MODE "status" "green" 200 "port_knocking" 100
 fi 
 
-if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
-then
-	output $OUTPUT_MODE "status" "green" 200 "optimus-databases" 100
-fi
-
-if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
-then
-	output $OUTPUT_MODE "status" "green" 200 "optimus-base" 100
-fi
