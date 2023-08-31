@@ -18,7 +18,7 @@ then
 	done
 
 	output $OUTPUT_MODE "Recréation de l'enregistrement A racine" "magenta" 200 "letsencrypt_ovh" 30
-	PUBLIC_IP=$( wget -qO- ipinfo.io/ip )
+	PUBLIC_IP=$( wget -qO- ipinfo.io/ip )TXT
 	verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/record" '{"fieldType": "A", "target": "'$PUBLIC_IP'", "ttl": 0}'
 
 	output $OUTPUT_MODE "Suppression des enregistrements MX" "magenta" 200 "letsencrypt_ovh" 40
@@ -44,6 +44,13 @@ then
 
 	output $OUTPUT_MODE "Suppression des enregistrements TXT" "magenta" 200 "letsencrypt_ovh" 70
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=TXT")
+	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
+	do
+		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
+	done
+
+	output $OUTPUT_MODE "Suppression des enregistrements DKIM" "magenta" 200 "letsencrypt_ovh" 75
+	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=DKIM")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
 	do
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"

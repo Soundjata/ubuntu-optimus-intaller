@@ -24,7 +24,7 @@ output $OUTPUT_MODE "Paramétrage des logs" "magenta" 200 "nginx" 65
 verbose mkdir -p /var/log/optimus
 verbose chown -R www-data:www-data /var/log/optimus
 
-output $OUTPUT_MODE "Mise en place d'une veille sur les dossiers /srv/vhosts/servers et /srv/vhosts/locations" "magenta" 200 "nginx" 80
+output $OUTPUT_MODE "Mise en place d'une veille sur /srv/vhosts/servers et /srv/vhosts/locations" "magenta" 200 "nginx" 80
 if ! grep -q "root" /etc/incron.allow
 then
   echo "root" >> /etc/incron.allow
