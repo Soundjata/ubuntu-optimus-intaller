@@ -12,7 +12,7 @@ output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta"
 verbose usermod -a -G www-data debian
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "nginx" 35
-verbose apt-get -qq install nginx incron
+verbose apt-get -qq --yes install nginx incron
 
 output $OUTPUT_MODE "Paramétrage des vhosts" "magenta" 200 "nginx" 50
 verbose mkdir -p /srv/vhosts/servers

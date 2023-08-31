@@ -15,9 +15,9 @@ then
   then
 
     echo_magenta "Installation des paquets requis"
-    DEBIAN_FRONTEND=noninteractive apt-get -qq install keyboard-configuration &> /dev/null
-    DEBIAN_FRONTEND=noninteractive apt-get -qq install cryptsetup cryptsetup-bin &> /dev/null
-    verbose apt-get -qq install curl
+    DEBIAN_FRONTEND=noninteractive apt-get -qq --yes install keyboard-configuration &> /dev/null
+    DEBIAN_FRONTEND=noninteractive apt-get -qq --yes install cryptsetup cryptsetup-bin &> /dev/null
+    verbose apt-get -qq --yes install curl
     
     echo_magenta "Ouverture de la partition chiffrée via le serveur de clé distant"
     mkdir -p /root/tmpramfs

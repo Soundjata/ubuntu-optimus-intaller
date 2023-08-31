@@ -5,7 +5,7 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DE FAIL2BAN" "blue" 200 "fail2ban" 0
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "fail2ban" 25
-verbose apt-get -qq install fail2ban
+verbose apt-get -qq --yes install fail2ban
 
 output $OUTPUT_MODE "Installation des prisons locales" "magenta" 200 "fail2ban" 50
 envsubst '${DOMAIN}' < /etc/optimus/fail2ban/jail.local > /etc/fail2ban/jail.local

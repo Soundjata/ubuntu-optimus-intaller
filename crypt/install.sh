@@ -22,9 +22,9 @@ if lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT
 then
 
   output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "crypt" 10
-  DEBIAN_FRONTEND=noninteractive apt-get -qq install keyboard-configuration &> /dev/null
-  DEBIAN_FRONTEND=noninteractive apt-get -qq install cryptsetup cryptsetup-bin &> /dev/null
-  verbose apt-get -qq install curl
+  DEBIAN_FRONTEND=noninteractive apt-get -qq --yes install keyboard-configuration &> /dev/null
+  DEBIAN_FRONTEND=noninteractive apt-get -qq --yes install cryptsetup cryptsetup-bin &> /dev/null
+  verbose apt-get -qq --yes install curl
 
   if mountpoint -q /srv
   then

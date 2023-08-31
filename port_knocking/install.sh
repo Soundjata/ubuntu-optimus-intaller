@@ -17,7 +17,7 @@ then
 fi
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "port_knocking" 20
-verbose apt-get -qq install knockd
+verbose apt-get -qq --yes install knockd
 
 output $OUTPUT_MODE "Modification des fichiers de configuration" "magenta" 200 "port_knocking" 40
 envsubst '${PORTKNOCKING_SEQUENCE}' < /etc/optimus/port_knocking/knockd.conf > /etc/knockd.conf

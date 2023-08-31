@@ -13,7 +13,7 @@ then
   echo_green "==== SAUVEGARDE AUTOMATIQUE ===="
 
   echo_magenta "Installation des paquets requis"
-  verbose apt-get -qq install rdiff-backup mailutils sshfs
+  verbose apt-get -qq --yes install rdiff-backup mailutils sshfs
 
 
   echo_magenta "Envoi de la clé publique au serveur distant"

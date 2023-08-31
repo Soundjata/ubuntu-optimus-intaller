@@ -20,8 +20,8 @@ then
   echo
   echo_green "==== MISE A JOUR DU SYSTEME ===="
   echo_magenta "Téléchargement et installation des mises à jour"
-  apt-get -qq update
-  apt-get -qq upgrade
+  apt-get -qq --yes update
+  apt-get -qq --yes upgrade
 fi
 
 if [ $MODULE_SECURE_ENABLEFW = "Y" ]
@@ -29,7 +29,7 @@ then
   echo
   echo_green "==== PARE FEU ===="
   echo_magenta "Installation des paquets requis"
-  verbose apt-get -qq install ufw
+  verbose apt-get -qq --yes install ufw
   echo_magenta "Ouverture du port SSH"
   if grep -q "Port 7822" /etc/ssh/sshd_config
   then
@@ -54,7 +54,7 @@ then
   echo
   echo_green "==== FAIL2BAN ===="
   echo_magenta "Installation des paquets requis"
-  verbose apt-get -qq install fail2ban
+  verbose apt-get -qq --yes install fail2ban
   echo_magenta "Installation des prisons locales"
   envsubst '${DOMAIN}' < /etc/optimus/secure/jail.local > /etc/fail2ban/jail.local
   #commit suggéré sur le github fail2ban mais pas encore implémenté
@@ -66,7 +66,7 @@ else
   echo
   echo_green "==== FAIL2BAN ===="
   echo_magenta "Désinstallation des paquets"
-  verbose apt-get -qq remove fail2ban
+  verbose apt-get -qq --yes remove fail2ban
 fi
 
 if [ $MODULE_SECURE_CHANGEROOTPASS = "Y" ]
@@ -118,7 +118,7 @@ then
 	echo
 	echo_green "==== PROTECTION DU SERVEUR SSH AVEC UNE SEQUENCE DE PORT KNOCKING ===="
 	echo_magenta "Installation des paquets requis"
-	verbose apt-get -qq install knockd
+	verbose apt-get -qq --yes install knockd
 	echo_magenta "Modification des fichiers de configuration"
 	envsubst '${MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE}' < /etc/optimus/secure/knockd.conf > /etc/knockd.conf
 	if [ $MODULE_SECURE_SSH_REPLACEDEFAULTPORT = "Y" ]
@@ -154,7 +154,7 @@ then
 	if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
 
 	echo_magenta "Installation des paquets requis"
-	verbose apt-get -qq -y install libpam-google-authenticator qrencode ntp
+	verbose apt-get -qq --yes install libpam-google-authenticator qrencode ntp
 
 	echo_magenta "Activation de l'authentification à deux facteurs"
 	if ! grep -q "auth required pam_google_authenticator.so" /etc/pam.d/sshd

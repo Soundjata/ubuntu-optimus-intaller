@@ -10,7 +10,7 @@ verbose usermod -aG docker www-data
 verbose usermod -aG docker debian
  
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "docker" 35
-verbose apt-get -qq install docker.io
+verbose apt-get -qq --yes install docker.io
   
 output $OUTPUT_MODE "Activation du service" "magenta" 200 "docker" 50
 verbose systemctl enable docker 2> /dev/null

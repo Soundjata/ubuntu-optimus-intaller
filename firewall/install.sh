@@ -7,8 +7,14 @@ output $OUTPUT_MODE "INSTALLATION DU PARE FEU" "blue" 200 "firewall" 0
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "firewall" 5
 verbose apt -qq install ufw
 
-output $OUTPUT_MODE "Ouverture du port 22 (SSH)" "magenta" 200 "firewall" 15
-verbose /sbin/ufw allow 22
+if grep -q "Port 7822" /etc/ssh/sshd_config
+then
+	output $OUTPUT_MODE "Ouverture du port 7822 (SSH)" "magenta" 200 "firewall" 15
+	verbose /sbin/ufw allow 7822
+else
+	output $OUTPUT_MODE "Ouverture du port 22 (SSH)" "magenta" 200 "firewall" 15
+	verbose /sbin/ufw allow 22
+fi
 
 output $OUTPUT_MODE "Ouverture du port 80 (HTTP)" "magenta" 200 "firewall" 25
 verbose /sbin/ufw allow 80
