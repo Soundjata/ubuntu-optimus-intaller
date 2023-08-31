@@ -49,6 +49,8 @@ then
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
+	ovh_dns_record_replace "A" "optimus" "$PUBLIC_IP"
+
 	sleep 1
 
 	output $OUTPUT_MODE "Rechargement de la zone DNS" "magenta" 200 "letsencrypt_ovh" 80
