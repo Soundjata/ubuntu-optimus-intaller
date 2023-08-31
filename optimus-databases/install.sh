@@ -12,7 +12,7 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DU CONTENEUR OPTIMUS-DATABASES (MARIADB)" "blue" 200 "optimus-databases" 0
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "optimus-databases" 10
-verbose apt -qq install mariadb-client
+verbose apt -qq --yes install mariadb-client
 
 output $OUTPUT_MODE "Création du groupe mysql (gid 221)" "magenta" 200 "optimus-databases" 20
 verbose groupadd --gid 221 mysql
