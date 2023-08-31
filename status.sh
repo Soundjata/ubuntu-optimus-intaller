@@ -51,6 +51,16 @@ then
 	output $OUTPUT_MODE "status" "green" 200 "ssh_port_change" 100
 fi
 
+if [ ! -z $DEBIAN_PASSWORD ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "debian_password" 100
+fi
+
+if [ ! -z $TWO_FA_KEY ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "2fa" 100
+fi
+
 if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
 then
 	output $OUTPUT_MODE "status" "green" 200 "optimus-databases" 100
