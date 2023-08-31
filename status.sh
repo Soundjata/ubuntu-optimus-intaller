@@ -36,6 +36,16 @@ then
 	output $OUTPUT_MODE "status" "green" 200 "docker" 100
 fi
 
+if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "optimus-databases" 100
+fi
+
+if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "optimus-base" 100
+fi
+
 if [ -f /etc/ufw/applications.d/ufw-webserver ]
 then
 	output $OUTPUT_MODE "status" "green" 200 "firewall" 100
@@ -59,16 +69,6 @@ fi
 if [ ! -z $TWO_FA_KEY ]
 then
 	output $OUTPUT_MODE "status" "green" 200 "2fa" 100
-fi
-
-if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
-then
-	output $OUTPUT_MODE "status" "green" 200 "optimus-databases" 100
-fi
-
-if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
-then
-	output $OUTPUT_MODE "status" "green" 200 "optimus-base" 100
 fi
 
 CYBERTRON_PUBLIC_KEY=$(cat /etc/optimus/cybertron_ssh_key/prime.pub)
