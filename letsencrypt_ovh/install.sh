@@ -83,7 +83,7 @@ then
 	verbose certbot certonly --expand --non-interactive --agree-tos --quiet --email postmaster@$DOMAIN --dns-ovh --dns-ovh-propagation-seconds 30 --dns-ovh-credentials /root/ovh -d $DOMAIN -d *.$DOMAIN
 
 	output $OUTPUT_MODE "Configuration du Reverse DNS" "magenta" 200 "letsencrypt_ovh" 90
-	ovh_api_request "POST" "/ip/$PUBLIC_IP/reverse" '{"ip": "'$PUBLIC_IP'", "ipReverse": "'$PUBLIC_IP'", "reverse": "'$DOMAIN'."}'
+	RECORDS=$(ovh_api_request "POST" "/ip/$PUBLIC_IP/reverse" '{"ipReverse": "'$PUBLIC_IP'", "reverse": "'$DOMAIN'."}')
 
 	if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
 	then
