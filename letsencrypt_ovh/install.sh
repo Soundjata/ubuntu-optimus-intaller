@@ -17,53 +17,64 @@ then
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
-	output $OUTPUT_MODE "Recréation de l'enregistrement A racine" "magenta" 200 "letsencrypt_ovh" 30
-	PUBLIC_IP=$( wget -qO- ipinfo.io/ip )TXT
-	verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/record" '{"fieldType": "A", "target": "'$PUBLIC_IP'", "ttl": 0}'
-
-	output $OUTPUT_MODE "Suppression des enregistrements MX" "magenta" 200 "letsencrypt_ovh" 40
+	output $OUTPUT_MODE "Suppression des enregistrements MX" "magenta" 200 "letsencrypt_ovh" 25
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=MX")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
 	do
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
-	output $OUTPUT_MODE "Suppression des enregistrements SRV" "magenta" 200 "letsencrypt_ovh" 50
+	output $OUTPUT_MODE "Suppression des enregistrements SRV" "magenta" 200 "letsencrypt_ovh" 30
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=SRV")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
 	do
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
-	output $OUTPUT_MODE "Suppression des enregistrements CNAME" "magenta" 200 "letsencrypt_ovh" 60
+	output $OUTPUT_MODE "Suppression des enregistrements CNAME" "magenta" 200 "letsencrypt_ovh" 35
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=CNAME")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
 	do
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
-	output $OUTPUT_MODE "Suppression des enregistrements TXT" "magenta" 200 "letsencrypt_ovh" 70
+	output $OUTPUT_MODE "Suppression des enregistrements TXT" "magenta" 200 "letsencrypt_ovh" 40
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=TXT")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
 	do
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
-	output $OUTPUT_MODE "Suppression des enregistrements DKIM" "magenta" 200 "letsencrypt_ovh" 75
+	output $OUTPUT_MODE "Suppression des enregistrements DKIM" "magenta" 200 "letsencrypt_ovh" 45
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=DKIM")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
 	do
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
+	output $OUTPUT_MODE "Suppression des enregistrements SPF" "magenta" 200 "letsencrypt_ovh" 50
+	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=SPF")
+	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
+	do
+		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
+	done
+
+	PUBLIC_IP=$( wget -qO- ipinfo.io/ip )
+	output $OUTPUT_MODE "Recréation de l'enregistrement A racine" "magenta" 200 "letsencrypt_ovh" 55
+	ovh_dns_record_replace "A" "" "$PUBLIC_IP"
+
+	output $OUTPUT_MODE "Création du sous domaine api" "magenta" 200 "letsencrypt_ovh" 60
+	ovh_dns_record_replace "A" "api" "$PUBLIC_IP"
+
+	output $OUTPUT_MODE "Création du sous domaine optimus" "magenta" 200 "letsencrypt_ovh" 65
 	ovh_dns_record_replace "A" "optimus" "$PUBLIC_IP"
 
 	sleep 1
 
-	output $OUTPUT_MODE "Rechargement de la zone DNS" "magenta" 200 "letsencrypt_ovh" 80
+	output $OUTPUT_MODE "Rechargement de la zone DNS" "magenta" 200 "letsencrypt_ovh" 70
 	verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/refresh"
 
-	output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt_ovh" 90
+	output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt_ovh" 85
 	echo "dns_ovh_endpoint = ovh-eu" > /root/ovh
 	echo "dns_ovh_application_key = $OVH_APP_KEY" >> /root/ovh
 	echo "dns_ovh_application_secret = $OVH_SECRET_KEY" >> /root/ovh
