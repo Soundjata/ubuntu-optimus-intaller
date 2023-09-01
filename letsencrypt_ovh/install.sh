@@ -74,13 +74,16 @@ then
 	output $OUTPUT_MODE "Rechargement de la zone DNS" "magenta" 200 "letsencrypt_ovh" 70
 	verbose ovh_api_request "POST" "/domain/zone/$DOMAIN/refresh"
 
-	output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt_ovh" 85
+	output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt_ovh" 80
 	echo "dns_ovh_endpoint = ovh-eu" > /root/ovh
 	echo "dns_ovh_application_key = $OVH_APP_KEY" >> /root/ovh
 	echo "dns_ovh_application_secret = $OVH_SECRET_KEY" >> /root/ovh
   	echo "dns_ovh_consumer_key = $OVH_CONSUMER_KEY" >> /root/ovh
 	verbose chmod 600 /root/ovh
 	verbose certbot certonly --expand --non-interactive --agree-tos --quiet --email postmaster@$DOMAIN --dns-ovh --dns-ovh-propagation-seconds 30 --dns-ovh-credentials /root/ovh -d $DOMAIN -d *.$DOMAIN
+
+	output $OUTPUT_MODE "Configuration du Reverse DNS" "magenta" 200 "letsencrypt_ovh" 90
+	ovh_api_request "POST" "/ip/$PUBLIC_IP/reverse" '{"ip": "'$PUBLIC_IP'", "ipReverse": "'$PUBLIC_IP'", "reverse": "'$DOMAIN'."}'
 
 	if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
 	then
