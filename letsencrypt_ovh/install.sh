@@ -52,6 +52,13 @@ then
 		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
 	done
 
+	output $OUTPUT_MODE "Suppression des enregistrements DMARC" "magenta" 200 "letsencrypt_ovh" 40
+	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=DMARC")
+	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
+	do
+		verbose ovh_api_request "DELETE" "/domain/zone/$DOMAIN/record/$RECORD"
+	done
+
 	output $OUTPUT_MODE "Suppression des enregistrements SPF" "magenta" 200 "letsencrypt_ovh" 50
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=SPF")
 	for RECORD in $(echo "$RECORDS" | jq -r '.[]')
