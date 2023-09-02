@@ -28,9 +28,9 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "CREATION DU COMPTE ADMINISTRATEUR" "blue" 200 "create_admin" 0
 
 output $OUTPUT_MODE "Ajout du domaine $DOMAIN dans les allowed_origins" "magenta" 200 "create_admin" 33
-verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "INSERT INTO server.allowed_origins SET origin='*.$DOMAIN'"
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.allowed_origins SET origin='*.$DOMAIN'"
 
 output $OUTPUT_MODE "Création du compte administrateur $ADMIN_EMAIL" "magenta" 200 "create_admin" 66
-verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "INSERT INTO server.users SET status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password=AES_ENCRYPT('$ADMIN_PASSWORD','$AES_KEY')"
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.users SET status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password=AES_ENCRYPT('$ADMIN_PASSWORD','$AES_KEY')"
 
 output $OUTPUT_MODE "Le compte administrateur a été créé avec succès" "green" 200 "create_admin" 100
