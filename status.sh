@@ -66,7 +66,7 @@ then
 	output $OUTPUT_MODE "status" "green" 200 "debian_password" 100
 fi
 
-if [ ! -z $TWO_FA_KEY ]
+if grep -q "auth required pam_google_authenticator.so" /etc/pam.d/sshd
 then
 	output $OUTPUT_MODE "status" "green" 200 "2fa" 100
 fi
