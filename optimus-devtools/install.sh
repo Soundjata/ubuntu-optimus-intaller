@@ -29,6 +29,9 @@ then
 	verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-base /srv/optimus/optimus-base
 fi
 
+output $OUTPUT_MODE "Installation de la proposition de service optimus-devtools" "magenta" 200 "optimus-devtools" 25
+verbose wget --quiet -O /srv/services/optimus-structures.json https://git.cybertron.fr/optimus/optimus-devtools/-/raw/v5-dev/manifest.json
+
 output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta" 200 "optimus-devtools" 30
 verbose usermod -a -G www-data debian
 

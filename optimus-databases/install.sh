@@ -12,13 +12,13 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DU CONTENEUR OPTIMUS-DATABASES (MARIADB)" "blue" 200 "optimus-databases" 0
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "optimus-databases" 10
-verbose apt -qq --yes install mariadb-client
+verbose apt -qq --yes install mariadb-client 2> /dev/null
 
 output $OUTPUT_MODE "Création du groupe mysql (gid 221)" "magenta" 200 "optimus-databases" 20
-verbose groupadd --gid 221 mysql
+verbose groupadd --gid 221 mysql 2> /dev/null
 
 output $OUTPUT_MODE "Création de l'utilisateur mysql (uid 221)" "magenta" 200 "optimus-databases" 30
-verbose useradd --no-create-home --home /nonexistent --shell /bin/false --gid 221 --uid 221 mysql 
+verbose useradd --no-create-home --home /nonexistent --shell /bin/false --gid 221 --uid 221 mysql 2> /dev/null
 
 if [ ! -d "/srv/databases" ]
 then

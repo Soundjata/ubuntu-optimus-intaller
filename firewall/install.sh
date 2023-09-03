@@ -5,7 +5,7 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DU PARE FEU" "blue" 200 "firewall" 0
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "firewall" 5
-verbose apt -qq install ufw
+verbose apt -qq install ufw 2> /dev/null
 
 if grep -q "Port 7822" /etc/ssh/sshd_config
 then

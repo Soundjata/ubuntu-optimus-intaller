@@ -5,10 +5,14 @@ source /etc/optimus/functions.sh
 output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DU CONTENEUR OPTIMUS-BASE" "blue" 200 "optimus-base" 0
 
-if [ -z $MARIADB_ROOT_PASSWORD ] || [ -z $AES_KEY ] || [ -z $DOMAIN ] || [ -z $OVH_APP_KEY ] || [ -z $OVH_SECRET_KEY ] || [ -z $OVH_CONSUMER_KEY ]
-then 
-	output $OUTPUT_MODE "Installation impossible. Les prérequis ne sont pas atteints" "red" 400 "optimus-base" 100
-	exit
+if [ -z $UUID ]
+then
+	sed -i 's/UUID=/UUID='$(</dev/urandom tr -dc A-Z0-9 | head -c 16)'/g' /root/.optimus
+fi
+
+if [ -z $AES_KEY ]
+then
+	sed -i 's/AES_KEY=/AES_KEY='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus
 fi
 
 if [ -z $API_SHA_KEY ]
@@ -17,6 +21,11 @@ then
 	update_conf API_SHA_KEY $API_SHA_KEY
 fi
 
+if [ -z $MARIADB_ROOT_PASSWORD ]
+then 
+	output $OUTPUT_MODE "Installation impossible. Optimus-databases doit être installé préalablement." "red" 400 "optimus-base" 100
+	exit
+fi
 
 output $OUTPUT_MODE "Création des dossiers requis" "magenta" 200 "optimus-base" 10
 
@@ -48,8 +57,8 @@ fi
 
 if [ ! -d "/srv/mailboxes" ]
 then 
-	[ $(getent group mailboxes) ] || verbose groupadd mailboxes --gid 203
-	[ $(getent passwd mailboxes) ] || verbose useradd -g mailboxes -s /bin/false -d /srv/mailboxes --uid 203 mailboxes
+	[ $(getent group mailboxes) ] || verbose groupadd mailboxes --gid 203 2> /dev/null
+	[ $(getent passwd mailboxes) ] || verbose useradd -g mailboxes -s /bin/false -d /srv/mailboxes --uid 203 mailboxes 2> /dev/null
 	verbose usermod -a -G mailboxes www-data
 	verbose mkdir /srv/mailboxes
 	chown mailboxes:mailboxes -R /srv/mailboxes
@@ -83,10 +92,10 @@ fi
 if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
 then
 	output $OUTPUT_MODE "Suppression du conteneur optimus-base existant" "magenta" 200 "optimus-base" 40
-	verbose docker stop optimus-base
-	verbose docker rm optimus-base
-	verbose docker stop optimus-base-old
-	verbose docker rm optimus-base-old
+	verbose docker stop optimus-base 2> /dev/null
+	verbose docker rm optimus-base 2> /dev/null
+	verbose docker stop optimus-base-old 2> /dev/null
+	verbose docker rm optimus-base-old 2> /dev/null
 fi
 
 output $OUTPUT_MODE "Téléchargement de l'image optimus-base" "magenta" 200 "optimus-base" 50

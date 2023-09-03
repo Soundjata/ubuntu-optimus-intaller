@@ -28,7 +28,7 @@ tput cup 5  3; if [ -n "$LAST_UPGRADE" ]; then echo_green "a. Mettre à jour le 
 tput cup 7  3; if [ -n "$PART_TO_ENCRYPT" ] && lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT; then echo_green "b. Créer une partition $PART_TO_ENCRYPT indépendante"; else echo_red "b. Créer une partition $PART_TO_ENCRYPT indépendante"; fi
 tput cup 8  3; if /sbin/blkid /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q 'crypto_LUKS'; then echo_green "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; else echo_red "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; fi
 
-tput cup 11  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo_green "e. Configurer le DNS du domaine"; else echo_red "e. Configurer le DNS du domaine"; fi
+tput cup 11  3; if [ "$DOMAIN_TO_DNS" = "$PUBLIC_IP" ]; then echo_green "e. Configurer le DNS du domaine"; else echo_red "e. Configurer le DNS du domaine"; fi
 tput cup 12  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo_green "f. Installer les certificats SSL"; else echo_red "f. Installer les certificats SSL"; fi
 tput cup 13  3; if [ -d /etc/nginx ]; then echo_green "g. Installer NGINX"; else echo_red "g. Installer NGINX"; fi
 tput cup 14  3; if [ -d /etc/docker ]; then echo_green "h. Installer DOCKER"; else echo_red "h. Installer DOCKER"; fi
@@ -272,7 +272,7 @@ case "$y" in
   z)
   	tput reset
   	clear
-    if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez renseigner votre nom de domaine :"; fi
+    if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
     if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus; fi
     if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus; fi
     if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus; fi

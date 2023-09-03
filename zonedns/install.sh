@@ -1,6 +1,6 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
-if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.allspark; fi
+if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
 source /root/.optimus
 
 echo
