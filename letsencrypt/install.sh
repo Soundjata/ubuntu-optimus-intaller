@@ -9,7 +9,7 @@ output $OUTPUT_MODE "INSTALLATION DES CERTIFICATS SSL" "blue" 200 "letsencrypt" 
 if [ ! -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
 then
 
-	if [ -z $OVH_APP_KEY ] && [ -z $OVH_SECRET_KEY ] && [ $OVH_CONSUMER_KEY ]
+	if [ "$OVH_APP_KEY" != "" ] && [ "$OVH_SECRET_KEY" != "" ] && [ "$OVH_CONSUMER_KEY" != "" ]
 	then
 
 		output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "letsencrypt" 10
@@ -102,7 +102,7 @@ then
 	else
 
 		echo_magenta "Installation des paquets requis"
-		verbose apt -qq -y install letsencrypt python3-certbot-apache dnsutils 2> /dev/null
+		verbose apt -qq -y install python3-pip python3-certbot python3-certbot-nginx dnsutils 2> /dev/null
 
 		PUBLIC_IP=$( wget -qO- ipinfo.io/ip )
 		NSALL=$( dig NS $DOMAIN +short +retry=99 )
@@ -137,12 +137,13 @@ then
 		echo "80   HTTP"
 		echo "443  HTTPS"
 
+		echo
 		echo "Une fois les modifications effectuées, appuyez sur [ENTREE] pour générer les certificats"
 		read -p ""
 		clear
 		
 		output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt" 66
-		certbot run -n --apache --redirect --agree-tos --email postmaster@$DOMAIN -d $DOMAIN -d *.$DOMAIN
+		certbot run -n --nginx --redirect --agree-tos --email postmaster@$DOMAIN -d $DOMAIN -d *.$DOMAIN
 
 	fi
 

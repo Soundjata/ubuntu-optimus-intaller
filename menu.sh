@@ -110,7 +110,7 @@ case "$y" in
   f)
     tput reset
     clear
-	source /etc/optimus/letsencrypt_ovh/install.sh
+	  source /etc/optimus/letsencrypt/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
   
