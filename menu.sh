@@ -24,36 +24,49 @@ tput cup 2 	3; echo -ne  "\033[46;30m          OPTIMUS INSTALLER          \e[0m"
 tput cup 3 	3; echo -ne  "\033[46;30m                V$OPTIMUS_INSTALLER_VERSION                \e[0m"
 
 tput cup 5  3; if [ -n "$LAST_UPGRADE" ]; then echo_green "a. Mettre à jour le système (LASTUPGRADE : $LAST_UPGRADE)"; else echo_red "a. Mettre à jour le système"; fi
-tput cup 6  3; if [ -n "$PART_TO_ENCRYPT" ] && lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT; then echo_green "b. Créer une partition $PART_TO_ENCRYPT indépendante"; else echo_red "b. Créer une partition $PART_TO_ENCRYPT indépendante"; fi
-tput cup 7  3; if /sbin/blkid /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q 'crypto_LUKS'; then echo_green "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; else echo_red "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; fi
-tput cup 8  3; if lsblk -o MOUNTPOINT -n /dev/mapper/crypt$PART_TO_ENCRYPT 2>/dev/null | grep -q '/srv'; then echo_green "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; else echo_red "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; fi
-tput cup 9  3; if grep -q "Port 7822" /etc/ssh/sshd_config; then echo_green "e. Sécuriser le serveur"; else echo_red "e. Sécuriser le serveur"; fi
 
-tput cup 11 3; if [ -f "/etc/letsencrypt/live/$DOMAIN/privkey.pem" ];  then echo_green "f. Installer les certificats SSL via OVH"; else echo_red "f. Installer les certificats SSL via OVH"; fi
-tput cup 12 3; if [ -d "/etc/nginx/sites-enabled" ]; then echo_green "g. Installer NGINX"; else echo_red "g. Installer NGINX"; fi
-tput cup 13 3; if [ -d "/etc/docker" ]; then echo_green "h. Installer DOCKER"; else echo_red "h. Installer DOCKER"; fi
-tput cup 14 3; if [ -d "/srv/databases" ]; then echo_green "i. Installer le conteneur MARIADB"; else echo_red "i. Installer le conteneur MARIADB"; fi
-tput cup 15 3; if [ -d "/srv/services" ]; then echo_green "j. Installer le conteneur OPTIMUS BASE"; else echo_red "j. Installer le conteneur OPTIMUS BASE"; fi
+tput cup 7  3; if [ -n "$PART_TO_ENCRYPT" ] && lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT; then echo_green "b. Créer une partition $PART_TO_ENCRYPT indépendante"; else echo_red "b. Créer une partition $PART_TO_ENCRYPT indépendante"; fi
+tput cup 8  3; if /sbin/blkid /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q 'crypto_LUKS'; then echo_green "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; else echo_red "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; fi
 
-tput cup 19 3; if [ -f "/srv/optimus-backup.sh" ]; then echo_green "r. Installer les scripts de sauvegarde"; else echo_red "r. Installer les scripts de sauvegarde"; fi
+tput cup 11  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo_green "e. Configurer le DNS du domaine"; else echo_red "e. Configurer le DNS du domaine"; fi
+tput cup 12  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo_green "f. Installer les certificats SSL"; else echo_red "f. Installer les certificats SSL"; fi
+tput cup 13  3; if [ -d /etc/nginx ]; then echo_green "g. Installer NGINX"; else echo_red "g. Installer NGINX"; fi
+tput cup 14  3; if [ -d /etc/docker ]; then echo_green "h. Installer DOCKER"; else echo_red "h. Installer DOCKER"; fi
 
-tput cup 21 3; echo_green "s. Sauvegarder la configuration et les clés de chiffrement"
+tput cup 16  3; if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]; then echo_green "i. Installer OPTIMUS DATABASES"; else echo_red "i. Installer OPTIMUS DATABASES"; fi
+tput cup 17  3; if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]; then echo_green "j. Installer OPTIMUS BASE"; else echo_red "j. Installer OPTIMUS BASE"; fi
 
-tput cup 23 3; echo_green "t. Editer la configuration"
-tput cup 24 3; echo_green "u. Mettre à jour Optimus Installer"
-tput cup 25 3; echo_green "v. Redémarrer le serveur"
-tput cup 26 3; echo_green "w. Afficher le QR CODE 2FA"
-tput cup 27 3; echo_green "x. Quitter"
+tput cup 19  3; if [ -f /etc/ufw/applications.d/ufw-webserver ]; then echo_green "k. Installer le pare feu UFW"; else echo_red "k. Installer le pare feu UFW"; fi
+tput cup 20  3; if [ -d /etc/fail2ban ]; then echo_green "l. Installer FAIL2BAN"; else echo_red "l. Installer FAIL2BAN"; fi
+tput cup 21  3; if grep -q "Port 7822" /etc/ssh/sshd_config; then echo_green "m. Remplacer le port SSH par 7822"; else echo_red "m. Remplacer le port SSH par 7822"; fi
+tput cup 22  3; if [ ! -z $DEBIAN_PASSWORD ]; then echo_green "n. Modifier le mot de passe de l'utilisateur debian"; else echo_red "n. Modifier le mot de passe de l'utilisateur debian"; fi
+tput cup 23  3; if grep -q "auth required pam_google_authenticator.so" /etc/pam.d/sshd; then echo_green "o. Protéger le serveur SSH avec un 2FA"; else echo_red "o. Protéger le serveur SSH avec un 2FA"; fi
 
-tput cup 29 3; echo_green "y. INSTALLATION GUIDEE"
-tput cup 30 3; echo_green "z. INSTALLATION AUTOMATISEE"
+tput cup 25  3; if grep -q "$CYBERTRON_PUBLIC_KEY" /home/debian/.ssh/authorized_keys; then echo_green "p. Installer la clé publique CYBERTRON"; else echo_red "p. Installer la clé publique CYBERTRON"; fi
+tput cup 26  3; if [ -f /etc/knockd.conf ]; then echo_green "q. Protéger le serveur avec une séquence de PORT KNOCKING"; else echo_red "q. Protéger le serveur avec une séquence de PORT KNOCKING"; fi
+tput cup 27  3; if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]; then echo_green "r. Installer les outils de développement"; else echo_red "r. Installer les outils de développement"; fi
+tput cup 9  3; if lsblk -o MOUNTPOINT -n /dev/mapper/crypt$PART_TO_ENCRYPT 2>/dev/null | grep -q '/srv'; then echo_green "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; else echo_red "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; fi
 
-tput cup 32 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 
-tput cup 35 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
-tput cup 36 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
-tput cup 37 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
-tput cup 38 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
+#tput cup 19 3; if [ -f "/srv/optimus-backup.sh" ]; then echo_green "r. Installer les scripts de sauvegarde"; else echo_red "r. Installer les scripts de sauvegarde"; fi
+
+tput cup 29 3; echo_green "s. Sauvegarder la configuration et les clés de chiffrement"
+
+tput cup 31 3; echo_green "t. Editer la configuration"
+tput cup 32 3; echo_green "u. Mettre à jour Optimus Installer"
+tput cup 33 3; echo_green "v. Redémarrer le serveur"
+tput cup 34 3; echo_green "w. Afficher le QR CODE 2FA"
+tput cup 35 3; echo_green "x. Quitter"
+
+tput cup 38 3; echo_green "1. INSTALLATION AUTOMATISEE"
+tput cup 37 3; echo_green "2. INSTALLATION GUIDEE"
+
+tput cup 40 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
+
+tput cup 42 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
+tput cup 43 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
+tput cup 44 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
+tput cup 45 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
 
 read -n 1 y
 
@@ -91,7 +104,7 @@ case "$y" in
   e)
     tput reset
     clear
-    source /etc/optimus/secure/install.sh
+    source /etc/optimus/zonedns/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
