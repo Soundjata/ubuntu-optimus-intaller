@@ -58,15 +58,14 @@ tput cup 33 3; echo_cyan "v. Redémarrer le serveur"
 tput cup 34 3; echo_cyan "w. Afficher le QR CODE 2FA"
 tput cup 35 3; echo_cyan "x. Quitter"
 
-tput cup 38 3; echo_cyan "1. INSTALLATION AUTOMATISEE"
-tput cup 37 3; echo_cyan "2. INSTALLATION GUIDEE"
+tput cup 37 3; echo_cyan "z. INSTALLATION AUTOMATISEE OVH"
 
-tput cup 40 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
+tput cup 39 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 
-tput cup 42 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
-tput cup 43 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
-tput cup 44 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
-tput cup 45 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
+tput cup 41 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
+tput cup 42 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
+tput cup 43 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
+tput cup 44 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
 
 read -n 1 y
 
@@ -248,13 +247,23 @@ case "$y" in
     exit 1
     ;;
 
-  y)
+  z)
     tput reset
     clear
+    
+    if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
+    if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus; fi
+    if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus; fi
+    if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus; fi
+    echo_green "Merci d'indiquer le préfixe de l'adresse email du premier administrateur à créer. Exemple 'alice.dupont' pour créer 'alice.dupont@$DOMAIN :"
+	  read ADMIN_EMAIL_PREFIX
+    echo_green "Merci d'indiquer le mot de passe du premier administrateur '$ADMIN_EMAIL_PREFIX'. Au moins 12 caractères, 1 chiffre, 1 majuscule et 1 minuscule :"
+	  read ADMIN_PASSWORD
+ 
     source /etc/optimus/upgrade/install.sh
   	source /etc/optimus/diskpart/install.sh
     source /etc/optimus/crypt/install.sh
-    source /etc/optimus/letsencrypt_ovh/install.sh
+    source /etc/optimus/letsencrypt/install.sh
     source /etc/optimus/nginx/install.sh
     source /etc/optimus/docker/install.sh
     source /etc/optimus/optimus-databases/install.sh
@@ -265,64 +274,9 @@ case "$y" in
     source /etc/optimus/ssh_port_change/install.sh
     source /etc/optimus/debian_password/install.sh
     source /etc/optimus/2fa/install.sh
-    qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus"
-    read -p "Appuyez sur [ENTREE] après avoir enregistré votre code ..."
-    ;;
-
-  z)
-  	tput reset
-  	clear
-    if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
-    if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus; fi
-    if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus; fi
-    if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus; fi
-    if [ -z $ADMIN_FIRSTNAME ]; then require ADMIN_FIRSTNAME string "Merci d'indiquer le prénom du premier administrateur à créer :"; source /root/.optimus; fi
-    if [ -z $ADMIN_LASTNAME ]; then require ADMIN_LASTNAME string "Merci d'indiquer le nom de famille du premier administrateur à créer :"; source /root/.optimus; fi
-    if [ -z $ADMIN_EMAIL_PREFIX ]; then require ADMIN_EMAIL_PREFIX string "Merci d'indiquer le préfixe de l'adresse email du premier administrateur à créer. Exemple 'alice.dupont' pour créer 'alice.dupont@$DOMAIN :"; source /root/.optimus; fi
-    if [ -z $ADMIN_PASSWORD ]; then require ADMIN_PASSWORD password "Merci d'indiquer le mot de passe du premier administrateur '$ADMIN_EMAIL_PREFIX'. Au moins 9 caractères, 1 chiffre, 1 majuscule et 1 caractère spécial :"; fi
-    update_conf VERBOSE 2
-    update_conf UUID auto
-    update_conf AES_KEY auto
-    update_conf API_SHA_KEY auto
-    update_conf SECURE_ROOT_PASSWORD auto
-    update_conf SECURE_DEBIAN_PASSWORD auto
-    update_conf MARIADB_ROOT_PASSWORD auto
-    update_conf MODULE_BACKUP "Y"
-    update_conf MODULE_CRYPT "Y"
-    update_conf MODULE_DECRYPT "Y"
-    update_conf MODULE_DISKPART "Y"
-    update_conf MODULE_LETSENCRYPT_OVH "Y"
-    update_conf MODULE_CLEANDNS_OVH "Y"
-    update_conf MODULE_MARIADB "Y"
-    update_conf MODULE_MARIADB_REMOTE_ACCESS "Y"
-    update_conf MODULE_NGINX "Y"
-    update_conf MODULE_DOCKER "Y"
-    update_conf MODULE_OPTIMUS_BASE "Y"
-    update_conf MODULE_UPGRADE "Y"
-    update_conf MODULE_SECURE_UPDATE "Y"
-    update_conf MODULE_SECURE_ENABLEFW "Y"
-    update_conf MODULE_SECURE_FAIL2BAN "N"
-    update_conf MODULE_SECURE_CHANGEROOTPASS "Y"
-    update_conf MODULE_SECURE_CHANGEDEBIANPASS "Y"
-    update_conf MODULE_SECURE_SSH_REPLACEDEFAULTPORT "Y"
-    update_conf MODULE_SECURE_SSH_PORTKNOCKING "N"
-    update_conf MODULE_SECURE_SSH_PORTKNOCKING_SEQUENCE "1083,1080,1082,1075"
-    update_conf MODULE_SECURE_SSH_DISABLEROOTACCESS "Y"
-    update_conf MODULE_SECURE_SSH_2FA "Y"
-    update_conf AUTODECRYPT "Y"
-    source /root/.optimus
-    source /etc/optimus/upgrade/install.sh
-  	source /etc/optimus/diskpart/install.sh
-    source /etc/optimus/crypt/install.sh
-    source /etc/optimus/secure/install.sh
-    source /etc/optimus/letsencrypt_ovh/install.sh
-    source /etc/optimus/nginx/install.sh
-    source /etc/optimus/docker/install.sh
-    source /etc/optimus/mariadb/install.sh
-    source /etc/optimus/optimus_base/install.sh
-    read -p "Appuyez sur [ENTREE] pour continuer ..."
+    source /etc/optimus/create_admin/install.sh console $DOMAIN $ADMIN_EMAIL_PREFIX@$DOMAIN $ADMIN_PASSWORD
     clear
-    qrencode -t ansi "otpauth://totp/debian@$DOMAIN?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus"
+    qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${TWO_FA_KEY}&issuer=optimus"
     echo
     echo_magenta "Ce code doit être scanné et conservé sur votre smartphone à l'aide d'une application comme GOOGLE Authenticator, 2FAS ou Authy (gratuit)"
     echo_magenta "Ces applications permettent de générer un mot de passe qui change toutes les 30 secondes et qui vous sera demandé pour vous authentifier sur le serveur"
@@ -345,7 +299,7 @@ case "$y" in
     echo_magenta "Si vous avez choisi de renforcer la sécurité en ajoutant une authentification 2FA, vérifiez bien que l'accès fonctionne"
     echo_magenta "Après le redémarrage du serveur, vérifiez que la partition chiffrée a bien été ouverte (option 'd' du menu en vert)"
     echo "APPUYER SUR [ENTREE] POUR CONTINUER"
-	read -p ""
+	  read -p ""
     echo
     echo_green "Si l'installation s'est bien déroulée, vous pourrez vous connecter à https://optimus.$DOMAIN"
     echo_green "Le serveur à renseigner est : api.$DOMAIN"
@@ -357,7 +311,7 @@ case "$y" in
 
   '')
     clear
-    more /etc/optimus/LICENSE
+    more -d /etc/optimus/LICENSE
     ;;
 esac
 done

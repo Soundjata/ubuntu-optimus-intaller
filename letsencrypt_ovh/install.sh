@@ -8,7 +8,7 @@ if [ ! -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
 then
 
 	output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "letsencrypt_ovh" 10
-	verbose apt -qq -y install python3-pip python3-certbot python3-certbot-dns-ovh 
+	verbose apt -qq -y install python3-pip python3-certbot python3-certbot-dns-ovh 2> /dev/null
 
 	output $OUTPUT_MODE "Suppression des enregistrements A" "magenta" 200 "letsencrypt_ovh" 20
 	RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=A")

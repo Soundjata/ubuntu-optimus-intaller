@@ -36,19 +36,19 @@ case "$y" in
 
   1)
     clear
-    more /root/public.pem
+    more -d /root/public.pem
     read -n 1 -s -r -p ""
     ;;
 
   2)
     clear
-    more /root/private.pem
+    more -d /root/private.pem
     read -n 1 -s -r -p ""
     ;;
 
   3)
     clear
-    more /root/.optimus
+    more -d /root/.optimus
     read -n 1 -s -r -p ""
     ;;
 

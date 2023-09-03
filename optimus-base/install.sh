@@ -27,6 +27,12 @@ then
 	exit
 fi
 
+if [ "$OUTPUT_MODE" != "json" ]
+then
+	bash /etc/optimus/create_admin/install.sh
+fi
+
+
 output $OUTPUT_MODE "Création des dossiers requis" "magenta" 200 "optimus-base" 10
 
 if [ ! -d "/srv/services" ]
