@@ -33,8 +33,8 @@ tput cup 12  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo
 tput cup 13  3; if [ -d /etc/nginx ]; then echo_green "g. Installer NGINX"; else echo_red "g. Installer NGINX"; fi
 tput cup 14  3; if [ -d /etc/docker ]; then echo_green "h. Installer DOCKER"; else echo_red "h. Installer DOCKER"; fi
 
-tput cup 16  3; if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]; then echo_green "i. Installer OPTIMUS DATABASES"; else echo_red "i. Installer OPTIMUS DATABASES"; fi
-tput cup 17  3; if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]; then echo_green "j. Installer OPTIMUS BASE"; else echo_red "j. Installer OPTIMUS BASE"; fi
+tput cup 16  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]; then echo_green "i. Installer OPTIMUS DATABASES"; else echo_red "i. Installer OPTIMUS DATABASES"; fi
+tput cup 17  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]; then echo_green "j. Installer OPTIMUS BASE"; else echo_red "j. Installer OPTIMUS BASE"; fi
 
 tput cup 19  3; if [ -f /etc/ufw/applications.d/ufw-webserver ]; then echo_green "k. Installer le pare feu UFW"; else echo_red "k. Installer le pare feu UFW"; fi
 tput cup 20  3; if [ -d /etc/fail2ban ]; then echo_green "l. Installer FAIL2BAN"; else echo_red "l. Installer FAIL2BAN"; fi
@@ -44,7 +44,7 @@ tput cup 23  3; if grep -q "auth required pam_google_authenticator.so" /etc/pam.
 
 tput cup 25  3; if grep -q "$CYBERTRON_PUBLIC_KEY" /home/debian/.ssh/authorized_keys; then echo_green "p. Installer la clé publique CYBERTRON"; else echo_yellow "p. Installer la clé publique CYBERTRON"; fi
 tput cup 26  3; if [ -f /etc/knockd.conf ]; then echo_green "q. Protéger le serveur avec une séquence de PORT KNOCKING"; else echo_yellow "q. Protéger le serveur avec une séquence de PORT KNOCKING"; fi
-tput cup 27  3; if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]; then echo_green "r. Installer les outils de développement"; else echo_yellow "r. Installer les outils de développement"; fi
+tput cup 27  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]; then echo_green "r. Installer les outils de développement"; else echo_yellow "r. Installer les outils de développement"; fi
 tput cup 9  3; if lsblk -o MOUNTPOINT -n /dev/mapper/crypt$PART_TO_ENCRYPT 2>/dev/null | grep -q '/srv'; then echo_green "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; else echo_red "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; fi
 
 
