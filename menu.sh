@@ -255,11 +255,7 @@ case "$y" in
     if [ -z $OVH_APP_KEY ]; then require OVH_APP_KEY string "Merci de renseigner votre clé OVH APPLICATION KEY"; source /root/.optimus; fi
     if [ -z $OVH_SECRET_KEY ]; then require OVH_SECRET_KEY string "Merci de renseigner votre clé OVH SECRET KEY"; source /root/.optimus; fi
     if [ -z $OVH_CONSUMER_KEY ]; then require OVH_CONSUMER_KEY string "Merci de renseigner votre clé OVH CONSUMER KEY"; source /root/.optimus; fi
-    echo_green "Merci d'indiquer le préfixe de l'adresse email du premier administrateur à créer. Exemple 'alice.dupont' pour créer 'alice.dupont@$DOMAIN :"
-	  read ADMIN_EMAIL_PREFIX
-    echo_green "Merci d'indiquer le mot de passe du premier administrateur '$ADMIN_EMAIL_PREFIX'. Au moins 12 caractères, 1 chiffre, 1 majuscule et 1 minuscule :"
-	  read ADMIN_PASSWORD
- 
+    clear
     source /etc/optimus/upgrade/install.sh
   	source /etc/optimus/diskpart/install.sh
     source /etc/optimus/crypt/install.sh
@@ -274,7 +270,7 @@ case "$y" in
     source /etc/optimus/ssh_port_change/install.sh
     source /etc/optimus/debian_password/install.sh
     source /etc/optimus/2fa/install.sh
-    source /etc/optimus/create_admin/install.sh console $DOMAIN $ADMIN_EMAIL_PREFIX@$DOMAIN $ADMIN_PASSWORD
+    source /etc/optimus/create_admin/install.sh
     clear
     qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${TWO_FA_KEY}&issuer=optimus"
     echo

@@ -5,8 +5,8 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DU SERVEUR WEB NGINX" "blue" 200 "nginx" 0
 
 output $OUTPUT_MODE "Modification de l'uid de l'utilisateur et du groupe www-data" "magenta" 200 "nginx" 5
-verbose usermod --uid 219 www-data
-verbose groupmod --gid 219 www-data
+verbose usermod --uid 219 www-data 2> /dev/null
+verbose groupmod --gid 219 www-data 2> /dev/null
   
 output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta" 200 "nginx" 20
 verbose usermod -a -G www-data debian
