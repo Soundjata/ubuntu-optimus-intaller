@@ -5,7 +5,7 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "SECURISATION DE L'ACCES SSH AVEC UN CODE A DEUX FACTEURS" "blue" 200 "2fa" 0
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "2fa" 15
-verbose apt-get -qq --yes install libpam-google-authenticator ntp
+verbose apt-get -qq --yes install libpam-google-authenticator ntp qrencode
 
 output $OUTPUT_MODE "Activation de l'authentification à deux facteurs" "magenta" 200 "2fa" 30
 if ! grep -q "auth required pam_google_authenticator.so" /etc/pam.d/sshd
