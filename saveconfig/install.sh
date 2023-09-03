@@ -12,9 +12,8 @@ echo_red "Conservez les de préférence sur une ou plusieurs clés USB déconnec
 echo_red "Si vous perdez vos clés de chiffrement, vos données seront irrémédiablement perdues."
 echo
 echo_green "voici les informations à sauvegarder en priorité et à stocker en lieu sûr :"
-echo_green "- mot de passe root du serveur : $SECURE_ROOT_PASSWORD"
-echo_green "- mot de passe de l'utilisateur debian : $SECURE_DEBIAN_PASSWORD"
-echo_green "- clé globale du module d'authentification à deux facteurs : $SECURE_GOOGLEAUTH_KEY"
+echo_green "- mot de passe de l'utilisateur debian : $DEBIAN_PASSWORD"
+echo_green "- clé globale du module d'authentification à deux facteurs : $TWO_FA_KEY"
 echo_green "- identifiant UUID du serveur : $UUID"
 echo_green "- clé publique du serveur : /root/public.pem"
 echo_green "- clé privée du serveur : /root/private.pem "

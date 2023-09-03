@@ -42,24 +42,24 @@ tput cup 21  3; if grep -q "Port 7822" /etc/ssh/sshd_config; then echo_green "m.
 tput cup 22  3; if [ ! -z $DEBIAN_PASSWORD ]; then echo_green "n. Modifier le mot de passe de l'utilisateur debian"; else echo_red "n. Modifier le mot de passe de l'utilisateur debian"; fi
 tput cup 23  3; if grep -q "auth required pam_google_authenticator.so" /etc/pam.d/sshd; then echo_green "o. Protéger le serveur SSH avec un 2FA"; else echo_red "o. Protéger le serveur SSH avec un 2FA"; fi
 
-tput cup 25  3; if grep -q "$CYBERTRON_PUBLIC_KEY" /home/debian/.ssh/authorized_keys; then echo_green "p. Installer la clé publique CYBERTRON"; else echo_red "p. Installer la clé publique CYBERTRON"; fi
-tput cup 26  3; if [ -f /etc/knockd.conf ]; then echo_green "q. Protéger le serveur avec une séquence de PORT KNOCKING"; else echo_red "q. Protéger le serveur avec une séquence de PORT KNOCKING"; fi
-tput cup 27  3; if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]; then echo_green "r. Installer les outils de développement"; else echo_red "r. Installer les outils de développement"; fi
+tput cup 25  3; if grep -q "$CYBERTRON_PUBLIC_KEY" /home/debian/.ssh/authorized_keys; then echo_green "p. Installer la clé publique CYBERTRON"; else echo_yellow "p. Installer la clé publique CYBERTRON"; fi
+tput cup 26  3; if [ -f /etc/knockd.conf ]; then echo_green "q. Protéger le serveur avec une séquence de PORT KNOCKING"; else echo_yellow "q. Protéger le serveur avec une séquence de PORT KNOCKING"; fi
+tput cup 27  3; if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]; then echo_green "r. Installer les outils de développement"; else echo_yellow "r. Installer les outils de développement"; fi
 tput cup 9  3; if lsblk -o MOUNTPOINT -n /dev/mapper/crypt$PART_TO_ENCRYPT 2>/dev/null | grep -q '/srv'; then echo_green "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; else echo_red "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; fi
 
 
 #tput cup 19 3; if [ -f "/srv/optimus-backup.sh" ]; then echo_green "r. Installer les scripts de sauvegarde"; else echo_red "r. Installer les scripts de sauvegarde"; fi
 
-tput cup 29 3; echo_green "s. Sauvegarder la configuration et les clés de chiffrement"
+tput cup 29 3; echo_cyan "s. Sauvegarder la configuration et les clés de chiffrement"
 
-tput cup 31 3; echo_green "t. Editer la configuration"
-tput cup 32 3; echo_green "u. Mettre à jour Optimus Installer"
-tput cup 33 3; echo_green "v. Redémarrer le serveur"
-tput cup 34 3; echo_green "w. Afficher le QR CODE 2FA"
-tput cup 35 3; echo_green "x. Quitter"
+tput cup 31 3; echo_cyan "t. Editer la configuration"
+tput cup 32 3; echo_cyan "u. Mettre à jour Optimus Installer"
+tput cup 33 3; echo_cyan "v. Redémarrer le serveur"
+tput cup 34 3; echo_cyan "w. Afficher le QR CODE 2FA"
+tput cup 35 3; echo_cyan "x. Quitter"
 
-tput cup 38 3; echo_green "1. INSTALLATION AUTOMATISEE"
-tput cup 37 3; echo_green "2. INSTALLATION GUIDEE"
+tput cup 38 3; echo_cyan "1. INSTALLATION AUTOMATISEE"
+tput cup 37 3; echo_cyan "2. INSTALLATION GUIDEE"
 
 tput cup 40 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 
@@ -132,28 +132,77 @@ case "$y" in
   i)
     tput reset
     clear
-    source /etc/optimus/mariadb/install.sh
+    source /etc/optimus/optimus-databases/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   j)
     tput reset
     clear
-    source /etc/optimus/optimus_base/install.sh
+    source /etc/optimus/optimus-base/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  j)
+    tput reset
+    clear
+    source /etc/optimus/optimus-base/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  k)
+    tput reset
+    clear
+    source /etc/optimus/firewall/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  l)
+    tput reset
+    clear
+    source /etc/optimus/fail2ban/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  m)
+    tput reset
+    clear
+    source /etc/optimus/ssh_port_change/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  n)
+    tput reset
+    clear
+    source /etc/optimus/debian_password/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  o)
+    tput reset
+    clear
+    source /etc/optimus/2fa/install.sh
+    read -p "Appuyez sur [ENTREE] pour continuer..."
+    ;;
+
+  p)
+    tput reset
+    clear
+    source /etc/optimus/cybertron_ssh_key/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   q)
     tput reset
     clear
-    source /etc/optimus/devtools/install.sh
+    source /etc/optimus/port_knocking/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
   r)
     tput reset
     clear
-    source /etc/optimus/backup/install.sh
+    source /etc/optimus/optimus-devtools/install.sh
     read -p "Appuyez sur [ENTREE] pour continuer..."
     ;;
 
@@ -205,13 +254,17 @@ case "$y" in
     source /etc/optimus/upgrade/install.sh
   	source /etc/optimus/diskpart/install.sh
     source /etc/optimus/crypt/install.sh
-    source /etc/optimus/secure/install.sh
     source /etc/optimus/letsencrypt_ovh/install.sh
     source /etc/optimus/nginx/install.sh
     source /etc/optimus/docker/install.sh
-    source /etc/optimus/mariadb/install.sh
-    source /etc/optimus/optimus_base/install.sh
-    source /etc/optimus/backup/install.sh
+    source /etc/optimus/optimus-databases/install.sh
+    source /etc/optimus/optimus-base/install.sh
+    source /etc/optimus/create_admin/install.sh
+    source /etc/optimus/firewall/install.sh
+    source /etc/optimus/fail2ban/install.sh
+    source /etc/optimus/ssh_port_change/install.sh
+    source /etc/optimus/debian_password/install.sh
+    source /etc/optimus/2fa/install.sh
     qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${SECURE_GOOGLEAUTH_KEY}&issuer=optimus"
     read -p "Appuyez sur [ENTREE] après avoir enregistré votre code ..."
     ;;
