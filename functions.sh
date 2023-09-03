@@ -101,40 +101,21 @@ echo_magenta()(echo -e "\e[35m${1}\e[0m")
 echo_cyan()(echo -e "\e[36m${1}\e[0m")
 
 
-# if [ $1 ]
-# then
-#   if [ ! -f /root/.optimus ] && [ -f $1 ]
-#   then
-#     cp $1 /root/.optimus
-#   else
-#     if [ -f $1 ]
-#     then
-#       echo_green "Souhaitez vous remplacer votre fichier de configuration par le fichier $1 ?"
-#       echo_red "Cette opération écrasera tous vos paramètres antérieurs !"
-#       read -p "(o)ui / (n)on ? " -n 1 -e replace_config
-#       if [[ $replace_config =~ ^[YyOo]$ ]]
-#       then
-#         cp $1 /root/.optimus
-#         echo_magenta "Le fichier de configuration a bien été remplacé !"
-#         exit 0
-#       fi
-#     else
-#       echo_red "Le fichier $1 n'existe pas !"
-#       exit 1
-#     fi
-#   fi
-# fi
+if [ ! -f /root/.optimus ]
+then
+	cp /etc/config.sh /root/.optimus
+fi
 
 
 verbose()
 (
-  if [ $VERBOSE = 1 ]
+  if [ "$VERBOSE" = 1 ]
   then
     (set -o pipefail;"$@" 2>&1>&3|sed $'s,.*,\e[31m&\e[m,'>&2)3>&1
-  elif [ $VERBOSE = 2 ]
+  elif [ "$VERBOSE" = 2 ]
   then
     set -o pipefail;"$@" 2> >(sed $'s,.*,\e[31m&\e[m,'>&2) 1>/dev/null
-  elif [ $VERBOSE = 3 ]
+  elif [ "$VERBOSE" = 3 ]
   then
     set -o pipefail;"$@" &>/dev/null
   fi
