@@ -73,15 +73,12 @@ then
 		output $OUTPUT_MODE "Recréation de l'enregistrement A racine" "magenta" 200 "letsencrypt" 55
 		ovh_dns_record_replace "A" "" "$PUBLIC_IP"
 
-		output $OUTPUT_MODE "Création du sous domaine api" "magenta" 200 "letsencrypt" 60
-		ovh_dns_record_replace "A" "api" "$PUBLIC_IP"
-
-		output $OUTPUT_MODE "Création du sous domaine optimus" "magenta" 200 "letsencrypt" 65
-		ovh_dns_record_replace "A" "optimus" "$PUBLIC_IP"
+		output $OUTPUT_MODE "Création du sous domaine * (wildcard)" "magenta" 200 "letsencrypt" 60
+		ovh_dns_record_replace "A" "*" "$PUBLIC_IP"
 
 		sleep 1
 
-		output $OUTPUT_MODE "Configuration du Reverse DNS" "magenta" 200 "letsencrypt" 90
+		output $OUTPUT_MODE "Configuration du Reverse DNS" "magenta" 200 "letsencrypt" 65
 		RECORDS=$(ovh_api_request "POST" "/ip/$PUBLIC_IP/reverse" '{"ipReverse": "'$PUBLIC_IP'", "reverse": "'$DOMAIN'."}')
 
 		output $OUTPUT_MODE "Rechargement de la zone DNS" "magenta" 200 "letsencrypt" 70
