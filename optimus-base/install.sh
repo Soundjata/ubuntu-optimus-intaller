@@ -64,31 +64,6 @@ then
 	chown mailboxes:mailboxes -R /srv/mailboxes
 fi
 
-
-
-# if [ $DEV == 1 ]
-# then
-# 	output $OUTPUT_MODE "Installation des repos (pour le mode développeur)" "magenta" 200 "optimus-base" 20
-# 	if [ ! -d /srv/optimus/optimus-libs/.git ]
-# 	then
-# 		verbose rm -Rf /srv/optimus/optimus-libs
-# 		verbose mkdir -p /srv/optimus/optimus-libs
-# 		verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-libs /srv/optimus/optimus-libs
-# 	fi
-# 	if [ ! -d /srv/optimus/optimus-base/.git ]
-# 	then
-# 		verbose rm -Rf /srv/optimus/optimus-base
-# 		verbose mkdir -p /srv/optimus/optimus-base
-# 		verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-base /srv/optimus/optimus-base
-# 	fi
-# 	verbose chmod 775 -R /srv/optimus
-# 	verbose chown www-data:www-data -R /srv/optimus
-# 	output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data (pour le mode développeur)" "magenta" 200 "optimus-base" 30
-# 	verbose usermod -a -G www-data debian
-# 	OPTIMUS_BASE_ADDITIONNAL_VOLUMES="--volume /srv/optimus/optimus-base/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
-# 	OPTIMUS_DEV_ADDITIONNAL_VOLUMES="--volume /srv/optimus/optimus-devtools/api:/srv/api --volume /srv/optimus/optimus-libs:/srv/api/libs"
-# fi
-
 if [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]
 then
 	output $OUTPUT_MODE "Suppression du conteneur optimus-base existant" "magenta" 200 "optimus-base" 40
