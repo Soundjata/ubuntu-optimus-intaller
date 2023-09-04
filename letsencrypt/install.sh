@@ -1,7 +1,5 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
-if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
-source /root/.optimus
 
 output $OUTPUT_MODE
 output $OUTPUT_MODE "INSTALLATION DES CERTIFICATS SSL" "blue" 200 "letsencrypt" 0
@@ -9,7 +7,7 @@ output $OUTPUT_MODE "INSTALLATION DES CERTIFICATS SSL" "blue" 200 "letsencrypt" 
 if [ ! -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]
 then
 
-	if [ "$OVH_APP_KEY" != "" ] && [ "$OVH_SECRET_KEY" != "" ] && [ "$OVH_CONSUMER_KEY" != "" ]
+	if [ "$DOMAIN" != "" ] && [ "$OVH_APP_KEY" != "" ] && [ "$OVH_SECRET_KEY" != "" ] && [ "$OVH_CONSUMER_KEY" != "" ]
 	then
 
 		output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "letsencrypt" 10
@@ -100,6 +98,9 @@ then
 		verbose certbot certonly --expand --non-interactive --agree-tos --quiet --email postmaster@$DOMAIN --dns-ovh --dns-ovh-propagation-seconds 30 --dns-ovh-credentials /root/ovh -d $DOMAIN -d *.$DOMAIN
 
 	else
+
+		if [ -z $DOMAIN ]; then require DOMAIN string "Veuillez indiquer votre nom de domaine :"; source /root/.optimus; fi
+		source /root/.optimus
 
 		echo_magenta "Installation des paquets requis"
 		verbose apt -qq -y install python3-pip python3-certbot python3-certbot-nginx dnsutils 2> /dev/null
