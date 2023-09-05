@@ -52,8 +52,8 @@ tput cup 39 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 
 if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
 then
-  tput cup 41 3; echo "1. Reconstructeur d'image DOCKER (DEV TOOLS)"
-  tput cup 42 3; echo "2. Connexion à git.cybertron.fr (DEV TOOLS)"
+  tput cup 41 3; echo "1. Connexion à git.cybertron.fr (DEV TOOLS)"
+  tput cup 42 3; echo "2. Reconstructeur d'image DOCKER (DEV TOOLS)"
 fi
 
 tput cup 44 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
@@ -302,13 +302,13 @@ case "$y" in
   1)
 	tput reset
 	clear
-	source /etc/optimus/optimus-devtools/build.sh
+	source /etc/optimus/optimus-devtools/git_login.sh
 	;;
-
+	
   2)
 	tput reset
 	clear
-	source /etc/optimus/optimus-devtools/git_login.sh
+	source /etc/optimus/optimus-devtools/build.sh
 	;;
 
   '')
