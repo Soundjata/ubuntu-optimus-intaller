@@ -28,12 +28,26 @@ verbose cp /etc/optimus/optimus-devtools/build.sh /srv/optimus/build.sh
 if [ "$OUTPUT_MODE" != "json" ]
 then
 	echo
+	echo
 	echo_cyan "Connexion au registre de conteneurs https://git.cybertron.fr:5050"
-	docker login https://git.cybertron.fr:5050
+
+	echo
+	echo_green "Veuillez indiquer votre identifiant git.cybertron.fr :"
+    read GIT_USERNAME
+
+	echo
+	echo_green "Veuillez indiquer votre mot de passe git.cybertron.fr :"
+    read GIT_PASSWORD
+
+	docker logout
+	echo
+	echo "$GIT_USERNAME" | echo "$GIT_PASSWORD" | docker login https://git.cybertron.fr:5050
 
 	echo
 	echo
 	echo_cyan "Connexion au dépot git.cybertron.fr"
+	git config --global user.name "$GIT_USERNAME"
+	git config --global user.email "$GIT_USERNAME"
 	if [ ! -f /home/debian/.ssh/id_ed25519 ]
 	then
 		echo_magenta "Génération d'une clé développeur ED25519 pour l'utilisateur debian"
@@ -55,7 +69,7 @@ then
 fi
 
 output $OUTPUT_MODE
-output $OUTPUT_MODE "Installation des dépôts complémentaires" "magenta" 200 "optimus-devtools" 90
+output $OUTPUT_MODE "Installation des dépôts complémentaires optimus-libs" "magenta" 200 "optimus-devtools" 90
 if [ ! -d /srv/optimus/optimus-libs/.git ]
 then
 	verbose rm -Rf /srv/optimus/optimus-libs
