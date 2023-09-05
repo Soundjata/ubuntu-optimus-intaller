@@ -1,11 +1,12 @@
-5.00 (2022-03-01)
+5.00 (2022-09-05)
 Synchronisation du versioning avec le client V5
+Comptabilité avec le web installer
+Ajout des outils de développement
 Le processus de decryptage du disque se relance toutes les 15 secondes avec désormais un maximum de 10 tentatives
-Correction d'un bug qui empêchait spamassassin de mettre à jour sa base de données
 Augmentation de la taille du disque système à 10 Go pour éviter la saturation due aux logs
-Création d'un swapfile de 2Go pour pallier la forte consommation de RAM de CLAMAV
 Migration d'APACHE vers NGINX
-Conteneurisation de tous les services additionnels
+Intégration de DOCKER
+Conteneurisation de tous les services
 
 2.11 (2022-10-09)
 Correction d'un bug qui empêchait le partage de la boite source INBOX en IMAP ACL
