@@ -19,7 +19,7 @@ if [ ! -d /srv/optimus/optimus-libs/.git ]
 then
 	verbose rm -Rf /srv/optimus/optimus-libs
 	verbose mkdir -p /srv/optimus/optimus-libs
-	verbose git clone --quiet https://git.cybertron.fr/optimus/optimus-libs /srv/optimus/optimus-libs
+	verbose git clone --quiet git@git.cybertron.fr/optimus/optimus-libs /srv/optimus/optimus-libs
 fi
 
 
