@@ -80,12 +80,7 @@ verbose mkdir -p /etc/optimus
 chown debian:debian /etc/optimus
 su -c 'git clone --quiet git@git.cybertron.fr:optimus/optimus-installer /etc/optimus' debian
 
-output $OUTPUT_MODE "Le serveur est prêt pour accueillir les outils de développement !" "green" 200 "optimus-devtools" 100
+output $OUTPUT_MODE "Les outils de développement ont été installés avec succès" "green" 200 "optimus-devtools" 100
 
-DEV=1
-NAME="optimus-base"
-source /etc/optimus/optimus-init/container_installer.sh
-
-DEV=1
 NAME="optimus-devtools"
 source /etc/optimus/optimus-init/container_installer.sh
