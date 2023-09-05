@@ -80,6 +80,7 @@ fi
 output $OUTPUT_MODE
 output $OUTPUT_MODE "Réinstallation du repo optimus-installer (DEV MODE)" "magenta" 200 "optimus-devtools" 90
 rm -R /etc/optimus
+su -c 'mkdir -p /etc/optimus' debian
 su -c 'git clone --quiet git@git.cybertron.fr:optimus/optimus-installer /etc/optimus' debian
 
 output $OUTPUT_MODE "Le serveur est prêt pour accueillir les outils de développement !" "green" 200 "optimus-devtools" 100
