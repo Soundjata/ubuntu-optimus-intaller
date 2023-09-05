@@ -45,7 +45,3 @@ source /etc/optimus/optimus-init/container_installer.sh
 DEV=1
 NAME="optimus-devtools"
 source /etc/optimus/optimus-init/container_installer.sh
-
-
-
-

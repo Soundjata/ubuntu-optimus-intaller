@@ -1,5 +1,4 @@
 #!/bin/bash
-cd /
 source /etc/optimus/functions.sh
 
 output $OUTPUT_MODE
@@ -34,9 +33,9 @@ if [ $( docker ps -a | grep $NAME | wc -l ) -gt 0 ]
 then
 	output $OUTPUT_MODE "Suppression du conteneur $NAME existant" "magenta" 200 "$NAME" 40
 	verbose docker stop $NAME 2> /dev/null
-	verbose docker rm $NAME 2> /dev/null
+	verbose docker rm --force $NAME 2> /dev/null
 	verbose docker stop $NAME-old 2> /dev/null
-	verbose docker rm $NAME-old 2> /dev/null
+	verbose docker rm --force $NAME-old 2> /dev/null
 fi
 
 output $OUTPUT_MODE "Téléchargement de l'image $NAME" "magenta" 200 "$NAME" 50
