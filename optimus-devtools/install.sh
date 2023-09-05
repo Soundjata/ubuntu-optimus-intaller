@@ -62,7 +62,7 @@ then
 
 	read -p "Après avoir copié la clé, appuyez sur [ENTREE] pour tester la connexion..."
 	echo
-	su -c "ssh -T git@git.cybertron.fr" debian
+	su -c "ssh -T -o 'StrictHostKeyChecking no' git@git.cybertron.fr" debian
 	echo
 
 	read -p "Appuyez sur [ENTREE] pour continuer..."
