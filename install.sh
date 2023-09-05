@@ -58,7 +58,7 @@ DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes install git unzip zip sudo
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Clonage du dépôt git", "color":"magenta","operation":"optimus-installer", "progress":70}'; fi
 if [ -d "/etc/optimus" ]; then sudo rm -R /etc/optimus; fi
 sudo mkdir /etc/optimus
-sudo git clone git@git.cybertron.fr/optimus/optimus-installer /etc/optimus
+sudo git clone git@git.cybertron.fr:optimus/optimus-installer.git /etc/optimus
 sudo chmod +x /etc/optimus/menu.sh
 sudo chown $ID:$ID -R /etc/optimus
 
