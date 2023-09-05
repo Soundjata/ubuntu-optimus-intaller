@@ -1,6 +1,4 @@
 #!/bin/bash
-export DEV=0
-
 #export VERBOSE=1 --> #STDOUT normal, STDERR en rouge
 #export VERBOSE=2 --> #STDOUT pas affiché. STDERR en rouge
 #export VERBOSE=3 --> #STDOUT et STDERR pas affiché (mode silencieux)

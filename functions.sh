@@ -89,6 +89,8 @@ function output()
       ;;
       magenta) echo -e "\e[35m$MESSAGE\e[0m"
       ;;
+      *) echo -e "$MESSAGE"
+      ;;
     esac
   fi
 }

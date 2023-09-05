@@ -36,6 +36,11 @@ then
 	output $OUTPUT_MODE "status" "green" 200 "docker" 100
 fi
 
+if [ -d "/srv/optimus" ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "optimus-init" 100
+fi
+
 if [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]
 then
 	output $OUTPUT_MODE "status" "green" 200 "optimus-databases" 100
@@ -80,5 +85,10 @@ fi
 if [ -f /etc/knockd.conf ]
 then
 	output $OUTPUT_MODE "status" "green" 200 "port_knocking" 100
-fi 
+fi
+
+if [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
+then
+	output $OUTPUT_MODE "status" "green" 200 "optimus-devtools" 100
+fi
 
