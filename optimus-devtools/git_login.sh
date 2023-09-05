@@ -10,6 +10,8 @@ echo_magenta "Génération d'une clé développeur ED25519 pour l'utilisateur de
 if [ ! -f /home/debian/.ssh/optimusdev ]
 then
     ssh-keygen -t ed25519 -f "/home/debian/.ssh/optimusdev" -C "$DOMAIN"
+    chmod debian:debian /home/debian/.ssh/optimusdev
+    chmod debian:debian /home/debian/.ssh/optimusdev.pub
 fi
 echo
 echo_green "Vous trouverez ci-dessous la clé publique de ce serveur à copier sur https://git.cybertron.fr :"
