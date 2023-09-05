@@ -25,16 +25,16 @@ do
       if [ "$AES_KEY" == "" ]; then sed -i 's/AES_KEY=/AES_KEY='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus; fi
     ;;
     d | domain)
-      sed -i 's/DOMAIN=$DOMAIN/DOMAIN='$OPTARG'/g' /root/.optimus
+      sed -i "s/DOMAIN=$DOMAIN/DOMAIN=$OPTARG/g" /root/.optimus
     ;;
     a | app-key)
-      sed -i 's/OVH_APP_KEY=$OVH_APP_KEY/OVH_APP_KEY='$OPTARG'/g' /root/.optimus
+      sed -i "s/OVH_APP_KEY=$OVH_APP_KEY/OVH_APP_KEY=$OPTARG/g" /root/.optimus
     ;;
     c | consumer-key)
-      sed -i 's/OVH_CONSUMER_KEY=$OVH_CONSUMER_KEY/OVH_CONSUMER_KEY='$OPTARG'/g' /root/.optimus
+      sed -i "s/OVH_CONSUMER_KEY=$OVH_CONSUMER_KEY/OVH_CONSUMER_KEY=$OPTARG/g" /root/.optimus
     ;;
     s | secret-key)
-      sed -i 's/OVH_SECRET_KEY=$OVH_SECRET_KEY/OVH_SECRET_KEY='$OPTARG'/g' /root/.optimus
+      sed -i "s/OVH_SECRET_KEY=$OVH_SECRET_KEY/OVH_SECRET_KEY=$OPTARG/g" /root/.optimus
     ;;
     ??* )          
       echo "Unknown option --$option"
