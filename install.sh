@@ -3,7 +3,7 @@ source /etc/os-release
 
 if [ ! -f /root/.optimus ]
 then
-  wget -O /root/.optimus https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/config.sh;
+  wget -O /root/.optimus https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/config.sh
 fi
 
 while getopts m:g:d:a:c:s:-: option
@@ -69,16 +69,6 @@ sudo chown $ID:$ID -R /etc/optimus
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Synchronisation du serveur sur la zone Europe/Paris", "color":"magenta","operation":"optimus-installer", "progress":80}'; fi
 sudo timedatectl set-timezone Europe/Paris
-
-# CREATION D'UN SWAPFILE DE 2GO
-# if [[ $(sudo /usr/sbin/swapon -s) != *"/var/swap.img"* ]]
-# then
-#   sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
-#   sudo chmod 600 /var/swap.img
-#   sudo mkswap /var/swap.img
-#   sudo swapon /var/swap.img
-#   sudo echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
-# fi
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Création d un alias pour la commande optimus", "color":"magenta","operation":"optimus-installer", "progress":90}'; fi
 if ! grep -q "alias optimus" /home/debian/.bashrc
