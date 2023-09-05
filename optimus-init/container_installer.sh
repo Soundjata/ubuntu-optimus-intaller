@@ -2,7 +2,7 @@
 source /etc/optimus/functions.sh
 
 output $OUTPUT_MODE
-output $OUTPUT_MODE "INSTALLATION DU CONTENEUR ${NAME^^} (DEV MODE)" "blue" 200 "$NAME" 0
+output $OUTPUT_MODE "INSTALLATION DU CONTENEUR ${NAME^^}" "blue" 200 "$NAME" 0
 
 output $OUTPUT_MODE "Installation de la proposition de service $NAME" "magenta" 200 "$NAME" 20
 verbose wget --quiet -O /srv/services/$NAME.json https://git.cybertron.fr/optimus/$NAME/-/raw/v5-main/manifest.json
