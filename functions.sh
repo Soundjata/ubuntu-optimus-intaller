@@ -103,12 +103,6 @@ echo_magenta()(echo -e "\e[35m${1}\e[0m")
 echo_cyan()(echo -e "\e[36m${1}\e[0m")
 
 
-if [ ! -f /root/.optimus ]
-then
-	cp /etc/optimus/config.sh /root/.optimus
-fi
-
-
 verbose()
 (
   if [ "$VERBOSE" = 1 ]

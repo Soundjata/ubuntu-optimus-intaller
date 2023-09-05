@@ -1,6 +1,11 @@
 #!/bin/bash
 source /etc/os-release
 
+if [ ! -f /root/.optimus ]
+then
+  wget -O /root/.optimus https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/config.sh;
+fi
+
 while getopts m:g:d:a:c:s:-: option
 do
   if [ "$option" = "-" ]
