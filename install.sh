@@ -21,8 +21,8 @@ do
       MODE=$OPTARG
     ;;
     g | generate)
-      if [ "$UUID" != "" ]; then sed -i 's/UUID=/UUID='$(</dev/urandom tr -dc A-Z0-9 | head -c 16)'/g' /root/.optimus; fi
-      if [ "$AES_KEY" != "" ]; then sed -i 's/AES_KEY=/AES_KEY='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus; fi
+      if [ "$UUID" == "" ]; then sed -i 's/UUID=/UUID='$(</dev/urandom tr -dc A-Z0-9 | head -c 16)'/g' /root/.optimus; fi
+      if [ "$AES_KEY" == "" ]; then sed -i 's/AES_KEY=/AES_KEY='$(</dev/urandom tr -dc A-Za-z0-9 | head -c 16)'/g' /root/.optimus; fi
     ;;
     d | domain)
       sed -i 's/DOMAIN=$DOMAIN/DOMAIN='$OPTARG'/g' /root/.optimus
