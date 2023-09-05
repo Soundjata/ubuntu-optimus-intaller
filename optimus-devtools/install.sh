@@ -41,7 +41,7 @@ then
 
 	docker logout
 	echo
-	echo "$GIT_USERNAME" | echo "$GIT_PASSWORD" | docker login https://git.cybertron.fr:5050
+	docker login https://git.cybertron.fr:5050 -u "$GIT_USERNAME" -p "$GIT_PASSWORD"
 
 	echo
 	echo
