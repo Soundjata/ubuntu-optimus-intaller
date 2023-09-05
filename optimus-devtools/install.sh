@@ -21,10 +21,6 @@ output $OUTPUT_MODE "Attribution des droits en écriture sur les dépôts" "mage
 verbose chmod 775 -R /srv/optimus
 verbose chown www-data:www-data -R /srv/optimus
 
-
-output $OUTPUT_MODE "Ajout de l'outil de compilation des images" "magenta" 200 "optimus-devtools" 75
-verbose cp /etc/optimus/optimus-devtools/build.sh /srv/optimus/build.sh
-
 if [ "$OUTPUT_MODE" != "json" ]
 then
 	echo

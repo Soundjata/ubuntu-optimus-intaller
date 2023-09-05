@@ -1,0 +1,16 @@
+{
+	"[javascript]": {
+		"editor.defaultFormatter": "vscode.typescript-language-features"
+	},
+	"window.title": "optimus-installer",
+	"editor.renderWhitespace": "all",
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.wordWrap": "off",
+	"editor.codeActionsOnSave": {
+		"source.fixAll": false
+	},
+}
