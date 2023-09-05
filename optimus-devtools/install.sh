@@ -13,16 +13,6 @@ then
 fi
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "GRANT ALL ON *.* to 'root'@'%' IDENTIFIED BY '$MARIADB_ROOT_PASSWORD' WITH GRANT OPTION;"
 
-
-output $OUTPUT_MODE "Installation des dépôts complémentaires" "magenta" 200 "optimus-devtools" 30
-if [ ! -d /srv/optimus/optimus-libs/.git ]
-then
-	verbose rm -Rf /srv/optimus/optimus-libs
-	verbose mkdir -p /srv/optimus/optimus-libs
-	verbose git clone --quiet git@git.cybertron.fr/optimus/optimus-libs /srv/optimus/optimus-libs
-fi
-
-
 output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta" 200 "optimus-devtools" 45
 verbose usermod -a -G www-data debian
 
@@ -35,8 +25,45 @@ verbose chown www-data:www-data -R /srv/optimus
 output $OUTPUT_MODE "Ajout de l'outil de compilation des images" "magenta" 200 "optimus-devtools" 75
 verbose cp /etc/optimus/optimus-devtools/build.sh /srv/optimus/build.sh
 
-output $OUTPUT_MODE "Le serveur est prêt pour accueillir les outils de développement" "green" 200 "optimus-devtools" 100
+if [ "$OUTPUT_MODE" != "json" ]
+then
+	echo
+	echo_cyan "Connexion au registre de conteneurs https://git.cybertron.fr:5050"
+	docker login https://git.cybertron.fr:5050
 
+	echo
+	echo
+	echo_cyan "Connexion au dépot git.cybertron.fr"
+	if [ ! -f /home/debian/.ssh/id_ed25519 ]
+	then
+		echo_magenta "Génération d'une clé développeur ED25519 pour l'utilisateur debian"
+		su -c 'ssh-keygen -t ed25519 -C "debian@$DOMAIN"' debian
+	fi
+
+	echo
+	echo_magenta "Vous trouverez ci-dessous la clé publique de ce serveur à copier sur https://git.cybertron.fr/-/profile/keys :"
+	echo
+	echo_yellow "$(cat /home/debian/.ssh/id_ed25519.pub)"
+	echo
+
+	read -p "Après avoir copié la clé, appuyez sur [ENTREE] pour tester la connexion..."
+	echo
+	su -c "ssh -T git@git.cybertron.fr" debian
+	echo
+
+	read -p "Appuyez sur [ENTREE] pour continuer..."
+fi
+
+output $OUTPUT_MODE
+output $OUTPUT_MODE "Installation des dépôts complémentaires" "magenta" 200 "optimus-devtools" 90
+if [ ! -d /srv/optimus/optimus-libs/.git ]
+then
+	verbose rm -Rf /srv/optimus/optimus-libs
+	su -c 'mkdir -p /srv/optimus/optimus-libs' debian
+	su -c 'git clone --quiet git@git.cybertron.fr:optimus/optimus-libs /srv/optimus/optimus-libs' debian
+fi
+
+output $OUTPUT_MODE "Le serveur est prêt pour accueillir les outils de développement !" "green" 200 "optimus-devtools" 100
 
 DEV=1
 NAME="optimus-base"
