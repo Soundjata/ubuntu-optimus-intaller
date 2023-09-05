@@ -65,15 +65,6 @@ then
 fi
 
 output $OUTPUT_MODE
-output $OUTPUT_MODE "Installation des dépôts complémentaires optimus-libs" "magenta" 200 "optimus-devtools" 90
-if [ ! -d /srv/optimus/optimus-libs/.git ]
-then
-	verbose rm -Rf /srv/optimus/optimus-libs
-	su -c 'mkdir -p /srv/optimus/optimus-libs' debian
-	su -c 'git clone --quiet git@git.cybertron.fr:optimus/optimus-libs /srv/optimus/optimus-libs' debian
-fi
-
-output $OUTPUT_MODE
 output $OUTPUT_MODE "Réinstallation du repo optimus-installer (DEV MODE)" "magenta" 200 "optimus-devtools" 90
 verbose rm -R /etc/optimus
 verbose mkdir -p /etc/optimus
