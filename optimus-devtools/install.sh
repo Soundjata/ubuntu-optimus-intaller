@@ -46,12 +46,12 @@ then
 	echo
 	echo
 	echo_cyan "Connexion au dépot git.cybertron.fr"
-	git config --global user.name "$GIT_USERNAME"
-	git config --global user.email "$GIT_USERNAME"
+	su -c 'git config --global user.name "$GIT_USERNAME"' debian
+	su -c 'git config --global user.email "$GIT_USERNAME"' debian
 	if [ ! -f /home/debian/.ssh/id_ed25519 ]
 	then
 		echo_magenta "Génération d'une clé développeur ED25519 pour l'utilisateur debian"
-		su -c 'ssh-keygen -t ed25519 -C "debian@$DOMAIN"' debian
+		su -c 'ssh-keygen -t ed25519 -f "/home/debian/.ssh/id_25519" -N "" -C "debian@$DOMAIN"' debian
 	fi
 
 	echo
