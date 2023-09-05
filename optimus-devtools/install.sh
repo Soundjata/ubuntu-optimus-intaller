@@ -51,7 +51,7 @@ then
 	if [ ! -f /home/debian/.ssh/id_ed25519 ]
 	then
 		echo_magenta "Génération d'une clé développeur ED25519 pour l'utilisateur debian"
-		su -c 'ssh-keygen -t ed25519 -f "/home/debian/.ssh/id_25519" -N "" -C "debian@$DOMAIN"' debian
+		su -c 'ssh-keygen -t ed25519 -f "/home/debian/.ssh/id_ed25519" -N "" -C "debian@$DOMAIN"' debian
 	fi
 
 	echo
