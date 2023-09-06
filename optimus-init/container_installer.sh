@@ -13,6 +13,7 @@ fi
 
 output $OUTPUT_MODE "Installation de la proposition de service $NAME" "magenta" 200 "$NAME" 20
 verbose wget --quiet -O /srv/services/$NAME.json https://git.cybertron.fr/optimus/$NAME/-/raw/v5-$BRANCH/manifest.json
+chown www-data:www-data /srv/services/$NAME.json
 
 output $OUTPUT_MODE "Lecture du fichier manifest.json" "magenta" 200 "$NAME" 30
 IMAGE=$(jq -r .image /srv/services/$NAME.json)
