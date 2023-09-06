@@ -15,7 +15,7 @@ num_dirs=${#dirs[@]}
 while true; 
 do
 	clear
-	echo "Quel conteneur voulez-vous reconstruire ?"
+	echo "Selectionnez le conteneur que vous souhaitez installer/recompiler en mode développement ?"
 	for i in $(seq 0 $(($num_dirs - 1))); 
 	do
 		tput setaf 2  # COULEUR DU TEXTE VERTE
@@ -30,7 +30,7 @@ do
     tput sgr0
 	
     tput cup $(($num_dirs + 5)) 0
-	echo -n "Merci de sélectionner un dossier (1-$num_dirs) : "
+	echo -n "Selection (1-$num_dirs) ? "
 
 	# ACTIVATION DU MODE CANONICAL POUR LIRE LES CARACTERES TAPPES
 	stty_orig=$(stty -g)
