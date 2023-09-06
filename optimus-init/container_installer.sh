@@ -38,8 +38,11 @@ then
 	verbose docker rm --force $NAME-old 2> /dev/null
 fi
 
-output $OUTPUT_MODE "Téléchargement de l'image $NAME" "magenta" 200 "$NAME" 50
-verbose docker pull --quiet $IMAGE
+if [ "$DEV" != "1" ]
+then
+	output $OUTPUT_MODE "Téléchargement de l'image $NAME" "magenta" 200 "$NAME" 50
+	verbose docker pull --quiet $IMAGE
+fi
 
 output $OUTPUT_MODE "Création du conteneur $NAME" "magenta" 200 "$NAME" 70
 verbose docker create --name $NAME --network optimus $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $VOLUMES $DEV_VOLUMES $IMAGE

@@ -2,10 +2,12 @@
 cd /srv/optimus
 
 # LISTE LES DOSSIERS QUI CONTIENNENT UN FICHIER DOCKERFILE
-dirs=()
-while IFS= read -r -d '' dir; do
-	dirs+=("${dir%*/}")
-done < <(find . -type f -name "Dockerfile" -printf "%h\0" | sort -zu)
+mapfile -t dirs < <( find "/srv/services" -type f -name "*.json")
+for ((i=0; i<${#dirs[@]}; i++))
+do
+  dirs[$i]=$(echo "${dirs[$i]}" | sed "s/\/srv\/services\///g")
+  dirs[$i]=$(echo "${dirs[$i]}" | sed "s/.json//g")
+done
 
 num_dirs=${#dirs[@]}
 
@@ -57,13 +59,36 @@ do
 	# VERIFICATION DE LA VALIDITE DE LA SELECTION
 	if [[ "$selection" -ge 1 && "$selection" -le $num_dirs ]]; 
 	then
-        selected_dir=${dirs[$(($selection - 1))]}
+		selected_dir=${dirs[$(($selection - 1))]}
 		selected_dir=${selected_dir#./}  # SUPPRIME "./" AU DEBUT DE LA VARIABLE
+		
+		if [ ! -d "/srv/optimus/$selected_dir/.git" ]
+		then
+			rm -Rf "/srv/optimus/$selected_dir"
+			mkdir -p "/srv/optimus/$selected_dir"
+			chown debian:debian "/srv/optimus/$selected_dir"
+			su -c "git clone git@git.cybertron.fr:optimus/$selected_dir /srv/optimus/$selected_dir" debian
+		fi
+		if [ ! -d "/srv/optimus/optimus-libs/.git" ]
+		then
+			rm -Rf "/srv/optimus/optimus-libs"
+			mkdir -p "/srv/optimus/optimus-libs"
+			chown debian:debian "/srv/optimus/optimus-libs"
+			su -c "git clone git@git.cybertron.fr:optimus/optimus-libs /srv/optimus/optimus-libs" debian
+		fi
+		if [ ! -d "/srv/optimus/.vscode" ]
+		then
+			mkdir -p "/srv/optimus/.vscode"
+			wget -O "/srv/optimus/.vscode/settings.json" "https://git.cybertron.fr/optimus/optimus-libs/-/raw/v5-dev/.vscode/settings.json"
+		fi
+		chown -R www-data:www-data /srv/optimus
+		chmod +775 -R /srv/optimus
+
 		docker build -t git.cybertron.fr:5050/optimus/$selected_dir/v5:dev -f $selected_dir/Dockerfile .
 		DEV=1
-        NAME=$selected_dir
-        source <(sudo cat /etc/optimus/optimus-init/container_installer.sh)
-        read -p "Appuyez sur [ENTREE] pour continuer..."
+		NAME=$selected_dir
+		source <(sudo cat /etc/optimus/optimus-init/container_installer.sh)
+		read -p "Appuyez sur [ENTREE] pour continuer..."
 	else
 		echo "Choix invalide. Pressez une touche pour continuer"
 		read -n 1
