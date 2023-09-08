@@ -32,5 +32,6 @@ verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.allowed
 
 output $OUTPUT_MODE "Création du compte administrateur $ADMIN_EMAIL" "magenta" 200 "create_admin" 66
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.users SET status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password=AES_ENCRYPT('$ADMIN_PASSWORD','$AES_KEY')"
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE user_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
 
 output $OUTPUT_MODE "Le compte administrateur a été créé avec succès" "green" 200 "create_admin" 100
