@@ -52,13 +52,14 @@ tput cup 39 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 
 if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
 then
-  tput cup 41 3; echo "1. Compilateur de développement"
+  tput cup 41 3; echo "1. Co*pilation des conteurs (DEV)"
+  tput cup 42 3; echo "2. Affichage des logs d'erreur des conteneurs (DEV)"
 fi
 
-tput cup 43 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
-tput cup 44 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
-tput cup 45 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
-tput cup 46 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
+tput cup 44 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
+tput cup 45 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
+tput cup 46 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
+tput cup 47 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
 
 read -n 1 y
 
@@ -302,6 +303,12 @@ case "$y" in
 	tput reset
 	clear
 	source /etc/optimus/optimus-devtools/build.sh
+	;;
+
+  2)
+	tput reset
+	clear
+	watch -n 1 'docker ps --format "{{.Names}}" | grep optimus- | grep --invert-match optimus-databases | sort | xargs --verbose --max-args=1 -- docker logs --tail=10 --timestamps'
 	;;
 
   '')
