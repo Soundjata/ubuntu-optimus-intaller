@@ -52,7 +52,7 @@ tput cup 39 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 
 if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
 then
-  tput cup 41 3; echo "1. Co*pilation des conteurs (DEV)"
+  tput cup 41 3; echo "1. Compilation des conteurs (DEV)"
   tput cup 42 3; echo "2. Affichage des logs d'erreur des conteneurs (DEV)"
 fi
 

@@ -28,10 +28,15 @@ output $OUTPUT_MODE
 output $OUTPUT_MODE "CREATION DU COMPTE ADMINISTRATEUR" "blue" 200 "create_admin" 0
 
 output $OUTPUT_MODE "Ajout du domaine $DOMAIN dans les allowed_origins" "magenta" 200 "create_admin" 33
-verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.allowed_origins SET origin='*.$DOMAIN'"
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.allowed_origins SET  id = 1, origin='*.$DOMAIN'"
 
 output $OUTPUT_MODE "Création du compte administrateur $ADMIN_EMAIL" "magenta" 200 "create_admin" 66
-verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.users SET status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password=AES_ENCRYPT('$ADMIN_PASSWORD','$AES_KEY')"
-verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE user_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
+verbose apt -qq -y install apache2-utils
+PASSWORD_HASH=$(htpasswd -bnBC 10 "" "$ADMIN_PASSWORD" | tr -d ':\n')
+echo $PASSWORD_HASH
+verbose apt -qq -y remove apache2-utils
+verbose apt -qq -y autoremove
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.users SET id = 1, status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password='$PASSWORD_HASH'"
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS user_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
 
 output $OUTPUT_MODE "Le compte administrateur a été créé avec succès" "green" 200 "create_admin" 100
