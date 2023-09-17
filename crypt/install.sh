@@ -53,7 +53,7 @@ then
   openssl pkeyutl -decrypt -inkey /root/private.pem -in /root/tmpramfs/keyfile_encrypted | /sbin/cryptsetup luksOpen /dev/$PART_TO_ENCRYPT crypt$PART_TO_ENCRYPT
   sleep 0.5
 
-  output $OUTPUT_MODE "Formattage de la partition chiffrée au format EXT4" "crypt" 200 "crypt" 70
+  output $OUTPUT_MODE "Formattage de la partition chiffrée au format EXT4" "magenta" 200 "crypt" 70
   /sbin/mkfs.ext4 /dev/mapper/crypt$PART_TO_ENCRYPT &> /dev/null
   sleep 0.5
 
@@ -61,7 +61,7 @@ then
   verbose cryptsetup luksHeaderBackup /dev/$PART_TO_ENCRYPT --header-backup-file /root/headerbackup
   sleep 0.5
 
-  output $OUTPUT_MODE "Montage de la partition dans /srv" "crypt" 200 "crypt" 90
+  output $OUTPUT_MODE "Montage de la partition dans /srv" "magenta" 200 "crypt" 90
   mount /dev/mapper/crypt$PART_TO_ENCRYPT /srv
   umount /root/tmpramfs
   rmdir /root/tmpramfs
