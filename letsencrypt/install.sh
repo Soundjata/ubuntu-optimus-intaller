@@ -86,7 +86,7 @@ then
 		
 		sleep 1
 
-		output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt" 80
+		output $OUTPUT_MODE "Génération d'un certificat wildcard automatique pour le domaine $DOMAIN" "magenta" 200 "letsencrypt" 80
 		echo "dns_ovh_endpoint = ovh-eu" > /root/ovh
 		echo "dns_ovh_application_key = $OVH_APP_KEY" >> /root/ovh
 		echo "dns_ovh_application_secret = $OVH_SECRET_KEY" >> /root/ovh
@@ -100,7 +100,7 @@ then
 		source /root/.optimus
 
 		echo_magenta "Installation des paquets requis"
-		verbose apt -qq -y install python3-pip python3-certbot python3-certbot-nginx dnsutils 2> /dev/null
+		verbose apt -qq -y install python3-pip python3-certbot dnsutils 2> /dev/null
 
 		PUBLIC_IP=$( wget -qO- ipinfo.io/ip )
 		NSALL=$( dig NS $DOMAIN +short +retry=99 )
@@ -109,39 +109,57 @@ then
 		NS2="${NSALL[1]}"
 		THEDATE=$(  date +"%Y%m%d" );
 
-		echo_magenta "Voici les enregistrements DNS à renseigner pour votre nom de domaine $DOMAIN si votre registrar est GANDI :"
+		echo_magenta "Configuration de la zone DNS"
+		echo_magenta "La solution la plus simple est de rediriger tout le traffic en redirigeant l'enregistrement racine et tous les sous domaines vers l'adresse ip de votre serveur"
 		echo
 
-		echo "api 3600 IN A $PUBLIC_IP"
-		echo "optimus 3600 IN A $PUBLIC_IP"
+		echo "3600 IN A $PUBLIC_IP"
+		echo "* 3600 IN A $PUBLIC_IP"
 
 		echo
-		echo_magenta "Voici les enregistrements DNS à renseigner pour votre nom de domaine $DOMAIN si votre registrar est OVH :"
+		echo_magenta "Voici par exemple les enregistrements DNS à renseigner si votre registrar est OVH :"
 		echo_magenta "Il faut copier le texte ci-dessous dans la rubrique Web Cloud --> Domaines --> $DOMAIN --> Zone DNS --> Modifier en mode textuel";
-		echo_magenta "Attention car OVH exige que le texte collé se termine par un saut de ligne (touche ENTREE)"
 		echo
 
 		echo '$TTL 3600';
-		echo "@	IN SOA $NS2 tech.ovh.net. ($THEDATE 86400 3600 3600000 60)";
-		echo "	3600 IN NS $NS2";
-		echo "	3600 IN NS $NS1";
-		echo "api 3600 IN A $PUBLIC_IP"
-		echo "optimus 3600 IN A $PUBLIC_IP"
+		echo "@ IN SOA $NS2 tech.ovh.net. ($THEDATE 86400 3600 3600000 60)";
+		echo "  IN NS $NS2";
+		echo "  IN NS $NS1";
+		echo "  IN A $PUBLIC_IP"
+		echo "* IN A $PUBLIC_IP"
+		echo
 
+		echo_magenta "Si vous utiliser le serveur mail, il est impératif de renseigner votre domaine dans le 'REVERSE DNS' de votre adresse IP"
 		echo
-		echo_magenta "Si vous hébergez vous même votre serveur, ces ports doivent être redirigés vers votre serveur :"
-		echo
-		if grep -q "Port 7822" /etc/ssh/sshd_config; then echo "7822 SSH"; else echo "22   SSH"; fi
+
+		echo_magenta "Enfin, si vous hébergez vous même votre serveur, ces ports doivent être redirigés vers votre serveur :"
+		echo ""
+		if grep -q "Port 7822" /etc/ssh/sshd_config
+		then
+		echo "7822 SSH"
+		else
+		echo "22   SSH"
+		fi
 		echo "80   HTTP"
 		echo "443  HTTPS"
-
+		echo "25   SMTP"
+		echo "143  IMAP"
+		echo "465  SMTPS"
+		echo "587  SMTPS"
+		echo "993  IMAPS"
 		echo
-		echo "Une fois les modifications effectuées, appuyez sur [ENTREE] pour générer les certificats"
+
+		echo_magenta "Une fois ces modifications effectuées, patientez au moins 30 secondes avant de lancer l'étape suivante, le temps que les modifications soient propagées"
+		echo
+		echo "APPUYER SUR [ENTREE] POUR CONTINUER"
 		read -p ""
-		clear
-		
-		output $OUTPUT_MODE "Génération d'un certificat wildcard pour le domaine $DOMAIN" "magenta" 200 "letsencrypt" 66
-		certbot run -n --nginx --redirect --agree-tos --email postmaster@$DOMAIN -d $DOMAIN -d *.$DOMAIN
+
+		output $OUTPUT_MODE "Génération d'un certificat wildcard manuel pour le domaine $DOMAIN" "magenta" 200 "letsencrypt" 66
+		echo
+		echo_red "Attention, le certificat qui va être généré ne se renouvellera pas automatiquement au bout de 3 mois"
+		echo_red "Le renouvellement automatique n'est possible qu'avec une méthode automatisée"
+		echo
+		certbot certonly --expand --manual --preferred-challenges dns --agree-tos --email postmaster@$DOMAIN -d $DOMAIN -d *.$DOMAIN
 
 	fi
 
