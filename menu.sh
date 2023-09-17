@@ -20,12 +20,12 @@ tput cup 7  3; if [ -n "$PART_TO_ENCRYPT" ] && lsblk -o NAME -n /dev/$PART_TO_EN
 tput cup 8  3; if /sbin/blkid /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q 'crypto_LUKS'; then echo_green "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; else echo_red "c. Activer le chiffrement sur la partition $PART_TO_ENCRYPT"; fi
 tput cup 9  3; if lsblk -o MOUNTPOINT -n /dev/mapper/crypt$PART_TO_ENCRYPT 2>/dev/null | grep -q '/srv'; then echo_green "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; else echo_red "d. Déchiffrer la partition $PART_TO_ENCRYPT et la monter sur /srv"; fi
 
-tput cup 11  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo_green "e. Installer les certificats SSL"; else echo_red "f. Installer les certificats SSL"; fi
-tput cup 12  3; if [ -d /etc/nginx ]; then echo_green "g. Installer NGINX"; else echo_red "f. Installer NGINX"; fi
-tput cup 13  3; if [ -d /etc/docker ]; then echo_green "h. Installer DOCKER"; else echo_red "g. Installer DOCKER"; fi
+tput cup 11  3; if [ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ]; then echo_green "e. Installer les certificats SSL"; else echo_red "e. Installer les certificats SSL"; fi
+tput cup 12  3; if [ -d /etc/nginx ]; then echo_green "f. Installer NGINX"; else echo_red "f. Installer NGINX"; fi
+tput cup 13  3; if [ -d /etc/docker ]; then echo_green "g. Installer DOCKER"; else echo_red "g. Installer DOCKER"; fi
 
-tput cup 15  3; if [ -d srv/optimus ]; then echo_green "h. Préconfiguration OPTIMUS"; else echo_red "h. Préconfiguration OPTIMUS"; fi
-tput cup 16  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]; then echo_green "i. Installer OPTIMUS DATABASES"; else echo_red "i. Installer OPTIMUS DATABASES"; fi
+tput cup 15  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]; then echo_green "h. Installer OPTIMUS DATABASES"; else echo_red "h. Installer OPTIMUS DATABASES"; fi
+tput cup 16  3; if [ -d srv/optimus ]; then echo_green "i. Initialisation OPTIMUS"; else echo_red "i. Initialisation OPTIMUS"; fi
 tput cup 17  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]; then echo_green "j. Installer OPTIMUS BASE"; else echo_red "j. Installer OPTIMUS BASE"; fi
 
 tput cup 19  3; if [ -f /etc/ufw/applications.d/ufw-webserver ]; then echo_green "k. Installer le pare feu UFW"; else echo_red "k. Installer le pare feu UFW"; fi
@@ -116,14 +116,14 @@ case "$y" in
 	read -p "Appuyez sur [ENTREE] pour continuer..."
 	;;
 
-  i)
+  h)
 	tput reset
 	clear
 	source /etc/optimus/optimus-databases/install.sh
 	read -p "Appuyez sur [ENTREE] pour continuer..."
 	;;
 
-  h)
+  i)
 	tput reset
 	clear
 	source /etc/optimus/optimus-init/install.sh

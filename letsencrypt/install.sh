@@ -150,6 +150,7 @@ then
 		echo
 
 		echo_magenta "Une fois ces modifications effectuées, patientez au moins 30 secondes avant de lancer l'étape suivante, le temps que les modifications soient propagées"
+		echo_magenta "A chacune des étapes qui vont suivre, après avoir fait les modifications demandées, attendez au moins 30 secondes avant d'appuyer sur entrée"
 		echo
 		echo "APPUYER SUR [ENTREE] POUR CONTINUER"
 		read -p ""
@@ -159,7 +160,7 @@ then
 		echo_red "Attention, le certificat qui va être généré ne se renouvellera pas automatiquement au bout de 3 mois"
 		echo_red "Le renouvellement automatique n'est possible qu'avec une méthode automatisée"
 		echo
-		certbot certonly --expand --manual --preferred-challenges dns --agree-tos --email postmaster@$DOMAIN -d $DOMAIN -d *.$DOMAIN
+		certbot certonly --expand --manual --agree-tos --preferred-challenges dns --agree-tos --email postmaster@$DOMAIN -d $DOMAIN -d *.$DOMAIN
 
 	fi
 
