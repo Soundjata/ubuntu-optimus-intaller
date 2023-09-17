@@ -2,11 +2,12 @@
 cd /
 rm -R /etc/optimus
 mkdir /etc/optimus
-if [ $DEV == 1 ]
+
+if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
 then
     git clone git@git.cybertron.fr/optimus/optimus-installer /etc/optimus
 else
-    git clone git@git.cybertron.fr/optimus/optimus-installer /etc/optimus
+    git clone https://git.cybertron.fr/optimus/optimus-installer /etc/optimus
 fi
 
 chmod +x /etc/optimus/menu.sh
