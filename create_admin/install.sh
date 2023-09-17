@@ -31,11 +31,10 @@ output $OUTPUT_MODE "Ajout du domaine $DOMAIN dans les allowed_origins" "magenta
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.allowed_origins SET  id = 1, origin='*.$DOMAIN'"
 
 output $OUTPUT_MODE "Création du compte administrateur $ADMIN_EMAIL" "magenta" 200 "create_admin" 66
-verbose apt -qq -y install apache2-utils
+verbose apt -qq -y install apache2-utils 2> /dev/null
 PASSWORD_HASH=$(htpasswd -bnBC 10 "" "$ADMIN_PASSWORD" | tr -d ':\n')
-echo $PASSWORD_HASH
-verbose apt -qq -y remove apache2-utils
-verbose apt -qq -y autoremove
+verbose apt -qq -y remove apache2-utils 2> /dev/null
+verbose apt -qq -y autoremove 2> /dev/null
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.users SET id = 1, status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password='$PASSWORD_HASH'"
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS user_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
 

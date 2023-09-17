@@ -32,28 +32,28 @@ output $OUTPUT_MODE "Création des dossiers requis" "magenta" 200 "optimus-init"
 if [ ! -d "/srv/services" ]
 then 
 	verbose mkdir /srv/services
-	chown www-data:www-data -R /srv/services
-	chmod 775 /srv/services
 fi
+chown www-data:www-data -R /srv/services
+chmod 775 /srv/services
 
 if [ ! -d "/srv/www" ]
 then 
 	verbose mkdir /srv/www
-	chown www-data:www-data -R /srv/www
 fi
+chown www-data:www-data -R /srv/www
 
 if [ ! -d "/srv/optimus" ]
 then 
 	verbose mkdir /srv/optimus
-	chown www-data:www-data -R /srv/optimus
-	chmod 775 -R /srv/optimus
 fi
+chown www-data:www-data -R /srv/optimus
+chmod 775 -R /srv/optimus
 
 if [ ! -d "/srv/files" ]
 then 
 	verbose mkdir /srv/files
-	chown www-data:www-data -R /srv/files
 fi
+chown www-data:www-data -R /srv/files
 
 if [ ! -d "/srv/mailboxes" ]
 then 

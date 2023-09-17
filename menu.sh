@@ -257,16 +257,14 @@ case "$y" in
 	source /etc/optimus/letsencrypt/install.sh
 	source /etc/optimus/nginx/install.sh
 	source /etc/optimus/docker/install.sh
-	source /etc/optimus/optimus-init/install.sh
 	source /etc/optimus/optimus-databases/install.sh
+	source /etc/optimus/optimus-init/install.sh
 	source /etc/optimus/optimus-base/install.sh
-	source /etc/optimus/create_admin/install.sh
 	source /etc/optimus/firewall/install.sh
 	source /etc/optimus/fail2ban/install.sh
 	source /etc/optimus/ssh_port_change/install.sh
 	source /etc/optimus/debian_password/install.sh
 	source /etc/optimus/2fa/install.sh
-	source /etc/optimus/create_admin/install.sh
 	clear
 	qrencode -t ansi "otpauth://totp/debian@$DOMAIN.fr?secret=${TWO_FA_KEY}&issuer=optimus"
 	echo
@@ -290,7 +288,7 @@ case "$y" in
 	echo_magenta "Si vous avez choisi de renforcer la sécurité en modifiant le port SSH, rappelez vous que la connexion se fait désormais via le port 7822"
 	echo_magenta "Si vous avez choisi de renforcer la sécurité en ajoutant une authentification 2FA, vérifiez bien que l'accès fonctionne"
 	echo_magenta "Après le redémarrage du serveur, vérifiez que la partition chiffrée a bien été ouverte (option 'd' du menu en vert)"
-	echo "APPUYER SUR [ENTREE] POUR CONTINUER"optimus-devtools
+	echo "APPUYER SUR [ENTREE] POUR CONTINUER"
 	  read -p ""
 	echo
 	echo_green "Si l'installation s'est bien déroulée, vous pourrez vous connecter à https://optimus.$DOMAIN"
@@ -299,6 +297,7 @@ case "$y" in
 	echo "APPUYER SUR [ENTREE] POUR REDEMARRER"
 	read -p ""
 	reboot
+	exit
 	;;
 
   1)

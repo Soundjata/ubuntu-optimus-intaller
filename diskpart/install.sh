@@ -93,9 +93,11 @@ then
         echo_red "APPUYER SUR [ENTREE] POUR CONTINUER"
         read -p ""
         reboot
+		exit
       else
         output $OUTPUT_MODE "Redémarrage..." "magenta" 200 "diskpart" 90
         reboot
+		exit
       fi
     fi
   fi

@@ -7,13 +7,11 @@ output $OUTPUT_MODE "CHIFFREMENT DU DISQUE" "blue" 200 "crypt" 0
 if ! lsblk -o NAME -n /dev/$PART_TO_ENCRYPT 2>/dev/null | grep -q $PART_TO_ENCRYPT
 then
   output $OUTPUT_MODE "Opération impossible : la partition /dev/$PART_TO_ENCRYPT n'existe pas" "red" 200 "crypt" 100
-  exit
 fi
 
 if [ -e /dev/mapper/crypt${PART_TO_ENCRYPT} ]
 then
   output $OUTPUT_MODE "Opération impossible : la partition est déjà chiffrée" "red" 200 "crypt" 100
-  exit
 fi
 
 
