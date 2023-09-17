@@ -19,6 +19,8 @@ verbose mkdir -p /srv/vhosts/servers
 verbose mkdir -p /srv/vhosts/locations
 echo "include /srv/vhosts/servers/*;" > /etc/nginx/sites-enabled/default
 verbose chown -R www-data:www-data /srv/vhosts
+verbose rm /usr/share/nginx/html/index.html
+verbose touch /usr/share/nginx/html/index.html
 
 output $OUTPUT_MODE "Paramétrage des logs" "magenta" 200 "nginx" 65
 verbose mkdir -p /var/log/optimus
