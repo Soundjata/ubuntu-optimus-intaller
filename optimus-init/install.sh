@@ -64,9 +64,6 @@ then
 	chown mailboxes:mailboxes -R /srv/mailboxes
 fi
 
-output $OUTPUT_MODE "Installation de la proposition de service optimus-databases" "magenta" 200 "optimus-init" 30
-verbose wget --quiet -O /srv/services/optimus-databases.json https://git.cybertron.fr/optimus/optimus-databases/-/raw/v5-main/manifest.json
-
 output $OUTPUT_MODE "Installation de la proposition de service optimus-base" "magenta" 200 "optimus-init" 20
 verbose wget --quiet -O /srv/services/optimus-base.json https://git.cybertron.fr/optimus/optimus-databases/-/raw/v5-main/manifest.json
 
