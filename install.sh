@@ -1,6 +1,8 @@
 #!/bin/bash
 source /etc/os-release
 
+rm install.sh
+
 if [ ! -f /root/.optimus ]
 then
   wget -O /root/.optimus https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/config.sh
