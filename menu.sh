@@ -54,12 +54,13 @@ if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt
 then
   tput cup 41 3; echo "1. Compilation des conteurs (DEV)"
   tput cup 42 3; echo "2. Affichage des logs d'erreur des conteneurs (DEV)"
+  tput cup 43 3; echo "3. Console MARIADB root (DEV)"
 fi
 
-tput cup 44 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
-tput cup 45 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
-tput cup 46 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
-tput cup 47 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
+tput cup 45 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."
+tput cup 46 3; echo_magenta "Le texte complet de la licence GNU AGPL V3 est fourni dans le fichier LICENSE ou consultable en tapant [ESPACE]."
+tput cup 47 3; echo_magenta "Cela signifie que vous les utilisez sous votre seule et unique responsabilité."
+tput cup 48 3; echo_magenta "Personne ne peut être tenu pour responsable d'un quelconque dommage, notamment lié à une perte de vos données"
 
 read -n 1 y
 
@@ -308,13 +309,20 @@ case "$y" in
   2)
 	tput reset
 	clear
-	watch -n 1 'docker ps --format "{{.Names}}" | grep optimus- | grep --invert-match optimus-databases | sort | xargs --verbose --max-args=1 -- docker logs --tail=10 --timestamps'
+	watch -c -t -n 1 'docker ps --format "{{.Names}}" | grep optimus- | grep --invert-match optimus-databases | sort | xargs -I % bash /etc/optimus/optimus-devtools/container_log.sh %'
+	;;
+
+  3)
+	tput reset
+	clear
+	mysql -u root -p$MARIADB_ROOT_PASSWORD
 	;;
 
   '')
 	clear
 	more -d /etc/optimus/LICENSE
 	;;
+
 	
 esac
 done

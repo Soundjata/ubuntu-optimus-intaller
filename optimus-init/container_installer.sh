@@ -4,11 +4,11 @@ source /etc/optimus/functions.sh
 output $OUTPUT_MODE
 if [ "$DEV" == "1" ]
 then
-    output $OUTPUT_MODE "INSTALLATION DU CONTENEUR ${NAME^^} (DEV MODE)" "blue" 200 "$NAME" 0
-    BRANCH="dev"
+	output $OUTPUT_MODE "INSTALLATION DU CONTENEUR ${NAME^^} (DEV MODE)" "blue" 200 "$NAME" 0
+	BRANCH="dev"
 else
-    output $OUTPUT_MODE "INSTALLATION DU CONTENEUR ${NAME^^}" "blue" 200 "$NAME" 0
-    BRANCH="main"
+	output $OUTPUT_MODE "INSTALLATION DU CONTENEUR ${NAME^^}" "blue" 200 "$NAME" 0
+	BRANCH="main"
 fi
 
 output $OUTPUT_MODE "Installation de la proposition de service $NAME" "magenta" 200 "$NAME" 20
@@ -25,9 +25,9 @@ if [ "$(jq -r .restart_policy.name /srv/services/$NAME.json)" != "null" ]; then 
 
 if [ "$DEV" == "1" ]
 then
-    IMAGE="${IMAGE//latest/dev}"
-    DEV_ENV=""; for row in $(jq -r .dev.env[] /srv/services/$NAME.json); do DEV_ENV+="--env $row "; done
-    DEV_VOLUMES=""; for row in $(jq -r .dev.volumes[] /srv/services/$NAME.json); do DEV_VOLUMES+="--volume $row "; done
+	IMAGE="${IMAGE//latest/dev}"
+	DEV_ENV=""; for row in $(jq -r .dev.env[] /srv/services/$NAME.json); do DEV_ENV+="--env $row "; done
+	DEV_VOLUMES=""; for row in $(jq -r .dev.volumes[] /srv/services/$NAME.json); do DEV_VOLUMES+="--volume $row "; done
 fi
 
 if [ $( docker ps -a | grep $NAME | wc -l ) -gt 0 ]
@@ -46,16 +46,16 @@ then
 fi
 
 output $OUTPUT_MODE "Création du conteneur $NAME" "magenta" 200 "$NAME" 70
-verbose docker create --name $NAME --network optimus $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $VOLUMES $DEV_VOLUMES $IMAGE
+verbose eval "docker create --name $NAME --network optimus $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $VOLUMES $DEV_VOLUMES $IMAGE"
 
 output $OUTPUT_MODE "Lancement du conteneur $NAME" "magenta" 200 "$NAME" 80
 verbose docker start $NAME
 
 if [ "$DEV" == "1" ]
 then
-    output $OUTPUT_MODE "Le conteneur $NAME (DEV MODE) a été installé avec succès !" "green" 200 "$NAME" 100
-    BRANCH="dev"
+	output $OUTPUT_MODE "Le conteneur $NAME (DEV MODE) a été installé avec succès !" "green" 200 "$NAME" 100
+	BRANCH="dev"
 else
-    output $OUTPUT_MODE "Le conteneur $NAME a été installé avec succès !" "green" 200 "$NAME" 100
-    BRANCH="main"
+	output $OUTPUT_MODE "Le conteneur $NAME a été installé avec succès !" "green" 200 "$NAME" 100
+	BRANCH="main"
 fi

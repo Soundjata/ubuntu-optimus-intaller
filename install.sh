@@ -78,4 +78,17 @@ then
   echo "alias optimus='sudo bash /etc/optimus/menu.sh'" >> /home/debian/.bashrc
 fi
 
+
+# CREATION D'UN SWAPFILE DE 2GO
+# if [[ $(sudo /usr/sbin/swapon -s) != *"/var/swap.img"* ]]
+# then
+#   sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
+#   sudo chmod 600 /var/swap.img
+#   sudo mkswap /var/swap.img
+#   sudo swapon /var/swap.img
+#   sudo echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
+# fi
+
+
+
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Installation réussie", "color":"green","operation":"optimus-installer", "progress":100}'; fi
