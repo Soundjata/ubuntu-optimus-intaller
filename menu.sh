@@ -25,7 +25,7 @@ tput cup 12  3; if [ -d /etc/nginx ]; then echo_green "f. Installer NGINX"; else
 tput cup 13  3; if [ -d /etc/docker ]; then echo_green "g. Installer DOCKER"; else echo_red "g. Installer DOCKER"; fi
 
 tput cup 15  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-databases | wc -l ) -gt 0 ]; then echo_green "h. Installer OPTIMUS DATABASES"; else echo_red "h. Installer OPTIMUS DATABASES"; fi
-tput cup 16  3; if [ -d srv/optimus ]; then echo_green "i. Initialisation OPTIMUS"; else echo_red "i. Initialisation OPTIMUS"; fi
+tput cup 16  3; if [ -d /srv/optimus ]; then echo_green "i. Initialisation OPTIMUS"; else echo_red "i. Initialisation OPTIMUS"; fi
 tput cup 17  3; if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-base | wc -l ) -gt 0 ]; then echo_green "j. Installer OPTIMUS BASE"; else echo_red "j. Installer OPTIMUS BASE"; fi
 
 tput cup 19  3; if [ -f /etc/ufw/applications.d/ufw-webserver ]; then echo_green "k. Installer le pare feu UFW"; else echo_red "k. Installer le pare feu UFW"; fi
@@ -54,8 +54,8 @@ if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt
 then
   tput cup 41 3; echo "0. Installer un conteneur"
   tput cup 42 3; echo "1. Activer le mode développeur sur un conteneur"
-  tput cup 43 3; echo "2. Affichage des logs d'erreur des conteneurs (DEV)"
-  tput cup 44 3; echo "3. Console MARIADB root (DEV)"
+  tput cup 43 3; echo "2. Afficher les logs d'erreur des conteneurs"
+  tput cup 44 3; echo "3. Ouvrir une console MARIADB root"
 fi
 
 tput cup 46 3; echo_magenta "Il est rappelé que le logiciel OPTIMUS et ses composants sont des logiciels libres."

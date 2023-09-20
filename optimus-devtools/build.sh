@@ -78,7 +78,7 @@ then
 		read -p "Appuyez sur [ENTREE] pour continuer..."
 	fi
 
-elif [ "CHOICE" != "X" ] && [ "CHOICE" != "x" ]
+elif [ "$CHOICE" != "X" ] && [ "$CHOICE" != "x" ]
 then
 	echo
 	echo "Réponse invalide. La réponse doit être un nombre compris entre 1 et $COUNT_SERVICES ou X pour quitter"

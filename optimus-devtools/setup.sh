@@ -1,48 +1,59 @@
 #!/bin/bash
 cd /srv/optimus
 
-# LISTE LES SERVICES INSTALLES
-INSTALLED_SERVICES="hop la geiss"
-COUNT_SERVICES=$(echo "$INSTALLED_SERVICES" | wc -l)
-INSTALLED_SERVICES=($INSTALLED_SERVICES)
+# LISTE LES IMAGES DISPONIBLES SUR LE GIT CYBERTRON
+OPTIMUS_REPO=$(curl -s https://git.cybertron.fr/api/v4/groups/optimus/projects?search=optimus-&simple=true)
+AVAILABLE_IMAGES=()
+
+PROJECTS=$(echo $OPTIMUS_REPO | jq -c '.[] | {name: .name, path: .web_url, branch: .default_branch}')
+for PROJECT in $PROJECTS
+do
+	PROJECT_NAME=$(echo $PROJECT | jq -r .name)
+	if [ $PROJECT_NAME != "optimus-libs" ] && [ $PROJECT_NAME != "optimus-container" ] && [ $PROJECT_NAME != "optimus-installer" ]
+	then
+		AVAILABLE_IMAGES+=("git.cybertron.fr:5050/optimus/$PROJECT_NAME/v5:stable")
+	fi
+done
+
+COUNT_IMAGES=${#AVAILABLE_IMAGES[@]}
 
 # AFFICHAGE DU MENU INTERACTIF
-echo "Selectionnez le conteneur que vous souhaitez passer en mode développement ?"
+echo "Selectionnez le conteneur que vous souhaitez installer ?"
 echo
-for ((i=1; i <= $COUNT_SERVICES; i++))
+for ((i=1; i <= $COUNT_IMAGES; i++))
 do
-	echo -e "  \e[32m$i. ${INSTALLED_SERVICES[$i-1]}\e[0m"
+	echo -e "  \e[32m$i. ${AVAILABLE_IMAGES[$i-1]}\e[0m"
 done
 
 echo
 echo -e "  \e[31mX. Quitter\e[0m"
 echo
-read -p "Sélectionnez une option (1-$COUNT_SERVICES ou X): " CHOICE
+read -p "Sélectionnez une option (1-$COUNT_IMAGES ou X): " CHOICE
 
 #TRAITEMENT DU CHOIX DE L'UTILISATEUR
 if [[ $CHOICE =~ ^[0-9]+$ ]]
 then
 
-	if [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le $COUNT_SERVICES ]
+	if [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le $COUNT_IMAGES ]
 	then
 
-		SELECTED_SERVICE="${INSTALLED_SERVICES[$((CHOICE-1))]}"
+		SELECTED_SERVICE="${AVAILABLE_IMAGES[$((CHOICE-1))]}"
 		
 		#INSTALLATION DU NOUVEAU CONTENEUR
-		IMAGE="git.cybertron.fr:5050/optimus/optimus-devtools/v5:stable"
+		IMAGE=$SELECTED_SERVICE
 		source <(sudo cat /etc/optimus/optimus-init/container_installer.sh)
 		read -p "Appuyez sur [ENTREE] pour continuer..."
 	else
 		echo 
-		echo "Nombre invalide ! La réponse doit être comprise entre 1 et $COUNT_SERVICES"
+		echo "Nombre invalide ! La réponse doit être comprise entre 1 et $COUNT_IMAGES"
 		echo
 		read -p "Appuyez sur [ENTREE] pour continuer..."
 	fi
 
-elif [ "CHOICE" != "X" ] && [ "CHOICE" != "x" ]
+elif [ "$CHOICE" != "X" ] && [ "$CHOICE" != "x" ]
 then
 	echo
-	echo "Réponse invalide. La réponse doit être un nombre compris entre 1 et $COUNT_SERVICES ou X pour quitter"
+	echo "Réponse invalide. La réponse doit être un nombre compris entre 1 et $COUNT_IMAGES ou X pour quitter"
 	echo
 	read -p "Appuyez sur [ENTREE] pour continuer..."
 fi
