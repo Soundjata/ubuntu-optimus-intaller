@@ -27,7 +27,7 @@ then
 	exit
 fi
 
-output $OUTPUT_MODE "Création des dossiers requis" "magenta" 200 "optimus-init" 10
+output $OUTPUT_MODE "Création des dossiers requis" "magenta" 200 "optimus-init" 25
 
 if [ ! -d "/srv/services" ]
 then 
@@ -64,19 +64,18 @@ then
 	chown mailboxes:mailboxes -R /srv/mailboxes
 fi
 
-output $OUTPUT_MODE "Installation de la proposition de service optimus-base" "magenta" 200 "optimus-init" 20
-verbose wget --quiet -O /srv/services/optimus-base.json https://git.cybertron.fr/optimus/optimus-databases/-/raw/v5-main/manifest.json
+output $OUTPUT_MODE "Installation du script de mise à jour des services" "magenta" 200 "optimus-init" 50
+verbose chmod 700 -R /srv/services
+verbose chown root:root -R /srv/services
+verbose cp /etc/optimus/optimus-init/services_updater.service /etc/systemd/system/services_updater.service
+verbose cp /etc/optimus/optimus-init/services_updater.timer /etc/systemd/system/services_updater.timer
+verbose systemctl daemon-reload
+verbose systemctl enable services_updater.timer 2> /dev/null
+verbose systemctl start services_updater.timer 2> /dev/null
 
-output $OUTPUT_MODE "Installation de la proposition de service optimus-cloud" "magenta" 200 "optimus-init" 40
-verbose wget --quiet -O /srv/services/optimus-cloud.json https://git.cybertron.fr/optimus/optimus-cloud/-/raw/v5-main/manifest.json
 
-output $OUTPUT_MODE "Installation de la proposition de service optimus-avocats" "magenta" 200 "optimus-init" 50
-verbose wget --quiet -O /srv/services/optimus-avocats.json https://git.cybertron.fr/optimus/optimus-avocats/-/raw/v5-main/manifest.json
+output $OUTPUT_MODE "Mise à jour des services" "magenta" 200 "optimus-init" 75
 
-output $OUTPUT_MODE "Installation de la proposition de service optimus-structures" "magenta" 200 "optimus-init" 60
-verbose wget --quiet -O /srv/services/optimus-structures.json https://git.cybertron.fr/optimus/optimus-structures/-/raw/v5-main/manifest.json
-
-verbose chmod 775 -R /srv/services
-verbose chown www-data:www-data -R /srv/services
+source /etc/optimus/optimus-init/services_updater.sh
 
 output $OUTPUT_MODE "Le serveur est prêt pour accueillir les services Optimus !" "green" 200 "optimus-init" 100

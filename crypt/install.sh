@@ -67,9 +67,9 @@ then
 fi
 
 output $OUTPUT_MODE "Activation du service de décryptage" "magenta" 200 "crypt" 95
-envsubst '${PART_TO_ENCRYPT} ${UUID}' < /etc/optimus/crypt/decrypt.sh > /root/decrypt.sh
+envsubst '${PART_TO_ENCRYPT} ${UUID}' < /etc/optimus/decrypt/decrypt.sh > /root/decrypt.sh
 verbose chmod 700 /root/decrypt.sh
-verbose cp /etc/optimus/crypt/decrypt.service /etc/systemd/system/decrypt.service
+verbose cp /etc/optimus/decrypt/decrypt.service /etc/systemd/system/decrypt.service
 verbose systemctl daemon-reload
 verbose systemctl enable decrypt.service 2> /dev/null
 
