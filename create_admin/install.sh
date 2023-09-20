@@ -27,10 +27,13 @@ fi
 output $OUTPUT_MODE
 output $OUTPUT_MODE "CREATION DU COMPTE ADMINISTRATEUR" "blue" 200 "create_admin" 0
 
-output $OUTPUT_MODE "Ajout du domaine $DOMAIN dans les allowed_origins" "magenta" 200 "create_admin" 33
+output $OUTPUT_MODE "Ajout de *.$DOMAIN dans les allowed_origins" "magenta" 200 "create_admin" 25
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.allowed_origins SET  id = 1, origin='*.$DOMAIN'"
 
-output $OUTPUT_MODE "Création du compte administrateur $ADMIN_EMAIL" "magenta" 200 "create_admin" 66
+output $OUTPUT_MODE "Ajout de $DOMAIN dans les domains" "magenta" 200 "create_admin" 50
+verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.domains SET id = 1, status = b'1', domain='$DOMAIN'"
+
+output $OUTPUT_MODE "Création du compte administrateur $ADMIN_EMAIL" "magenta" 200 "create_admin" 75
 verbose apt -qq -y install apache2-utils 2> /dev/null
 PASSWORD_HASH=$(htpasswd -bnBC 10 "" "$ADMIN_PASSWORD" | tr -d ':\n')
 verbose apt -qq -y remove apache2-utils 2> /dev/null
