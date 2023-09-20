@@ -12,8 +12,15 @@ else
 fi
 
 output $OUTPUT_MODE "Installation de la proposition de service $NAME" "magenta" 200 "$NAME" 20
-verbose wget --quiet -O /srv/services/$NAME.json https://git.cybertron.fr/optimus/$NAME/-/raw/v5-$BRANCH/manifest.json
-chown www-data:www-data /srv/services/$NAME.json
+if [ "$DEV" == "1" ]
+then
+	cp "/srv/optimus/$selected_dir/manifest.json" "/srv/services/$selected_dir.json"
+else
+	verbose wget --quiet -O /srv/services/$NAME.json https://git.cybertron.fr/optimus/$NAME/-/raw/v5-$BRANCH/manifest.json
+fi
+chown debian:debian /srv/services/$NAME.json
+chmod 644 /srv/services/$NAME.json
+
 
 output $OUTPUT_MODE "Lecture du fichier manifest.json" "magenta" 200 "$NAME" 30
 IMAGE=$(jq -r .image /srv/services/$NAME.json)

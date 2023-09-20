@@ -65,10 +65,12 @@ then
 fi
 
 output $OUTPUT_MODE "Installation du script de mise à jour des services" "magenta" 200 "optimus-init" 50
-verbose chmod 700 -R /srv/services
-verbose chown root:root -R /srv/services
+verbose chown debian:debian -R /srv/services
+verbose chmod 755 -R /srv/services
 verbose cp /etc/optimus/optimus-init/services_updater.service /etc/systemd/system/services_updater.service
+verbose chmod 644 /etc/systemd/system/services_updater.service
 verbose cp /etc/optimus/optimus-init/services_updater.timer /etc/systemd/system/services_updater.timer
+verbose chmod 700 /etc/optimus/optimus-init/services_updater.sh
 verbose systemctl daemon-reload
 verbose systemctl enable services_updater.timer 2> /dev/null
 verbose systemctl start services_updater.timer 2> /dev/null

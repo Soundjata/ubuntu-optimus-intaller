@@ -8,14 +8,9 @@ do
 	PROJECT_NAME=$(echo $PROJECT | jq -r .name)
 	PROJECT_URL=$(echo $PROJECT | jq -r .path)
 	PROJECT_BRANCH=$(echo $PROJECT | jq -r .branch)
-	if [ ! -f "/srv/services/$PROJECT_NAME.json" ] && [ $PROJECT_NAME != "optimus-libs" ] && [ $PROJECT_NAME != "optimus-container" ] && [ $PROJECT_NAME != "optimus-installer" ]
+	if [ $PROJECT_NAME != "optimus-libs" ] && [ $PROJECT_NAME != "optimus-container" ] && [ $PROJECT_NAME != "optimus-installer" ]
 	then
 		curl -f -s "$PROJECT_URL/-/raw/$PROJECT_BRANCH/manifest.json" -o /srv/services/$PROJECT_NAME.json
-		if [ -f "/srv/services/$PROJECT_NAME.json" ]
-		then
-			echo -e "\e[0;32m$PROJECT_NAME\e[0m"
-		else
-			echo -e "\e[0;31m$PROJECT_NAME\e[0m"
-		fi
+		echo -e "\e[0;35mTéléchargement du service $PROJECT_NAME\e[0m"
 	fi
 done

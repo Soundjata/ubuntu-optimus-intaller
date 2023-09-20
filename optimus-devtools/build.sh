@@ -82,7 +82,11 @@ do
 			wget -O "/srv/optimus/.vscode/settings.json" "https://git.cybertron.fr/optimus/optimus-libs/-/raw/v5-dev/.vscode/settings.json"
 		fi
 		chown -R www-data:www-data /srv/optimus
-		chmod +775 -R /srv/optimus
+		chmod 775 -R /srv/optimus
+
+		OLDTIME=$(cat /srv/optimus/$selected_dir/manifest.json | jq -r .version_date)
+		NEWTIME=$(printf '%(%Y%m%d%H%M)T')
+		sed -i 's/"version_date": "'$OLDTIME'"/"version_date": "'$NEWTIME'"/' /srv/optimus/$selected_dir/manifest.json
 
 		docker build -t git.cybertron.fr:5050/optimus/$selected_dir/v5:dev -f $selected_dir/Dockerfile .
 		DEV=1

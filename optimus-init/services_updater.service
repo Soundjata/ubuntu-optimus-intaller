@@ -4,7 +4,7 @@ Description=Téléchargement des nouveaux services Optimus disponibles
 
 [Service]
 Type=oneshot
-User=root
-ExecStart=/etc/optimus/optimus-init/services_downloader.sh
+User=debian
+ExecStart=/etc/optimus/optimus-init/services_updater.sh
 StandardError=journal
 WorkingDirectory=/srv/services
