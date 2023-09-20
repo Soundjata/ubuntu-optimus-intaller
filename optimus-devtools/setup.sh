@@ -18,6 +18,7 @@ done
 COUNT_IMAGES=${#AVAILABLE_IMAGES[@]}
 
 # AFFICHAGE DU MENU INTERACTIF
+echo
 echo "Selectionnez le conteneur que vous souhaitez installer ?"
 echo
 for ((i=1; i <= $COUNT_IMAGES; i++))

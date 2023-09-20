@@ -7,6 +7,7 @@ COUNT_SERVICES=$(echo "$INSTALLED_SERVICES" | wc -l)
 INSTALLED_SERVICES=($INSTALLED_SERVICES)
 
 # AFFICHAGE DU MENU INTERACTIF
+echo
 echo "Selectionnez le conteneur que vous souhaitez passer en mode développement ?"
 echo
 for ((i=1; i <= $COUNT_SERVICES; i++))
