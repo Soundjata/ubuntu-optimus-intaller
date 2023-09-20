@@ -1,74 +1,43 @@
 #!/bin/bash
 cd /srv/optimus
 
-# LISTE LES DOSSIERS QUI CONTIENNENT UN FICHIER DOCKERFILE
-mapfile -t dirs < <( find "/srv/services" -type f -name "*.json")
-for ((i=0; i<${#dirs[@]}; i++))
-do
-  dirs[$i]=$(echo "${dirs[$i]}" | sed "s/\/srv\/services\///g")
-  dirs[$i]=$(echo "${dirs[$i]}" | sed "s/.json//g")
-done
-
-num_dirs=${#dirs[@]}
+# LISTE LES SERVICES INSTALLES
+INSTALLED_SERVICES=$(mariadb -u root -p$MARIADB_ROOT_PASSWORD -N -e "SELECT name FROM server.services")
+COUNT_SERVICES=$(echo "$INSTALLED_SERVICES" | wc -l)
+INSTALLED_SERVICES=($INSTALLED_SERVICES)
 
 # AFFICHAGE DU MENU INTERACTIF
-while true; 
+echo "Selectionnez le conteneur que vous souhaitez passer en mode développement ?"
+echo
+for ((i=1; i <= $COUNT_SERVICES; i++))
 do
-	clear
-	echo "Selectionnez le conteneur que vous souhaitez installer/recompiler en mode développement ?"
-	for i in $(seq 0 $(($num_dirs - 1))); 
-	do
-		tput setaf 2  # COULEUR DU TEXTE VERTE
-		tput cup $(($i + 2)) 2
-		echo "$(($i + 1)). ${dirs[$i]#./}"
-		tput sgr0  # COULEUR DU TEXTE PAR DEFAUT
-	done
+	echo -e "  \e[32m$i. ${INSTALLED_SERVICES[$i-1]}\e[0m"
+done
 
-    tput setaf 1
-    tput cup $(($num_dirs + 3)) 0
-    echo "  X. Quitter"
-    tput sgr0
-	
-    tput cup $(($num_dirs + 5)) 0
-	echo -n "Selection (1-$num_dirs) ? "
+echo
+echo -e "  \e[31mX. Quitter\e[0m"
+echo
+read -p "Sélectionnez une option (1-$COUNT_SERVICES ou X): " CHOICE
 
-	# ACTIVATION DU MODE CANONICAL POUR LIRE LES CARACTERES TAPPES
-	stty_orig=$(stty -g)
-	stty -icanon -echo
+#TRAITEMENT DU CHOIX DE L'UTILISATEUR
+if [[ $CHOICE =~ ^[0-9]+$ ]]
+then
 
-	# LECTURE DES CARACTERES ENTRES JUSQU'A OBTENTION D'UN CHIFFRE
-	selection=""
-	while [[ ! "$selection" =~ ^[0-9]+$ ]]; 
-	do
-		read -s -n 1 char
-		if [[ "$char" =~ ^[0-9]+$ ]];
-		then
-			selection=$char
-			echo "$char"
-		fi
-
-        if [[ "$char" =~ ^[Xx]$ ]]
-        then
-            source /etc/optimus/menu.sh
-        fi
-	done
-
-	# RESTAURATION DU MODE CANONIQUE
-	stty "$stty_orig"
-
-	# VERIFICATION DE LA VALIDITE DE LA SELECTION
-	if [[ "$selection" -ge 1 && "$selection" -le $num_dirs ]]; 
+	if [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le $COUNT_SERVICES ]
 	then
-		selected_dir=${dirs[$(($selection - 1))]}
-		selected_dir=${selected_dir#./}  # SUPPRIME "./" AU DEBUT DE LA VARIABLE
+
+		SELECTED_SERVICE="${INSTALLED_SERVICES[$((CHOICE-1))]}"
 		
-		if [ ! -d "/srv/optimus/$selected_dir/.git" ]
+		#INSTALLATION DU CODE SOURCE DE LA BRANCHE DEV
+		if [ ! -d "/srv/optimus/$SELECTED_SERVICE/.git" ]
 		then
-			rm -Rf "/srv/optimus/$selected_dir"
-			mkdir -p "/srv/optimus/$selected_dir"
-			chown debian:debian "/srv/optimus/$selected_dir"
-			su -c "git clone git@git.cybertron.fr:optimus/$selected_dir /srv/optimus/$selected_dir" debian
+			rm -Rf "/srv/optimus/$SELECTED_SERVICE"
+			mkdir -p "/srv/optimus/$SELECTED_SERVICE"
+			chown debian:debian "/srv/optimus/$SELECTED_SERVICE"
+			su -c "git clone git@git.cybertron.fr:optimus/$SELECTED_SERVICE /srv/optimus/$SELECTED_SERVICE" debian
 		fi
+		
+		#INSTALLATION DU REPO OPTIMUS LIBS
 		if [ ! -d "/srv/optimus/optimus-libs/.git" ]
 		then
 			rm -Rf "/srv/optimus/optimus-libs"
@@ -76,25 +45,43 @@ do
 			chown debian:debian "/srv/optimus/optimus-libs"
 			su -c "git clone git@git.cybertron.fr:optimus/optimus-libs /srv/optimus/optimus-libs" debian
 		fi
+		
+		#INSTALLATION DU FICHIER .VSCODE QUI CONTIENT LES PARAMETRES DE SYNTAXE DU CODE
 		if [ ! -d "/srv/optimus/.vscode" ]
 		then
 			mkdir -p "/srv/optimus/.vscode"
 			wget -O "/srv/optimus/.vscode/settings.json" "https://git.cybertron.fr/optimus/optimus-libs/-/raw/v5-dev/.vscode/settings.json"
 		fi
+		
+		#LE CODE DOIT APPARTENIR A L'UTILISATEUR DEBIAN
 		chown -R www-data:www-data /srv/optimus
 		chmod 775 -R /srv/optimus
-
-		OLDTIME=$(cat /srv/optimus/$selected_dir/manifest.json | jq -r .version_date)
-		NEWTIME=$(printf '%(%Y%m%d%H%M)T')
-		sed -i 's/"version_date": "'$OLDTIME'"/"version_date": "'$NEWTIME'"/' /srv/optimus/$selected_dir/manifest.json
-
-		docker build -t git.cybertron.fr:5050/optimus/$selected_dir/v5:dev -f $selected_dir/Dockerfile .
+		
+		#MISE A JOUR DE LA DATE DE VERSION DANS LE FICHIER MANIFEST
+		OLDTIME=$(cat /srv/optimus/$SELECTED_SERVICE/manifest.json | jq -r .version_date)
+		NEWTIME=$(printf '%(%Y%m%d%H%M%S)T')
+		sed -i 's/"version_date": "'$OLDTIME'"/"version_date": "'$NEWTIME'"/' /srv/optimus/$SELECTED_SERVICE/manifest.json
+		
+		#CONSTRUCTION DE LA NOUVELLE IMAGE
+		docker build -t git.cybertron.fr:5050/optimus/$SELECTED_SERVICE/v5:dev -f $SELECTED_SERVICE/Dockerfile .
+		
+		#INSTALLATION DU NOUVEAU CONTENEUR
 		DEV=1
-		NAME=$selected_dir
+		IMAGE=$(cat /srv/optimus/$SELECTED_SERVICE/manifest.json | jq -r .image)
+		NAME=$SELECTED_SERVICE
 		source <(sudo cat /etc/optimus/optimus-init/container_installer.sh)
 		read -p "Appuyez sur [ENTREE] pour continuer..."
 	else
-		echo "Choix invalide. Pressez une touche pour continuer"
-		read -n 1
+		echo 
+		echo "Nombre invalide ! La réponse doit être comprise entre 1 et $COUNT_SERVICES"
+		echo
+		read -p "Appuyez sur [ENTREE] pour continuer..."
 	fi
-done
+
+elif [ "CHOICE" != "X" ] && [ "CHOICE" != "x" ]
+then
+	echo
+	echo "Réponse invalide. La réponse doit être un nombre compris entre 1 et $COUNT_SERVICES ou X pour quitter"
+	echo
+	read -p "Appuyez sur [ENTREE] pour continuer..."
+fi

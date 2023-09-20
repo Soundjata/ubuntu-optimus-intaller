@@ -29,13 +29,6 @@ fi
 
 output $OUTPUT_MODE "Création des dossiers requis" "magenta" 200 "optimus-init" 25
 
-if [ ! -d "/srv/services" ]
-then 
-	verbose mkdir /srv/services
-fi
-chown www-data:www-data -R /srv/services
-chmod 775 /srv/services
-
 if [ ! -d "/srv/www" ]
 then 
 	verbose mkdir /srv/www
@@ -64,20 +57,18 @@ then
 	chown mailboxes:mailboxes -R /srv/mailboxes
 fi
 
-output $OUTPUT_MODE "Installation du script de mise à jour des services" "magenta" 200 "optimus-init" 50
-verbose chown debian:debian -R /srv/services
-verbose chmod 755 -R /srv/services
-verbose cp /etc/optimus/optimus-init/services_updater.service /etc/systemd/system/services_updater.service
-verbose chmod 644 /etc/systemd/system/services_updater.service
-verbose cp /etc/optimus/optimus-init/services_updater.timer /etc/systemd/system/services_updater.timer
-verbose chmod 700 /etc/optimus/optimus-init/services_updater.sh
-verbose systemctl daemon-reload
-verbose systemctl enable services_updater.timer 2> /dev/null
-verbose systemctl start services_updater.timer 2> /dev/null
+# output $OUTPUT_MODE "Installation du script de mise à jour des services" "magenta" 200 "optimus-init" 50
+# verbose chown debian:debian -R /srv/services
+# verbose chmod 755 -R /srv/services
+# verbose cp /etc/optimus/optimus-init/services_updater.service /etc/systemd/system/services_updater.service
+# verbose chmod 644 /etc/systemd/system/services_updater.service
+# verbose cp /etc/optimus/optimus-init/services_updater.timer /etc/systemd/system/services_updater.timer
+# verbose chmod 700 /etc/optimus/optimus-init/services_updater.sh
+# verbose systemctl daemon-reload
+# verbose systemctl enable services_updater.timer 2> /dev/null
+# verbose systemctl start services_updater.timer 2> /dev/null
 
-
-output $OUTPUT_MODE "Mise à jour des services" "magenta" 200 "optimus-init" 75
-
-source /etc/optimus/optimus-init/services_updater.sh
+#output $OUTPUT_MODE "Mise à jour des services" "magenta" 200 "optimus-init" 75
+#source /etc/optimus/optimus-init/services_updater.sh
 
 output $OUTPUT_MODE "Le serveur est prêt pour accueillir les services Optimus !" "green" 200 "optimus-init" 100
