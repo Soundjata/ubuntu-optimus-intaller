@@ -35,7 +35,7 @@ then
 fi
 
 output $OUTPUT_MODE "Téléchargement de l'image" "magenta" 200 "optimus-databases" 60
-verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-databases/v5:latest
+verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-databases/v5:stable
 
 output $OUTPUT_MODE "Création du conteneur" "magenta" 200 "optimus-databases" 70
 verbose docker create \
@@ -49,7 +49,7 @@ verbose docker create \
 --ip 172.20.0.2 \
 --publish 3306:3306 \
 --cap-add SYS_NICE \
-git.cybertron.fr:5050/optimus/optimus-databases/v5:latest --default-authentication-plugin=mysql_native_password
+git.cybertron.fr:5050/optimus/optimus-databases/v5:stable --default-authentication-plugin=mysql_native_password
 
 output $OUTPUT_MODE "Lancement du conteneur" "magenta" 200 "optimus-databases" 80
 verbose docker start optimus-databases
