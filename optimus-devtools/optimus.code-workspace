@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "modules",
+			"path": "/srv/optimus"
+		},
+		{
+			"name": "installer",
+			"path": "/etc/optimus"
+		}
+	]
+}

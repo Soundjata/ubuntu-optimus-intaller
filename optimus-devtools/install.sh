@@ -73,6 +73,23 @@ echo
 read -p "Appuyez sur [ENTREE] pour continuer..."
 
 output $OUTPUT_MODE
+output $OUTPUT_MODE "Installation des librairies OPTIMUS" "magenta" 200 "optimus-devtools" 70
+if [ ! -d "/srv/optimus/optimus-libs/.git" ]
+then
+	rm -Rf "/srv/optimus/optimus-libs"
+	mkdir -p "/srv/optimus/optimus-libs"
+	chown debian:debian "/srv/optimus/optimus-libs"
+	su -c "git clone git@git.cybertron.fr:optimus/optimus-libs /srv/optimus/optimus-libs" debian
+fi
+
+output $OUTPUT_MODE
+output $OUTPUT_MODE "Installation de l'environnement VS CODIUM" "magenta" 200 "optimus-devtools" 80
+if [ ! -f "/srv/optimus/optimus.code-workspace" ]
+then
+	cp /etc/optimus/optimus-devtools/optimus.code-workspace /srv/optimus.code-workspace
+fi
+
+output $OUTPUT_MODE
 output $OUTPUT_MODE "Réinstallation du repo optimus-installer (DEV MODE)" "magenta" 200 "optimus-devtools" 90
 verbose rm -R /etc/optimus
 verbose mkdir -p /etc/optimus

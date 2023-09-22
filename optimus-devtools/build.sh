@@ -8,7 +8,7 @@ INSTALLED_SERVICES=($INSTALLED_SERVICES)
 
 # AFFICHAGE DU MENU INTERACTIF
 echo
-echo "Selectionnez le conteneur que vous souhaitez passer en mode développement ?"
+echo "Selectionnez le conteneur que vous souhaitez passer en mode développement :"
 echo
 for ((i=1; i <= $COUNT_SERVICES; i++))
 do
@@ -36,22 +36,6 @@ then
 			mkdir -p "/srv/optimus/$SELECTED_SERVICE"
 			chown debian:debian "/srv/optimus/$SELECTED_SERVICE"
 			su -c "git clone git@git.cybertron.fr:optimus/$SELECTED_SERVICE /srv/optimus/$SELECTED_SERVICE" debian
-		fi
-		
-		#INSTALLATION DU REPO OPTIMUS LIBS
-		if [ ! -d "/srv/optimus/optimus-libs/.git" ]
-		then
-			rm -Rf "/srv/optimus/optimus-libs"
-			mkdir -p "/srv/optimus/optimus-libs"
-			chown debian:debian "/srv/optimus/optimus-libs"
-			su -c "git clone git@git.cybertron.fr:optimus/optimus-libs /srv/optimus/optimus-libs" debian
-		fi
-		
-		#INSTALLATION DU FICHIER .VSCODE QUI CONTIENT LES PARAMETRES DE SYNTAXE DU CODE
-		if [ ! -d "/srv/optimus/.vscode" ]
-		then
-			mkdir -p "/srv/optimus/.vscode"
-			wget -O "/srv/optimus/.vscode/settings.json" "https://git.cybertron.fr/optimus/optimus-libs/-/raw/v5-dev/.vscode/settings.json"
 		fi
 		
 		#LE CODE DOIT APPARTENIR A L'UTILISATEUR DEBIAN

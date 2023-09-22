@@ -53,7 +53,7 @@ tput cup 39 3; echo -ne "\033[46;30m Select Option : \e[0m"; tput cup 25 21
 if [ -d /etc/docker ] && [ $( docker ps -a | grep optimus-devtools | wc -l ) -gt 0 ]
 then
   tput cup 41 3; echo "0. Installer un conteneur"
-  tput cup 42 3; echo "1. Activer le mode développeur sur un conteneur"
+  tput cup 42 3; echo "1. Recompiler un conteneur (active le DEV MODE)"
   tput cup 43 3; echo "2. Afficher les logs d'erreur des conteneurs"
   tput cup 44 3; echo "3. Ouvrir une console MARIADB root"
 fi
