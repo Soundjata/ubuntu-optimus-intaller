@@ -98,5 +98,5 @@ su -c 'git clone --quiet git@git.cybertron.fr:optimus/optimus-installer /etc/opt
 
 output $OUTPUT_MODE "Les outils de développement ont été installés avec succès" "green" 200 "optimus-devtools" 100
 
-NAME="optimus-devtools"
+IMAGE=git.cybertron.fr:5050/optimus/optimus-devtools/v5:stable
 source /etc/optimus/optimus-init/container_installer.sh
