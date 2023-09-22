@@ -32,6 +32,8 @@ then
 		#INSTALLATION DU CODE SOURCE DE LA BRANCHE DEV
 		if [ ! -d "/srv/optimus/$SELECTED_SERVICE/.git" ]
 		then
+			echo
+			echo "Téléchargement du code source"
 			rm -Rf "/srv/optimus/$SELECTED_SERVICE"
 			mkdir -p "/srv/optimus/$SELECTED_SERVICE"
 			chown debian:debian "/srv/optimus/$SELECTED_SERVICE"
@@ -43,11 +45,16 @@ then
 		chmod 775 -R /srv/optimus
 		
 		#MISE A JOUR DE LA DATE DE VERSION DANS LE FICHIER MANIFEST
+		echo
+		echo "Mise à jour du fichier manifest.json"
 		OLDTIME=$(cat /srv/optimus/$SELECTED_SERVICE/manifest.json | jq -r .version_date)
 		NEWTIME=$(printf '%(%Y%m%d%H%M%S)T')
 		sed -i 's/"version_date": "'$OLDTIME'"/"version_date": "'$NEWTIME'"/' /srv/optimus/$SELECTED_SERVICE/manifest.json
 		
 		#CONSTRUCTION DE LA NOUVELLE IMAGE
+		echo
+		echo "Construction de la nouvelle image :"
+		echo
 		docker build -t git.cybertron.fr:5050/optimus/$SELECTED_SERVICE/v5:dev -f $SELECTED_SERVICE/Dockerfile .
 		
 		#INSTALLATION DU NOUVEAU CONTENEUR
@@ -55,6 +62,7 @@ then
 		IMAGE=$(cat /srv/optimus/$SELECTED_SERVICE/manifest.json | jq -r .image)
 		NAME=$SELECTED_SERVICE
 		source <(sudo cat /etc/optimus/optimus-init/container_installer.sh)
+		echo
 		read -p "Appuyez sur [ENTREE] pour continuer..."
 	else
 		echo 
