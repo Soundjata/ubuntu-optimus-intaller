@@ -46,7 +46,6 @@ verbose docker create \
 --volume /srv/databases:/var/lib/mysql:rw \
 --volume /run/mysqld:/run/mysqld \
 --network optimus \
---ip 172.20.0.2 \
 --publish 3306:3306 \
 --cap-add SYS_NICE \
 git.cybertron.fr:5050/optimus/optimus-databases/v5:stable --default-authentication-plugin=mysql_native_password
