@@ -48,6 +48,8 @@ verbose docker create \
 --network optimus \
 --publish 3306:3306 \
 --cap-add SYS_NICE \
+--log-driver json-file \
+--log-opt max-size=100m \
 git.cybertron.fr:5050/optimus/optimus-databases/v5:stable --default-authentication-plugin=mysql_native_password
 
 output $OUTPUT_MODE "Lancement du conteneur" "magenta" 200 "optimus-databases" 80

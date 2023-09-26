@@ -41,7 +41,7 @@ then
 fi
 
 output $OUTPUT_MODE "Création du conteneur $NAME" "magenta" 200 "$NAME" 70
-verbose eval "docker create --name $NAME --network optimus $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $VOLUMES $DEV_VOLUMES $IMAGE"
+verbose eval "docker create --name $NAME --network optimus --log-driver json-file --log-opt max-size=100m $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $VOLUMES $DEV_VOLUMES $IMAGE"
 
 output $OUTPUT_MODE "Lancement du conteneur $NAME" "magenta" 200 "$NAME" 80
 verbose docker start $NAME
