@@ -42,6 +42,13 @@ fi
 chown www-data:www-data -R /srv/optimus
 chmod 775 -R /srv/optimus
 
+if [ ! -d "/srv/websocket" ]
+then 
+	verbose mkdir /srv/websocket
+fi
+chown www-data:www-data -R /srv/websocket
+chmod 775 -R /srv/optimus
+
 if [ ! -d "/srv/files" ]
 then 
 	verbose mkdir /srv/files
