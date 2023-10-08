@@ -6,7 +6,7 @@ then
 	IMAGE=${IMAGE/stable/dev}
 fi
 IMAGE_ID=$(docker create $IMAGE)
-verbose docker cp $IMAGE_ID:/srv/init/manifest.json /tmp/$IMAGE_ID.json 2> /dev/null
+verbose docker cp $IMAGE_ID:/srv/manifest.json /tmp/$IMAGE_ID.json 2> /dev/null
 verbose docker rm --force $IMAGE_ID 2> /dev/null 2> /dev/null
 NAME=$(jq -r .name /tmp/$IMAGE_ID.json)
 
