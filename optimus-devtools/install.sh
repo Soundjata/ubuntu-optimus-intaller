@@ -13,10 +13,10 @@ then
 fi
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "GRANT ALL ON *.* to 'root'@'%' IDENTIFIED BY '$MARIADB_ROOT_PASSWORD' WITH GRANT OPTION;"
 
-output $OUTPUT_MODE "Création d'un swap de 512Mo" "magenta" 200 "optimus-devtools" 30
+output $OUTPUT_MODE "Création d'un swap de 1Go" "magenta" 200 "optimus-devtools" 30
 if [[ $(sudo /usr/sbin/swapon -s) != *"/var/swap.img"* ]]
 then
-	sudo dd if=/dev/zero of=/var/swap.img bs=1024 count=512k
+	sudo dd if=/dev/zero of=/var/swap.img bs=1024 count=1024k
 	sudo chmod 600 /var/swap.img
 	sudo mkswap /var/swap.img
 	sudo swapon /var/swap.img
