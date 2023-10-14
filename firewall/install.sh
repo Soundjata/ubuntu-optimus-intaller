@@ -37,6 +37,9 @@ verbose /sbin/ufw allow 587
 output $OUTPUT_MODE "Ouverture du port 993 (IMAPS)" "magenta" 200 "firewall" 85
 verbose /sbin/ufw allow 993
 
+output $OUTPUT_MODE "Ouverture du port 20000 (WEBSOCKET)" "magenta" 200 "firewall" 90
+verbose /sbin/ufw allow 20000
+
 output $OUTPUT_MODE "Activation du pare feu" "magenta" 200 "firewall" 95
 verbose /sbin/ufw --force enable
 
