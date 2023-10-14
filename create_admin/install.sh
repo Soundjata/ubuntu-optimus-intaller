@@ -41,4 +41,11 @@ verbose apt -qq -y autoremove 2> /dev/null
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "REPLACE INTO server.users SET id = 1, status = b'1', admin = b'1', lastname='Administrateur', email='$ADMIN_EMAIL', password='$PASSWORD_HASH'"
 verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS user_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
 
+verbose docker cp optimus-base:/srv/sql/user /tmp/sql 2> /dev/null
+for file in /tmp/sql/*.sql
+do
+	verbose mariadb -u root -p$MARIADB_ROOT_PASSWORD user_1 < $file
+done
+verbose rm -r /tmp/sql
+
 output $OUTPUT_MODE "Le compte administrateur a été créé avec succès" "green" 200 "create_admin" 100
