@@ -8,5 +8,30 @@
 			"name": "installer",
 			"path": "/etc/optimus"
 		}
-	]
+	],
+	"settings": {
+		"[javascript]": {
+			"editor.defaultFormatter": "vscode.typescript-language-features"
+		},
+		"editor.renderWhitespace": "all",
+		"editor.detectIndentation": false,
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4,
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true,
+		"editor.wordWrap": "off",
+		"editor.codeActionsOnSave": {
+			"source.fixAll": false
+		},
+		"javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+		"javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+		"javascript.format.semicolons": "remove",
+		"html.format.wrapAttributes": "auto",
+		"html.format.wrapLineLength": 0,
+		"css.format.enable": true,
+		"css.format.newlineBetweenRules": true,
+		"css.format.spaceAroundSelectorSeparator": true,
+		"css.format.newlineBetweenSelectors": false,
+		"css.format.braceStyle": "expand"
+	},
 }
