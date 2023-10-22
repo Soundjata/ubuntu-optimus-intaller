@@ -48,7 +48,7 @@ then
 		echo
 		echo "Mise à jour du fichier manifest.json"
 		OLDTIME=$(cat /srv/optimus/$SELECTED_SERVICE/manifest.json | jq -r .version_date)
-		NEWTIME=$(printf '%(%Y%m%d%H%M%S)T')
+		NEWTIME=$(date -u +'%Y%m%d%H%M%S')
 		sed -i 's/"version_date": "'$OLDTIME'"/"version_date": "'$NEWTIME'"/' /srv/optimus/$SELECTED_SERVICE/manifest.json
 		
 		#CONSTRUCTION DE LA NOUVELLE IMAGE
