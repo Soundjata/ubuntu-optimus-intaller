@@ -1,7 +1,7 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
 
-IMAGE="git.cybertron.fr:5050/optimus/optimus-base/v5:stable"
+IMAGE="git.cybertron.fr:5050/optimus/optimus-base/v5"
 source /etc/optimus/optimus-init/container_installer.sh
 
 if [ $OUTPUT_MODE != "json" ]

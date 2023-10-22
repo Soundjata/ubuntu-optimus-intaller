@@ -3,7 +3,9 @@ source /etc/optimus/functions.sh
 
 if [ "$DEV" == "1" ]
 then
-	IMAGE=${IMAGE/stable/dev}
+	IMAGE="$IMAGE:dev"
+else
+	IMAGE="$IMAGE:stable"
 fi
 IMAGE_ID=$(docker create $IMAGE)
 verbose docker cp $IMAGE_ID:/srv/manifest.json /tmp/$IMAGE_ID.json 2> /dev/null

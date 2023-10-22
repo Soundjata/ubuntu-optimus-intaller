@@ -11,7 +11,7 @@ do
 	PROJECT_NAME=$(echo $PROJECT | jq -r .name)
 	if [ $PROJECT_NAME != "optimus-libs" ] && [ $PROJECT_NAME != "optimus-container" ] && [ $PROJECT_NAME != "optimus-installer" ]
 	then
-		AVAILABLE_IMAGES+=("git.cybertron.fr:5050/optimus/$PROJECT_NAME/v5:stable")
+		AVAILABLE_IMAGES+=("git.cybertron.fr:5050/optimus/$PROJECT_NAME/v5")
 	fi
 done
 

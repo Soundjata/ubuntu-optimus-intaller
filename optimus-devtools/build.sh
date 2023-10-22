@@ -60,6 +60,7 @@ then
 		#INSTALLATION DU NOUVEAU CONTENEUR
 		DEV=1
 		IMAGE=$(cat /srv/optimus/$SELECTED_SERVICE/manifest.json | jq -r .image)
+		IMAGE="$IMAGE/v5"
 		NAME=$SELECTED_SERVICE
 		source <(sudo cat /etc/optimus/optimus-init/container_installer.sh)
 		echo
