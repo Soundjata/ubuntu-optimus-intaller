@@ -40,7 +40,7 @@ then
 			su -c "git clone git@git.cybertron.fr:optimus/$SELECTED_SERVICE /srv/optimus/$SELECTED_SERVICE" debian
 		fi
 		
-		#LE CODE DOIT APPARTENIR A L'UTILISATEUR DEBIAN
+		#LE CODE DOIT APPARTENIR A L'UTILISATEUR WWW-DATA
 		chown -R www-data:www-data /srv/optimus
 		chmod 775 -R /srv/optimus
 		
