@@ -12,10 +12,10 @@ then
 
 		output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "letsencrypt" 10
 		verbose apt -qq -y install snapd 2> /dev/null
-		verbose snap install core 2>&1 /dev/null
-		verbose snap install certbot --classic 2>&1 /dev/null
-		verbose snap set certbot trust-plugin-with-root=ok 2>&1 /dev/null
-		verbose snap install certbot-dns-ovh --classic 2>&1 /dev/null
+		verbose snap install core
+		verbose snap install certbot --classic
+		verbose snap set certbot trust-plugin-with-root=ok
+		verbose snap install certbot-dns-ovh --classic
 		verbose ln -s /snap/bin/certbot /usr/bin/certbot
 		#verbose apt -qq -y install python3-pip python3-certbot python3-certbot-dns-ovh 2> /dev/null
 
