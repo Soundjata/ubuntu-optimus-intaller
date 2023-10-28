@@ -11,7 +11,13 @@ then
 	then
 
 		output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "letsencrypt" 10
-		verbose apt -qq -y install python3-pip python3-certbot python3-certbot-dns-ovh 2> /dev/null
+		verbose apt install snapd
+		verbose snap install core
+		verbose snap install certbot --classic
+		verbose snap set certbot trust-plugin-with-root=ok
+		verbose snap install certbot-dns-ovh --classic
+		verbose ln -s /snap/bin/certbot /usr/bin/certbot
+		#verbose apt -qq -y install python3-pip python3-certbot python3-certbot-dns-ovh 2> /dev/null
 
 		output $OUTPUT_MODE "Suppression des enregistrements A" "magenta" 200 "letsencrypt" 20
 		RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=A")
