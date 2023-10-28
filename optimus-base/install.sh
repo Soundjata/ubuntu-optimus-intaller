@@ -1,6 +1,7 @@
 #!/bin/bash
 source /etc/optimus/functions.sh
 
+verbose rm -R /src/optimus/optimus-base
 IMAGE="git.cybertron.fr:5050/optimus/optimus-base/v5"
 source /etc/optimus/optimus-init/container_installer.sh
 
