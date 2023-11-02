@@ -98,7 +98,7 @@ then
 		echo "dns_ovh_application_secret = $OVH_SECRET_KEY" >> /root/ovh
 		echo "dns_ovh_consumer_key = $OVH_CONSUMER_KEY" >> /root/ovh
 		verbose chmod 600 /root/ovh
-		verbose certbot certonly --expand --non-interactive --agree-tos --quiet --email postmaster@$DOMAIN --dns-ovh --dns-ovh-propagation-seconds 30 --dns-ovh-credentials /root/ovh -d $DOMAIN -d *.$DOMAIN
+		verbose certbot certonly --expand --non-interactive --agree-tos --quiet --email postmaster@$DOMAIN --dns-ovh --dns-ovh-propagation-seconds 45 --dns-ovh-credentials /root/ovh -d $DOMAIN -d *.$DOMAIN
 
 	else
 

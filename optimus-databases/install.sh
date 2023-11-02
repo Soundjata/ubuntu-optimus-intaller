@@ -45,4 +45,4 @@ do
 	let "WAITER+=1"
 done
 
-output $OUTPUT_MODE "Le service OPTIMUS-DATABASES a été installé avec succès !" "green" 200 "optimus-databases" 100
+output $OUTPUT_MODE "Connexion à la base de donnée établie !" "green" 200 "optimus-databases" 100
