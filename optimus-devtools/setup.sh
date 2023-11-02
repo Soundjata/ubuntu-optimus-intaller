@@ -2,17 +2,14 @@
 cd /srv/optimus
 
 # LISTE LES IMAGES DISPONIBLES SUR LE GIT CYBERTRON
-OPTIMUS_REPO=$(curl -s https://git.cybertron.fr/api/v4/groups/optimus/projects?search=optimus-&simple=true)
+OPTIMUS_REPO=$(curl -s https://git.cybertron.fr/api/v4/projects?topic=service&simple=true)
 AVAILABLE_IMAGES=()
 
 PROJECTS=$(echo $OPTIMUS_REPO | jq -c '.[] | {name: .name, path: .web_url, branch: .default_branch}')
 for PROJECT in $PROJECTS
 do
 	PROJECT_NAME=$(echo $PROJECT | jq -r .name)
-	if [ $PROJECT_NAME != "optimus-libs" ] && [ $PROJECT_NAME != "optimus-container" ] && [ $PROJECT_NAME != "optimus-installer" ]
-	then
-		AVAILABLE_IMAGES+=("git.cybertron.fr:5050/optimus/$PROJECT_NAME/v5")
-	fi
+	AVAILABLE_IMAGES+=("git.cybertron.fr:5050/optimus/$PROJECT_NAME/v5")
 done
 
 COUNT_IMAGES=${#AVAILABLE_IMAGES[@]}

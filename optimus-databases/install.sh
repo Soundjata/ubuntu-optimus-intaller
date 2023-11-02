@@ -34,26 +34,8 @@ then
 	verbose docker rm optimus-databases
 fi
 
-output $OUTPUT_MODE "Téléchargement de l'image" "magenta" 200 "optimus-databases" 60
-verbose docker pull --quiet git.cybertron.fr:5050/optimus/optimus-databases/v5:stable
-
-output $OUTPUT_MODE "Création du conteneur" "magenta" 200 "optimus-databases" 70
-verbose docker create \
---name optimus-databases \
---restart always \
---env TZ=Europe/Paris \
---env MARIADB_ROOT_PASSWORD \
---volume /srv/databases:/var/lib/mysql:rw \
---volume /run/mysqld:/run/mysqld \
---network optimus \
---publish 3306:3306 \
---cap-add SYS_NICE \
---log-driver json-file \
---log-opt max-size=100m \
-git.cybertron.fr:5050/optimus/optimus-databases/v5:stable --default-authentication-plugin=mysql_native_password
-
-output $OUTPUT_MODE "Lancement du conteneur" "magenta" 200 "optimus-databases" 80
-verbose docker start optimus-databases
+IMAGE="git.cybertron.fr:5050/optimus/optimus-databases/v5"
+source /etc/optimus/optimus-init/container_installer.sh
 
 output $OUTPUT_MODE "Attente de l'ouverture du socket MARIADB" "magenta" 200 "optimus-databases" 90
 WAITER=0

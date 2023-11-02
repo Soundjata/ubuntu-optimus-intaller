@@ -2,9 +2,21 @@
 cd /srv/optimus
 
 # LISTE LES SERVICES INSTALLES
-INSTALLED_SERVICES=$(mariadb -u root -p$MARIADB_ROOT_PASSWORD -N -e "SELECT name FROM server.services")
-COUNT_SERVICES=$(echo "$INSTALLED_SERVICES" | wc -l)
-INSTALLED_SERVICES=($INSTALLED_SERVICES)
+#INSTALLED_SERVICES=$(mariadb -u root -p$MARIADB_ROOT_PASSWORD -N -e "SELECT name FROM server.services")
+INSTALLED_SERVICES=()
+COUNT_SERVICES=0
+
+for dir in "/srv/optimus"/*/
+do
+	if [ -f "$dir/Dockerfile" ]
+	then
+		INSTALLED_SERVICES+=("$(basename "$dir")")
+		COUNT_SERVICES=$[COUNT_SERVICES + 1]
+	fi
+done
+
+#COUNT_SERVICES=$(echo "$INSTALLED_SERVICES" | wc -l)
+echo ${INSTALLED_SERVICES[@]}
 
 # AFFICHAGE DU MENU INTERACTIF
 echo

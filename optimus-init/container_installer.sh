@@ -21,6 +21,8 @@ else
 fi
 
 
+CAP_ADD=""; for row in $(jq -r .cap_add[] /tmp/$IMAGE_ID.json); do CAP_ADD+="--cap-add $row "; done
+PUBLISH=""; for row in $(jq -jr '.port_bindings | keys[] as $key | (.[$key][0].HostPort), ":", $key' /tmp/$IMAGE_ID.json); do PUBLISH+="--publish $row "; done
 ENV=""; for row in $(jq -r .env[] /tmp/$IMAGE_ID.json); do ENV+="--env $row "; done
 VOLUMES=""; for row in $(jq -r .volumes[] /tmp/$IMAGE_ID.json); do VOLUMES+="--volume $row "; done
 if [ "$(jq -r .stop_signal /tmp/$IMAGE_ID.json)" != "null" ]; then STOP_SIGNAL="--stop-signal $(jq -r .stop_signal /tmp/$IMAGE_ID.json) "; fi
@@ -43,7 +45,7 @@ then
 fi
 
 output $OUTPUT_MODE "Création du conteneur $NAME" "magenta" 200 "$NAME" 70
-verbose eval "docker create --name $NAME --network optimus --log-driver json-file --log-opt max-size=100m $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $VOLUMES $DEV_VOLUMES $IMAGE"
+verbose eval "docker create --name $NAME --network optimus --log-driver json-file --log-opt max-size=100m $ENV $DEV_ENV $RESTART $USER $STOP_SIGNAL $CAP_ADD $PUBLISH $VOLUMES $DEV_VOLUMES $IMAGE"
 
 output $OUTPUT_MODE "Lancement du conteneur $NAME" "magenta" 200 "$NAME" 80
 verbose docker start $NAME
