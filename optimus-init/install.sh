@@ -60,7 +60,8 @@ then
 	[ $(getent group mailboxes) ] || verbose groupadd mailboxes --gid 203 2> /dev/null
 	[ $(getent passwd mailboxes) ] || verbose useradd -g mailboxes -s /bin/false -d /srv/mailboxes --uid 203 mailboxes 2> /dev/null
 	verbose usermod -a -G mailboxes www-data
-	verbose mkdir /srv/mailboxes
+	verbose mkdir -p /srv/mailboxes
+	verbose mkdir -p /srv/mailboxes/gpg-keys
 	chown www-data:mailboxes -R /srv/mailboxes
 	chmod 770 -R /srv/mailboxes
 fi

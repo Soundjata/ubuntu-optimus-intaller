@@ -15,9 +15,6 @@ do
 	fi
 done
 
-#COUNT_SERVICES=$(echo "$INSTALLED_SERVICES" | wc -l)
-echo ${INSTALLED_SERVICES[@]}
-
 # AFFICHAGE DU MENU INTERACTIF
 echo
 echo "Selectionnez le conteneur que vous souhaitez passer en mode développement :"

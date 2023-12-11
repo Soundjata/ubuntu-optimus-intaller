@@ -12,12 +12,14 @@ output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta"
 verbose usermod -a -G www-data debian
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "nginx" 35
-verbose apt-get -qq --yes install nginx incron
+verbose apt-get -qq --yes install nginx libnginx-mod-mail incron
 
 output $OUTPUT_MODE "Paramétrage des vhosts" "magenta" 200 "nginx" 50
 verbose mkdir -p /srv/vhosts/servers
 verbose mkdir -p /srv/vhosts/locations
+verbose mkdir -p /srv/vhosts/mail
 echo "include /srv/vhosts/servers/*;" > /etc/nginx/sites-enabled/default
+echo "include /srv/vhosts/mail/*;" > /etc/nginx/nginx.conf
 verbose chown -R www-data:www-data /srv/vhosts
 verbose rm /usr/share/nginx/html/index.html
 verbose touch /usr/share/nginx/html/index.html
@@ -34,6 +36,7 @@ fi
 verbose touch /var/spool/incron/root
 if ! grep -q "/srv/vhosts" /var/spool/incron/root
 then
+  echo "/srv/vhosts/mail IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
   echo "/srv/vhosts/servers IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
   echo "/srv/vhosts/locations IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
 fi
