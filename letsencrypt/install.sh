@@ -19,6 +19,13 @@ then
 		verbose ln -s /snap/bin/certbot /usr/bin/certbot
 		#verbose apt -qq -y install python3-pip python3-certbot python3-certbot-dns-ovh 2> /dev/null
 
+		output $OUTPUT_MODE "Installation du script de renouvellement automatique" "magenta" 200 "letsencrypt" 15
+		if [ ! -f "/etc/letsencrypt/renewal-hooks/post/000-nginx.sh" ]
+		then
+			cp /etc/optimus/letsencrypt/000-nginx.sh /etc/letsencrypt/renewal-hooks/post/000-nginx.sh
+			chmod +x /etc/letsencrypt/renewal-hooks/post/000-nginx.sh
+		fi
+
 		output $OUTPUT_MODE "Suppression des enregistrements A" "magenta" 200 "letsencrypt" 20
 		RECORDS=$(ovh_api_request "GET" "/domain/zone/$DOMAIN/record?fieldType=A")
 		for RECORD in $(echo "$RECORDS" | jq -r '.[]')
