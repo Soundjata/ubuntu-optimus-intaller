@@ -84,7 +84,7 @@ fi
 
 output $OUTPUT_MODE
 output $OUTPUT_MODE "Installation de l'environnement VS CODIUM" "magenta" 200 "optimus-devtools" 80
-if [ ! -f "/srv/optimus/optimus.code-workspace" ]
+if [ ! -f "/home/debian/optimus.code-workspace" ]
 then
 	cp /etc/optimus/optimus-devtools/optimus.code-workspace /home/debian/optimus.code-workspace
 fi

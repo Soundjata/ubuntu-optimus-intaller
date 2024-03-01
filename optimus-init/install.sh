@@ -64,6 +64,14 @@ then
 	verbose mkdir -p /srv/mailboxes/gpg-keys
 	chown www-data:mailboxes -R /srv/mailboxes
 	chmod 770 -R /srv/mailboxes
+
+	[ $(getent group opendkim) ] || verbose groupadd opendkim --gid 204 2> /dev/null
+	[ $(getent passwd opendkim) ] || verbose useradd -g opendkim -s /bin/false -d /srv/dkim --uid 204 opendkim 2> /dev/null
+	verbose mkdir -p /srv/dkim/keys
+	chown opendkim:opendkim -R /srv/dkim
+
+	[ $(getent group opendmarc) ] || verbose groupadd opendmarc --gid 205 2> /dev/null
+	[ $(getent passwd opendmarc) ] || verbose useradd -g opendmarc -s /bin/false -d /srv/dkim --uid 205 opendmarc 2> /dev/null
 fi
 
 output $OUTPUT_MODE "Le serveur est prêt pour accueillir les services Optimus !" "green" 200 "optimus-init" 100

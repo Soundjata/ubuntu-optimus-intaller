@@ -11,6 +11,6 @@
 	"editor.formatOnPaste": true,
 	"editor.wordWrap": "off",
 	"editor.codeActionsOnSave": {
-		"source.fixAll": false
+		"source.fixAll": "never"
 	},
 }

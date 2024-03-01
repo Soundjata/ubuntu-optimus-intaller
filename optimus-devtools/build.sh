@@ -64,7 +64,7 @@ then
 		echo
 		echo "Construction de la nouvelle image :"
 		echo
-		docker build -t git.cybertron.fr:5050/optimus/$SELECTED_SERVICE/v5:dev -f $SELECTED_SERVICE/Dockerfile .
+		DOCKER_BUILDKIT=1 docker build -t git.cybertron.fr:5050/optimus/$SELECTED_SERVICE/v5:dev -f $SELECTED_SERVICE/Dockerfile .
 		
 		#INSTALLATION DU NOUVEAU CONTENEUR
 		DEV=1

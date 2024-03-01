@@ -12,14 +12,16 @@ output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta"
 verbose usermod -a -G www-data debian
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "nginx" 35
-verbose apt-get -qq --yes install nginx libnginx-mod-mail incron
+verbose apt-get -qq --yes install nginx libnginx-mod-mail libnginx-mod-stream incron
 
 output $OUTPUT_MODE "Paramétrage des vhosts" "magenta" 200 "nginx" 50
 verbose mkdir -p /srv/vhosts/servers
 verbose mkdir -p /srv/vhosts/locations
 verbose mkdir -p /srv/vhosts/mail
-echo "include /srv/vhosts/servers/*;" > /etc/nginx/sites-enabled/default
-echo "include /srv/vhosts/mail/*;" > /etc/nginx/nginx.conf
+verbose mkdir -p /srv/vhosts/streams
+printf "include /srv/vhosts/servers/*;\n" > /etc/nginx/sites-enabled/default
+printf "include /srv/vhosts/mail/*;\n\n" >> /etc/nginx/nginx.conf
+printf "stream\n{\ninclude /srv/vhosts/streams/*;\n}" >> /etc/nginx/nginx.conf
 verbose chown -R www-data:www-data /srv/vhosts
 verbose rm /usr/share/nginx/html/index.html
 verbose touch /usr/share/nginx/html/index.html
@@ -28,7 +30,7 @@ output $OUTPUT_MODE "Paramétrage des logs" "magenta" 200 "nginx" 65
 verbose mkdir -p /var/log/optimus
 verbose chown -R www-data:www-data /var/log/optimus
 
-output $OUTPUT_MODE "Mise en place d'une veille sur /srv/vhosts/servers et /srv/vhosts/locations" "magenta" 200 "nginx" 80
+output $OUTPUT_MODE "Mise en place d'une veille sur /srv/vhosts/" "magenta" 200 "nginx" 80
 if ! grep -q "root" /etc/incron.allow
 then
   echo "root" >> /etc/incron.allow
@@ -37,6 +39,7 @@ verbose touch /var/spool/incron/root
 if ! grep -q "/srv/vhosts" /var/spool/incron/root
 then
   echo "/srv/vhosts/mail IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
+  echo "/srv/vhosts/streams IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
   echo "/srv/vhosts/servers IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
   echo "/srv/vhosts/locations IN_CREATE,IN_DELETE,IN_MOVE,IN_CLOSE_WRITE /usr/bin/systemctl reload nginx" >> /var/spool/incron/root
 fi
