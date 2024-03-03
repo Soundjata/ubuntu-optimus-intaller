@@ -22,6 +22,7 @@ then
 		output $OUTPUT_MODE "Installation du script de renouvellement automatique" "magenta" 200 "letsencrypt" 15
 		if [ ! -f "/etc/letsencrypt/renewal-hooks/post/000-nginx.sh" ]
 		then
+			mkdir -p /etc/letsencrypt/renewal-hooks/post/000-nginx.sh
 			cp /etc/optimus/letsencrypt/000-nginx.sh /etc/letsencrypt/renewal-hooks/post/000-nginx.sh
 			chmod +x /etc/letsencrypt/renewal-hooks/post/000-nginx.sh
 		fi
