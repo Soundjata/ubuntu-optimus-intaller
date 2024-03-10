@@ -1,3 +1,7 @@
+5.01 (2024-03-10)
+Ajout de logrotate pour purger les logs au bout de 7 jours et éviter que le disque système se remplisse à 100%
+Ajout d'un script qui relance NGINX lorsque le certificat est renouvelé par CERTBOT
+
 5.00 (2022-09-05)
 Synchronisation du versioning avec le client V5
 Comptabilité avec le web installer

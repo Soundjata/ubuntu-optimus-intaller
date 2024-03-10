@@ -74,4 +74,13 @@ then
 	[ $(getent passwd opendmarc) ] || verbose useradd -g opendmarc -s /bin/false -d /srv/dkim --uid 205 opendmarc 2> /dev/null
 fi
 
+if grep -q "/var/log/optimus" /etc/logrotate.conf
+then
+	output $OUTPUT_MODE "Logrotate est déjà installé" "magenta" 200 "optimus-init" 50
+else
+	output $OUTPUT_MODE "Installation et configuration de logrotate" "magenta" 200 "optimus-init" 50
+	verbose apt-get -qq --yes install logrotate
+	printf "/var/log/optimus/*.log\n{\n  daily\n  rotate 7\n  compress\n  size 10M\n}\n" >> /etc/logrotate.conf
+fi
+
 output $OUTPUT_MODE "Le serveur est prêt pour accueillir les services Optimus !" "green" 200 "optimus-init" 100
