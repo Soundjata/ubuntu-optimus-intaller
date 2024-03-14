@@ -19,9 +19,22 @@ verbose mkdir -p /srv/vhosts/servers
 verbose mkdir -p /srv/vhosts/locations
 verbose mkdir -p /srv/vhosts/mail
 verbose mkdir -p /srv/vhosts/streams
-printf "include /srv/vhosts/servers/*;\n" > /etc/nginx/sites-enabled/default
-printf "include /srv/vhosts/mail/*;\n\n" >> /etc/nginx/nginx.conf
-printf "stream\n{\ninclude /srv/vhosts/streams/*;\n}" >> /etc/nginx/nginx.conf
+
+if ! grep -q "include /srv/vhosts/servers/*" /etc/nginx/sites-enabled/default
+then
+	printf "include /srv/vhosts/servers/*;\n" > /etc/nginx/sites-enabled/default
+fi
+
+if ! grep -q "include /srv/vhosts/mail/*" /etc/nginx/nginx.conf
+then
+	printf "include /srv/vhosts/mail/*;\n\n" >> /etc/nginx/nginx.conf
+fi
+
+if ! grep -q "include /srv/vhosts/streams/*" /etc/nginx/nginx.conf
+then
+	printf "stream\n{\ninclude /srv/vhosts/streams/*;\n}" >> /etc/nginx/nginx.conf
+fi
+
 verbose chown -R www-data:www-data /srv/vhosts
 verbose rm /usr/share/nginx/html/index.html
 verbose touch /usr/share/nginx/html/index.html
