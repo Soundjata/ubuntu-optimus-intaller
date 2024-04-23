@@ -11,6 +11,7 @@ then
 	then
 
 		output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "letsencrypt" 10
+		verbose apt -qq -y remove certbot 2> /dev/null
 		verbose apt -qq -y install snapd 2> /dev/null
 		verbose snap install core
 		verbose snap install certbot --classic
