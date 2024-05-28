@@ -6,7 +6,7 @@ Nos serveurs OPTIMUS n'intègrent que des logiciels libres et opensource garanti
 
 Les scripts ont été conçus pour fonctionner sur une installation minimale Debian 12.
 
-Pour lancer l'installation sur votre serveur, vous exécuter la commande suivante :
+Pour lancer l'installation sur votre serveur, il suffit d'exécuter la commande suivante :
 
 `wget https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/install.sh; sudo bash install.sh --generate; sudo bash /etc/optimus/menu.sh`
 
