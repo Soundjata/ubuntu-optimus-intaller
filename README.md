@@ -4,10 +4,10 @@ Il permet notamment de stocker et d'accéder à l'ensemble de vos données (fich
 
 Nos serveurs OPTIMUS n'intègrent que des logiciels libres et opensource garantissant une gratuité totale, une sécurité maximale et une transparence absolue.
 
-Les scripts ont été conçus pour fonctionner sur une installation minimale Debian 11.
+Les scripts ont été conçus pour fonctionner sur une installation minimale Debian 12.
 
 Pour lancer l'installation sur votre serveur, vous exécuter la commande suivante :
 
-`wget https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/install.sh; sudo bash install.sh; sudo bash /etc/optimus/menu.sh`
+`wget https://git.cybertron.fr/optimus/optimus-installer/-/raw/main/install.sh; sudo bash install.sh --generate; sudo bash /etc/optimus/menu.sh`
 
 Pour plus d'informations, veuillez consulter notre [WIKI](https://wiki.cybertron.fr)

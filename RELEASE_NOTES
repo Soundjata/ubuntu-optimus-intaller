@@ -1,3 +1,6 @@
+5.05 (2024-05-29)
+README update
+
 5.02 (2024-03-14)
 Modification du script d'installation NGINX pour qu'il n'applique pas 2x ses modifications à /etc/nginx/nginx.conf
 
