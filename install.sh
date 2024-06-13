@@ -56,13 +56,13 @@ sudo sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen
 sudo locale-gen
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Mise à jour du dépôt", "color":"magenta","operation":"optimus-installer", "progress":30}'; fi
-DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes update
+UBUNTU_FRONTEND=noninteractive sudo apt-get -qq --yes update
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Suppression de paquets inutiles", "color":"magenta","operation":"optimus-installer", "progress":40}'; fi
-DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes remove cryptsetup-initramfs
+UBUNTU_FRONTEND=noninteractive sudo apt-get -qq --yes remove cryptsetup-initramfs
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Installation de git, unzip, zip, sudo et jq", "color":"magenta","operation":"optimus-installer", "progress":50}'; fi
-DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --yes install git unzip zip sudo jq
+UBUNTU_FRONTEND=noninteractive sudo apt-get -qq --yes install git unzip zip sudo jq
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Clonage du dépôt git", "color":"magenta","operation":"optimus-installer", "progress":70}'; fi
 if [ -d "/etc/optimus" ]; then sudo rm -R /etc/optimus; fi
@@ -75,9 +75,9 @@ if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Synchronisation du s
 sudo timedatectl set-timezone Europe/Paris
 
 if [ "$MODE" = 'json' ]; then echo '{"code":200, "message":"Création d un alias pour la commande optimus", "color":"magenta","operation":"optimus-installer", "progress":90}'; fi
-if ! grep -q "alias optimus" /home/debian/.bashrc
+if ! grep -q "alias optimus" /home/ubuntu/.bashrc
 then
-  echo "alias optimus='sudo bash /etc/optimus/menu.sh'" >> /home/debian/.bashrc
+  echo "alias optimus='sudo bash /etc/optimus/menu.sh'" >> /home/ubuntu/.bashrc
 fi
 
 
