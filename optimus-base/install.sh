@@ -2,7 +2,8 @@
 source /etc/optimus/functions.sh
 
 verbose rm -f -R /srv/optimus/optimus-base
-IMAGE="git.cybertron.fr:5050/optimus/optimus-base/v5"
+#IMAGE="git.cybertron.fr:5050/optimus/optimus-base/v5"
+IMAGE="soundjata01/optimus-base"
 source /etc/optimus/optimus-init/container_installer.sh
 
 if [ $OUTPUT_MODE != "json" ]

@@ -34,7 +34,8 @@ then
 	verbose docker rm optimus-databases
 fi
 
-IMAGE="git.cybertron.fr:5050/optimus/optimus-databases/v5"
+#IMAGE="git.cybertron.fr:5050/optimus/optimus-databases/v5"
+IMAGE="soundjata01/optimus-databases"
 source /etc/optimus/optimus-init/container_installer.sh
 
 output $OUTPUT_MODE "Attente de l'ouverture du socket MARIADB" "magenta" 200 "optimus-databases" 90

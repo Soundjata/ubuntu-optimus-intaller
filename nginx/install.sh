@@ -8,8 +8,8 @@ output $OUTPUT_MODE "Modification de l'uid de l'utilisateur et du groupe www-dat
 verbose usermod --uid 219 www-data 2> /dev/null
 verbose groupmod --gid 219 www-data 2> /dev/null
   
-output $OUTPUT_MODE "Ajout de l'utilisateur debian au groupe www-data" "magenta" 200 "nginx" 20
-verbose usermod -a -G www-data debian
+output $OUTPUT_MODE "Ajout de l'utilisateur ubuntu au groupe www-data" "magenta" 200 "nginx" 20
+verbose usermod -a -G www-data ubuntu
 
 output $OUTPUT_MODE "Installation des paquets requis" "magenta" 200 "nginx" 35
 verbose apt-get -qq --yes install nginx libnginx-mod-mail libnginx-mod-stream incron
