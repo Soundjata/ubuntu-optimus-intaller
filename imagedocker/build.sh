@@ -2,7 +2,7 @@
 cd /
 source /etc/optimus/functions.sh
 
-docker login  -u soundjata01 -p dckr_pat_V_YWCxgbhgpven5vEhKn5zKZbo4
+docker login  -u soundjata01
 
 output $OUTPUT_MODE
 output $OUTPUT_MODE "Installation des librairies OPTIMUS" "magenta" 200 "optimus-build-imagedockers" 10
